@@ -136,9 +136,17 @@ def main():
     Storage.skel()
     parse_cmd(Cfg, " ".join(sys.argv[1:]))
     update(Cfg, Cfg.sets)
-    Cfg.mod += ",cmd,mod"
-    if 'a' in Cfg.mod:
+    if 'x' in Cfg.opts:
+        Cfg.mod += "cmd,mod"
+    else:
         Cfg.mod = ",".join(modules.__dir__())
+    if 'd' in Cfg.opts:
+        Cfg.mod = ",".join(modules.__dir__())
+        daemon(Cfg.pidfile)
+        privileges(Cfg.user)
+        scan(modules, Cfg.mod, True)
+        forever()
+        return
     if "v" in Cfg.opts:
         dte = time.ctime(time.time()).replace("  ", " ")
         debug(f"{Cfg.name.upper()} {Cfg.opts.upper()} started {dte}")
@@ -153,13 +161,9 @@ def main():
         csl.start()
         forever()
     if Cfg.otxt:
-        scan(modules, Cfg.mod)
+        Cfg.mod = ",".join(modules.__dir__())
+        scan(modules, Cfg.mod, False, Cfg.sets.dis, False)
         return cmnd(Cfg.otxt, print)
-    Cfg.mod = ",".join(modules.__dir__())
-    daemon(Cfg.pidfile)
-    privileges(Cfg.user)
-    scan(modules, Cfg.mod, True)
-    forever()
 
 
 def wrapped():
