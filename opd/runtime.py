@@ -111,14 +111,6 @@ def daemon(pidfile, verbose=False):
         fds.write(str(os.getpid()))
 
 
-def daemoned():
-    Cfg.mod = ",".join(modules.__dir__())
-    daemon(Cfg.pidfile)
-    privileges(Cfg.user)
-    scan(modules, Cfg.mod, True)
-    forever()
-
-
 def privileges(username):
     pwnam = pwd.getpwnam(username)
     os.setgid(pwnam.pw_gid)
@@ -144,16 +136,12 @@ def main():
     Storage.skel()
     parse_cmd(Cfg, " ".join(sys.argv[1:]))
     update(Cfg, Cfg.sets)
-    if "x" in Cfg.opts:
-        Cfg.mod += "cmd,irc,mdl,mod,req,wsd"
-    else:
+    Cfg.mod += ",cmd,mod"
+    if 'a' in Cfg.mod:
         Cfg.mod = ",".join(modules.__dir__())
     if "v" in Cfg.opts:
         dte = time.ctime(time.time()).replace("  ", " ")
         debug(f"{Cfg.name.upper()} {Cfg.opts.upper()} started {dte}")
-    if "d" in Cfg.opts:
-        daemoned()
-    csl = Console()
     if "h" in Cfg.opts:
         scan(modules, Cfg.mod)
         from . import __doc__ as txt
@@ -161,11 +149,17 @@ def main():
         return
     if "c" in Cfg.opts:
         scan(modules, Cfg.mod, True, Cfg.sets.dis, True)
+        csl = Console()
         csl.start()
         forever()
     if Cfg.otxt:
         scan(modules, Cfg.mod)
         return cmnd(Cfg.otxt, print)
+    Cfg.mod = ",".join(modules.__dir__())
+    daemon(Cfg.pidfile)
+    privileges(Cfg.user)
+    scan(modules, Cfg.mod, True)
+    forever()
 
 
 def wrapped():
