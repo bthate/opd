@@ -8,9 +8,10 @@ SYNOPSIS
 
 ::
 
+    opd
+    opd -c
     opd <cmd> [key=val] 
     opd <cmd> [key==val]
-    opd [-c] [-v] [-d]
 
 
 DESCRIPTION
@@ -44,42 +45,43 @@ USAGE
 
 ::
 
-    without any argument the program does nothing
+    without any argument the program starts itself as a daemon
 
     $ opd
     $
 
-    see list of commands
+    provding a command it will run a cli
 
-    $ od cmd
+    $ opd cmd
     cmd,err,mod,req,thr,ver
+    $
 
-    list of modules
+    the -c option starts a console
+
+    $ opd -c
+    >
+
+    the -v option turns on verbose    
+
+    $ opd -cv
+    OPD CV started Sat Feb 10 13:50:56 2024
+    > 
+
+    use mod= to load additional modules
+
+    $ opd mod=rss
+    $
+
+    the ``mod`` command shows a list of modules
 
     $ opd mod
     cmd,err,fnd,irc,log,mod,req,rss,tdo,thr
+    $
 
-    use mod=<name1,name2> to load additional
-    modules
+    the -a option will load all available modules
 
-    $ opd cfg mod=irc
-
-    start a console
-
-    $ opd -c mod=irc,rss
-    >
-
-    use -v for verbose
-
-    $ opd -cv mod=irc
-    OPD started CV started Sat Dec 2 17:53:24 2023
-    >
-
-    start daemon
-
-    $ opd -d
-    $ 
-
+    $ opd -a rss
+    $
 
 CONFIGURATION
 
