@@ -127,7 +127,7 @@ SYSTEMD::
     User=<user>
     Group=<user>
     WorkingDirectory=/home/<user>/.opd
-    ExecStart=/home/<user>/.local/pipx/venvs/lopd/bin/opd -d
+    ExecStart=/home/<user>/.local/pipx/venvs/opd/bin/opd -d
     RemainAfterExit=yes
 
     [Install]
