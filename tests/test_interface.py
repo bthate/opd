@@ -11,7 +11,7 @@ import sys
 import unittest
 
 
-import genocide.objects
+import opd.objects
 
 
 METHODS = [
@@ -53,7 +53,7 @@ METHOS = [
 ]
 
 
-class A(genocide.objects.Object):
+class A(opd.objects.Object):
     def a(self):
         return "b"
 
@@ -80,7 +80,7 @@ DIFF = [
 ]
 
 
-OBJECT = genocide.objects
+OBJECT = opd.objects
 
 
 class TestInterface(unittest.TestCase):

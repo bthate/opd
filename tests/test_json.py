@@ -9,7 +9,7 @@
 import unittest
 
 
-from genocide.objects import Object, dumps, loads
+from opd.objects import Object, dumps, loads
 
 
 VALIDJSON = "{'test': 'bla'}"

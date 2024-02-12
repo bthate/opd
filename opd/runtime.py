@@ -29,7 +29,6 @@ def __dir__():
         'Console',
         'cmnd',
         'daemon',
-        'daemoned',
         'forever',
         'main',
         'privileges',

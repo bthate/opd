@@ -9,7 +9,7 @@
 import unittest
 
 
-from genocide import Object
+from opd import Object
 
 
 class TestComposite(unittest.TestCase):
