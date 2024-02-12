@@ -135,9 +135,8 @@ def main():
     Storage.skel()
     parse_cmd(Cfg, " ".join(sys.argv[1:]))
     update(Cfg, Cfg.sets)
-    if 'x' in Cfg.opts:
-        Cfg.mod += "cmd,mod"
-    else:
+    Cfg.mod += ",cmd,mod"
+    if 'a' in Cfg.opts:
         Cfg.mod = ",".join(modules.__dir__())
     if 'd' in Cfg.opts:
         Cfg.mod = ",".join(modules.__dir__())
