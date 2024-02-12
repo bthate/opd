@@ -123,7 +123,7 @@ def forever():
 
 def getpid():
     try:
-        return int(open(Cfg.pidfile).read())
+        return int(open(Cfg.pidfile, encoding="utf-8").read())
     except (FileNotFoundError, ValueError):
         return None
 

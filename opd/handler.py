@@ -12,7 +12,8 @@ import _thread
 
 
 from .brokers import Fleet
-from .objects import Default, Object
+from .default import Default
+from .objects import Object
 from .threads import launch
 
 
