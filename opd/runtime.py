@@ -67,6 +67,17 @@ class Console(Client):
         print(txt)
 
 
+def checkpid(pid):        
+    if not pid:
+        return False
+    try:
+        os.kill(pid, 0)
+    except OSError:
+        return False
+    else:
+        return True
+
+
 def cmnd(txt, out):
     clt = Client()
     clt.raw = out
@@ -76,14 +87,6 @@ def cmnd(txt, out):
     Command.handle(evn)
     evn.wait()
     return evn
-
-
-def forever():
-    while 1:
-        try:
-            time.sleep(1.0)
-        except (KeyboardInterrupt, EOFError):
-            _thread.interrupt_main()
 
 
 def daemon(pidfile, verbose=False):
@@ -108,6 +111,21 @@ def daemon(pidfile, verbose=False):
     cdir(os.path.dirname(pidfile))
     with open(pidfile, "w", encoding="utf-8") as fds:
         fds.write(str(os.getpid()))
+
+
+def forever():
+    while 1:
+        try:
+            time.sleep(1.0)
+        except (KeyboardInterrupt, EOFError):
+            _thread.interrupt_main()
+
+
+def getpid():
+    try:
+        return int(open(Cfg.pidfile).read())
+    except (FileNotFoundError, ValueError):
+        return None
 
 
 def privileges(username):
@@ -138,13 +156,6 @@ def main():
     Cfg.mod += ",cmd,mod"
     if 'a' in Cfg.opts:
         Cfg.mod = ",".join(modules.__dir__())
-    if 'd' in Cfg.opts:
-        Cfg.mod = ",".join(modules.__dir__())
-        daemon(Cfg.pidfile)
-        privileges(Cfg.user)
-        scan(modules, Cfg.mod, True)
-        forever()
-        return
     if "v" in Cfg.opts:
         dte = time.ctime(time.time()).replace("  ", " ")
         debug(f"{Cfg.name.upper()} {Cfg.opts.upper()} started {dte}")
@@ -154,7 +165,7 @@ def main():
         print(txt)
         return
     if "c" in Cfg.opts:
-        scan(modules, Cfg.mod, True, Cfg.sets.dis, True)
+        scan(modules, Cfg.mod, True, Cfg.dis, True)
         csl = Console()
         csl.start()
         forever()
@@ -162,11 +173,20 @@ def main():
         Cfg.mod = ",".join(modules.__dir__())
         scan(modules, Cfg.mod, False, Cfg.sets.dis, False)
         return cmnd(Cfg.otxt, print)
+    if checkpid(getpid()):
+        print("daemon is already running.")
+        return
+    Cfg.mod = ",".join(modules.__dir__())
+    daemon(Cfg.pidfile)
+    privileges(Cfg.user)
+    scan(modules, Cfg.mod, True, Cfg.dis, True)
+    forever()
 
 
 def wrapped():
     wrap(main)
-    Error.show()
+    if "d" not in Cfg.opts:
+        Error.show()
 
 
 if __name__ == "__main__":
