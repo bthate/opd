@@ -1,4 +1,6 @@
-NAME::
+NAME
+
+::
 
     OPD - original programmer daemon
 
