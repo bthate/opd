@@ -1,6 +1,4 @@
-NAME
-
-::
+NAME::
 
     OPD - original programmer daemon
 
@@ -33,7 +31,7 @@ INSTALL::
 
 USAGE::
 
-    without any argument the program does nothing
+    without any argument the program starts itself as a daemon
 
     $ opd
     $
@@ -68,13 +66,6 @@ USAGE::
 
     the -a option will load all available modules
 
-    $ opd -a rss
-    $
-
-    to start opd in daemon mode use the '-d' option.
-
-    $ opd -d
-    $
 
 CONFIGURATION::
 
@@ -127,7 +118,7 @@ SYSTEMD::
     User=<user>
     Group=<user>
     WorkingDirectory=/home/<user>/.opd
-    ExecStart=/home/<user>/.local/pipx/venvs/opd/bin/opd -d
+    ExecStart=/home/<user>/.local/pipx/venvs/opd/bin/opd
     RemainAfterExit=yes
 
     [Install]
