@@ -45,7 +45,7 @@ USAGE
     $ opd
     $
 
-    provding a command it will run a cli
+    provding a command it will run it in the cli
 
     $ opd cmd
     cmd,err,mod,req,thr,ver
