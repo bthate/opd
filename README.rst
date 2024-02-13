@@ -5,9 +5,8 @@ NAME::
 SYNOPSIS::
 
     opd
-    opd -c
-    opd <cmd> [key=val] 
-    opd <cmd> [key==val]
+    opd [-a] [-c] [-v]
+    opd <cmd> [key=val] [key==val]
 
 DESCRIPTION::
 
@@ -66,7 +65,6 @@ USAGE::
 
     the -a option will load all available modules
 
-
 CONFIGURATION::
 
     irc
@@ -105,7 +103,7 @@ COMMANDS::
 
 SYSTEMD::
 
-    save the following it in /etc/systemd/system/opd.service and
+    save the following in /etc/systemd/system/opd.service and
     replace "<user>" with the user running pipx
 
     [Unit]
@@ -136,7 +134,7 @@ FILES::
     ~/.opd
     ~/.local/bin/opd
     ~/.local/pipx/venvs/opd/
-
+    ~/.local/pipx/venvs/opd/share/doc/opd/README.rst 
 
 AUTHOR::
 
