@@ -95,7 +95,7 @@ CONFIGURATION
     $ opd rss <url>
     $ opd dpl <url> <item1,item2>
     $ opd rem <url>
-    $ opd nme <url< <name>
+    $ opd nme <url> <name>
 
 COMMANDS
 
