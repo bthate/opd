@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "opd"
 description = "original programmer daemon"
-version = "200"
+version = "201"
 authors = [
     {name = "Bart Thate", email = "bthate@dds.nl" },
 ]
@@ -24,7 +24,7 @@ classifiers=[
 dev = []
 
 [project.scripts]
-opd = "opd.__main__:wrapped"
+opd = "opd.runtime:wrapped"
 
 
 [project.urls]

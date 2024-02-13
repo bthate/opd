@@ -45,6 +45,11 @@ USAGE
     $ opd
     $
 
+    if there is already a daemon running the program won't start
+
+    $ bin/opd
+    daemon is already running.
+
     provding a command it will run it in the cli
 
     $ opd cmd
