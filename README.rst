@@ -9,8 +9,8 @@ SYNOPSIS
 ::
 
     opd
-    opd [-a] [-c] [-v]
     opd <cmd> [key=val] [key==val]
+    opd [-a] [-c] [-v]
 
 DESCRIPTION
 
@@ -159,7 +159,6 @@ AUTHOR
 ::
 
     Bart Thate <bthate@dds.nl>
-
 
 COPYRIGHT
 
