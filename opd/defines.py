@@ -39,12 +39,12 @@ def __object__():
 
 def __dir__():
     return (
+        'Broker',
         'Cfg',
         'Client',
         'Command',
         'Error',
         'Event',
-        'Fleet',
         'Repeater',
         'Storage',
         'byorig',
