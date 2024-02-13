@@ -2,13 +2,17 @@ NAME::
 
     OPD - original programmer daemon
 
-SYNOPSIS::
+SYNOPSIS
+
+::
 
     opd
     opd [-a] [-c] [-v]
     opd <cmd> [key=val] [key==val]
 
-DESCRIPTION::
+DESCRIPTION
+
+::
 
     OPD is a python3 library implementing the 'opd' package. It
     provides all the tools to program a bot, such as disk perisistence
@@ -24,11 +28,15 @@ DESCRIPTION::
 
     OPD is Public Domain.
 
-INSTALL::
+INSTALL
+
+::
 
     $ pipx install opd
 
-USAGE::
+USAGE
+
+::
 
     without any argument the program starts itself as a daemon
 
@@ -65,7 +73,9 @@ USAGE::
 
     the -a option will load all available modules
 
-CONFIGURATION::
+CONFIGURATION
+
+::
 
     irc
 
@@ -85,7 +95,9 @@ CONFIGURATION::
     $ opd rem <url>
     $ opd nme <url< <name>
 
-COMMANDS::
+COMMANDS
+
+::
 
     cmd - commands
     cfg - irc configuration
@@ -101,7 +113,9 @@ COMMANDS::
     rss - add a feed
     thr - show the running threads
 
-SYSTEMD::
+SYSTEMD
+
+::
 
     save the following in /etc/systemd/system/opd.service and
     replace "<user>" with the user running pipx
@@ -129,18 +143,24 @@ SYSTEMD::
 
     default channel/server is #opd on localhost
 
-FILES::
+FILES
+
+::
 
     ~/.opd
     ~/.local/bin/opd
     ~/.local/pipx/venvs/opd/
     ~/.local/pipx/venvs/opd/share/doc/opd/README.rst 
 
-AUTHOR::
+AUTHOR
+
+::
 
     Bart Thate <bthate@dds.nl>
 
 
-COPYRIGHT::
+COPYRIGHT
+
+::
 
     OPD is Public Domain.
