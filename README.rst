@@ -2,7 +2,7 @@ NAME
 
 ::
 
-    OPD - original programmer daemon
+    OPD - Original Programmer Daemon
 
 SYNOPSIS
 
@@ -128,7 +128,7 @@ SYSTEMD
     replace "<user>" with the user running pipx
 
     [Unit]
-    Description=original programmer daemon
+    Description=Original Programmer Daemon
     Requires=network.target
     After=network.target
 

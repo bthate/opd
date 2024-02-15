@@ -3,21 +3,19 @@
 # pylint: disable=C,R,W0401,E0402
 
 
+"""Original Programmer Daemon
 
-""" @KarimKhanQC reconsider OTP-CR-117/19
-
-
-sbn <cmd> [key=val] [key==val] [mod=n1,n2]
-sbn [-a] [-c] [-d] [-h] [-v] [-w]
+opd <cmd> [key=val] [key==val] [mod=n1,n2]
+opd [-a] [-c] [-d] [-h] [-v]
 
 commands:
 
-cfg - irc configuration
 cmd - commands
 mod - show available modules
-now - show genocide stats
-req - reconsider
-wsd - show wisdom
+
+modules:
+
+cmd,flt,irc,log,mod,mre,pwd,req,rss,tdo,thr
 
 options:
 
@@ -26,7 +24,7 @@ options:
 -d     start daemon
 -h     display help
 -v     use verbose
--w     wait for services"""
+"""
 
 
 from .defines import *
