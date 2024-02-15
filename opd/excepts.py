@@ -16,7 +16,6 @@ from .objects import Object
 def __dir__():
     return (
         'Error',
-        'debug'
     )
 
 
@@ -34,6 +33,11 @@ class Error(Object):
     def add(exc):
         excp = exc.with_traceback(exc.__traceback__)
         Error.errors.append(excp)
+
+    @staticmethod
+    def debug(txt):
+        if Error.output and not Error.skip(txt):
+            Error.output(txt)
 
     @staticmethod
     def format(exc):
@@ -66,8 +70,3 @@ class Error(Object):
             if skp in str(txt):
                 return True
         return False
-
-
-def debug(txt):
-    if Error.output and not Error.skip(txt):
-        Error.output(txt)

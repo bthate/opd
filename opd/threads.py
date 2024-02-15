@@ -22,7 +22,7 @@ def __dir__():
        'Thread',
        'Timer',
        'launch',
-       'name',
+       'name'
     )
 
 

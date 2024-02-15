@@ -13,7 +13,7 @@ import time
 import _thread
 
 
-from .handler import Default
+from .default import Default
 from .objects import Object, dump, fqn, load, items, update
 from .parsers import spl
 
@@ -38,13 +38,6 @@ __all__ = __dir__()
 
 
 lock = _thread.allocate_lock()
-
-
-def cdir(pth) -> None:
-    if os.path.exists(pth):
-        return
-    pth = pathlib.Path(pth)
-    os.makedirs(pth, exist_ok=True)
 
 
 class Storage(Object):
@@ -114,6 +107,13 @@ def find(mtc, selector=None, index=None, deleted=False):
         if index is not None and nr != int(index):
             continue
         yield (fnm, obj)
+
+
+def cdir(pth) -> None:
+    if os.path.exists(pth):
+        return
+    pth = pathlib.Path(pth)
+    os.makedirs(pth, exist_ok=True)
 
 
 def fntime(daystr):

@@ -3,22 +3,7 @@
 # pylint: disable=C,R,W0613,E0101
 
 
-"""objects library
-
-
-GENOCIDE provides an objects module that allows for easy json save/load
-to/from disk of objects. It provides an "clean namespace" Object class
-that only has dunder methods, so the namespace is not cluttered with
-method names. This makes storing and reading to/from json possible.
-
-    >>> from genocide.objects import Object, dumps, loads
-    >>> o = Object()
-    >>> o.a = "b"
-    >>> txt = dumps(o)
-    >>> loads(txt)
-    {"a": "b"}
-
-"""
+"objects"
 
 
 import json

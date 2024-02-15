@@ -18,15 +18,16 @@ import _thread
 
 from .. import Cfg, Default, Object, edit, fmt, keys
 from .. import Broker, Client, Command, Error, Event
-from .. import debug, last, launch, sync
+from .. import last, launch, sync
 
 
 NAME = __file__.split(os.sep)[-3]
 
 
 Error.filter = ["PING", "PONG", "PRIVMSG"]
-byorig = Broker.byorig
-saylock = _thread.allocate_lock()
+byorig       = Broker.byorig
+debug        = Error.debug
+saylock      = _thread.allocate_lock()
 
 
 def init():

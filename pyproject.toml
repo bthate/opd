@@ -24,7 +24,7 @@ classifiers=[
 dev = []
 
 [project.scripts]
-opd = "opd.runtime:wrapped"
+opd = "opd.__main__:wrapped"
 
 
 [project.urls]
