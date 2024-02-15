@@ -15,6 +15,7 @@ mod - show available modules
 
 modules:
 
+$ opd mod
 cmd,flt,irc,log,mod,mre,pwd,req,rss,tdo,thr
 
 options:
