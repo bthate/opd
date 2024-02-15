@@ -69,7 +69,7 @@ USAGE
 
     use mod= to load additional modules
 
-    $ opd mod=rss
+    $ opd mod=irc,rss
     $
 
     the ``mod`` command shows a list of modules

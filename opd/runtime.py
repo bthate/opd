@@ -17,10 +17,7 @@ import time
 import _thread
 
 
-from .configs import Cfg
-
-
-from . import Client, Command, Default, Error, Event, Object, Storage
+from . import Client, Command, Config, Default, Error, Event, Object, Storage
 from . import cdir, debug, launch, parse_cmd, spl, scan, update
 
 
@@ -40,6 +37,11 @@ def __dir__():
 __all__ = __dir__()
 
 
+Cfg         = Config()
+Cfg.name    = __file__.split(os.sep)[-2]
+Cfg.wd      = os.path.expanduser(f"~/.{Cfg.name}")
+Cfg.pidfile = os.path.join(Cfg.wd, f"{Cfg.name}.pid")
+Cfg.user = getpass.getuser()
 Storage.wd  = Cfg.wd
 
 
@@ -160,15 +162,16 @@ def main():
         dte = time.ctime(time.time()).replace("  ", " ")
         debug(f"{Cfg.name.upper()} {Cfg.opts.upper()} started {dte}")
     if "h" in Cfg.opts:
-        scan(modules, Cfg.mod)
         from . import __doc__ as txt
         print(txt)
         return
     if "c" in Cfg.opts:
+        print(Cfg.mod)
         scan(modules, Cfg.mod, True, Cfg.dis, True)
         csl = Console()
         csl.start()
         forever()
+        return
     if Cfg.otxt:
         Cfg.mod = ",".join(modules.__dir__())
         scan(modules, Cfg.mod, False, Cfg.sets.dis, False)

@@ -16,9 +16,7 @@ import time
 import _thread
 
 
-from ..configs import Cfg
-
-from .. import Default, Object, edit, fmt, keys
+from .. import Cfg, Default, Object, edit, fmt, keys
 from .. import Broker, Client, Command, Error, Event
 from .. import debug, last, launch, sync
 
