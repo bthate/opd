@@ -3,7 +3,7 @@
 # pylint: disable=C,R,W0612,W0613
 
 
-""" rest interface. """
+"rest"
 
 
 import os
@@ -14,8 +14,8 @@ import time
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
 
-from .. import Default, Object
-from .. import Error, Storage, debug, launch
+from .. import Default, Object, Error, Storage
+from .. import launch
 
 
 def init():
@@ -67,7 +67,7 @@ class REST(HTTPServer, Object):
         exctype, excvalue, tb = sys.exc_info()
         exc = exctype(excvalue)
         Error.add(exc)
-        debug('%s %s' % (addr, excvalue))
+        Error.debug('%s %s' % (addr, excvalue))
 
 
 class RESTHandler(BaseHTTPRequestHandler):
@@ -108,4 +108,4 @@ class RESTHandler(BaseHTTPRequestHandler):
             self.end_headers()
 
     def log(self, code):
-        debug('%s code %s path %s' % (self.address_string(), code, self.path))
+        Error.debug('%s code %s path %s' % (self.address_string(), code, self.path))
