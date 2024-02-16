@@ -19,7 +19,7 @@ import _thread
 
 from . import Cfg, Client, Command, Config, Default, Error, Event, Object, Storage
 from . import cdir, launch, modules, parse_cmd, spl, scan, update
-from . import checkpid, forever, getpid, privileges, wrap
+from . import checkpid, daemon, forever, getpid, privileges, wrap
 
 
 def __dir__():
