@@ -168,7 +168,8 @@ def main():
         print("daemon is already running.")
         return
     Cfg.mod = ",".join(modules.__dir__())
-    daemon(Cfg.pidfile)
+    Cfg.user = getpass.getuser()
+    daemon(Cfg.pidfile, "v" in Cfg.opts)
     privileges(Cfg.user)
     scan(modules, Cfg.mod, True, Cfg.dis, True)
     forever()
