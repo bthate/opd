@@ -23,16 +23,15 @@ __all__ = __dir__()
 
 class Command(Object):
 
-    cmds = Object()
+    def __init__(self):
+        self.cmds = Object()
 
-    @staticmethod
-    def add(func):
-        setattr(Command.cmds, func.__name__, func)
+    def add(self, func):
+        setattr(self.cmds, func.__name__, func)
 
-    @staticmethod
-    def handle(evt):
+    def handle(self, evt):
         parse_cmd(evt)
-        func = getattr(Command.cmds, evt.cmd, None)
+        func = getattr(self.cmds, evt.cmd, None)
         if func:
             try:
                 func(evt)

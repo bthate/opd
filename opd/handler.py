@@ -70,7 +70,7 @@ class Handler(Object):
         if not func:
             evt.ready()
             return
-        evt._thr = launch(func, evt)
+        evt._thr = launch(func, self, evt)
  
     def loop(self):
         while not self.stopped.is_set():

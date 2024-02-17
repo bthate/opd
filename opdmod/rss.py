@@ -20,7 +20,7 @@ from urllib.parse import quote_plus, urlencode
 
 from opd import Default, Object, fmt, update
 from opd import Broker, Repeater
-from opd import fntime, find, launch, laps, last, sync
+from opd import fntime, getmain, launch, laps
 
 
 def init():
@@ -33,7 +33,7 @@ DEBUG = False
 
 
 fetchlock = _thread.allocate_lock()
-
+k         = getmain("k")
 
 class Feed(Default):
 
@@ -100,7 +100,7 @@ class Fetcher(Object):
                     Fetcher.seen.urls.append(uurl)
                 counter += 1
                 if self.dosave:
-                    sync(fed)
+                    k.sync(fed)
                 result.append(fed)
         if result:
             sync(Fetcher.seen, Fetcher.seenfn)
@@ -117,12 +117,12 @@ class Fetcher(Object):
 
     def run(self):
         thrs = []
-        for fnm, feed in find('rss'):
+        for fnm, feed in k.find('rss'):
             thrs.append(launch(self.fetch, feed, name=f"{feed.rss}"))
         return thrs
 
     def start(self, repeat=True):
-        Fetcher.seenfn = last(Fetcher.seen)
+        Fetcher.seenfn = k.last(Fetcher.seen)
         if repeat:
             repeater = Repeater(300.0, self.run)
             repeater.start()
@@ -217,7 +217,7 @@ def dpl(event):
         event.reply('dpl <stringinurl> <item1,item2>')
         return
     setter = {'display_list': event.args[1]}
-    for fnm, feed in find('rss', {'rss': event.args[0]}):
+    for fnm, feed in k.find('rss', {'rss': event.args[0]}):
         if feed:
             update(feed, setter)
             sync(feed)
@@ -229,7 +229,7 @@ def nme(event):
         event.reply('nme <stringinurl> <name>')
         return
     selector = {'rss': event.args[0]}
-    for fnm, feed in find('rss', selector):
+    for fnm, feed in k.find('rss', selector):
         if feed:
             feed.name = event.args[1]
             sync(feed)
@@ -241,7 +241,7 @@ def rem(event):
         event.reply('rem <stringinurl>')
         return
     selector = {'rss': event.args[0]}
-    for fnm, feed in find('rss', selector):
+    for fnm, feed in k.find('rss', selector):
         if feed:
             feed.__deleted__ = True
             sync(feed, fnm)
@@ -253,7 +253,7 @@ def res(event):
         event.reply('res <stringinurl>')
         return
     selector = {'rss': event.args[0]}
-    for fnm, feed in find('rss', selector, deleted=True):
+    for fnm, feed in k.find('rss', selector, deleted=True):
         if feed:
             feed.__deleted__ = False
             sync(feed, fnm)
@@ -263,7 +263,7 @@ def res(event):
 def rss(event):
     if not event.rest:
         nrs = 0
-        for fnm, feed in find('rss'):
+        for fnm, feed in k.find('rss'):
             nrs += 1
             elp = laps(time.time()-fntime(fnm))
             txt = fmt(feed)
@@ -275,7 +275,7 @@ def rss(event):
     if 'http' not in url:
         event.reply('i need an url')
         return
-    for fnm, result in find('rss', {'rss': url}):
+    for fnm, result in k.find('rss', {'rss': url}):
         if result:
             event.reply(f'already got {url}')
             return

@@ -6,8 +6,12 @@
 "list of commands"
 
 
-from opd import Command
+from opd.utility import getmain
+
+
+k = getmain("k")
 
 
 def cmd(event):
-    event.reply(",".join(sorted(Command.cmds)))
+    if k:
+        event.reply(",".join(sorted(k.command.cmds)))

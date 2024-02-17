@@ -16,9 +16,9 @@ import time
 import _thread
 
 
-from opd import Cfg, Default, Object, edit, fmt, keys
+from opd import Default, Object, edit, fmt, keys
 from opd import Broker, Client, Command, Error, Event
-from opd import last, launch, sync
+from opd import getmain, launch
 
 
 NAME = __file__.split(os.sep)[-3]
@@ -27,6 +27,7 @@ NAME = __file__.split(os.sep)[-3]
 Error.filter = ["PING", "PONG", "PRIVMSG"]
 byorig       = Broker.byorig
 debug        = Error.debug
+k            = getmain("k")
 saylock      = _thread.allocate_lock()
 
 
@@ -56,13 +57,13 @@ class Config(Default):
 
     def __init__(self):
         Default.__init__(self)
-        self.channel = Cfg.channel or self.channel or Config.channel
-        self.commands = self.commands or Config.commands
-        self.nick = Cfg.nick or self.nick or Config.nick
-        self.port = self.port or Config.port
-        self.realname = self.realname or Config.realname
-        self.server = Cfg.server or self.server or Config.server
-        self.username = self.username or Config.username
+        self.channel = k.cfg.channel or self.channel or Config.channel
+        self.commands = k.cfg.command or self.commands or Config.commands
+        self.nick = k.cfg.nick or self.nick or Config.nick
+        self.port = k.cfg.port or self.port or Config.port
+        self.realname = k.cfg.realname or self.realname or Config.realname
+        self.server = k.cfg.server or self.server or Config.server
+        self.username = k.cfg.username or self.username or Config.username
 
 
 class TextWrap(textwrap.TextWrapper):
@@ -450,7 +451,7 @@ class IRC(Client, Output):
         self.state.lastline = splitted[-1]
 
     def start(self):
-        last(self.cfg)
+        k.last(self.cfg)
         if self.cfg.channel not in self.channels:
             self.channels.append(self.cfg.channel)
         self.events.connected.clear()
@@ -459,9 +460,9 @@ class IRC(Client, Output):
         Client.start(self)
         launch(
                self.doconnect,
-               Cfg.server or self.cfg.server or "localhost",
-               Cfg.nick or self.cfg.nick,
-               int(self.cfg.port or '6667')
+               k.cfg.server or self.cfg.server or "localhost",
+               k.cfg.nick or self.cfg.nick,
+               int(k.cfg.port or self.cfg.port or '6667')
               )
         if not self.state.keeprunning:
             launch(self.keep)
@@ -563,7 +564,7 @@ def cb_quit(evt):
 
 def cfg(event):
     config = Config()
-    path = last(config)
+    path = k.last(config)
     if not event.sets:
         event.reply(
                     fmt(
@@ -574,5 +575,5 @@ def cfg(event):
                    )
     else:
         edit(config, event.sets)
-        sync(config, path)
+        k.sync(config, path)
         event.reply('ok')

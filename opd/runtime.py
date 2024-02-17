@@ -6,14 +6,68 @@
 "runtime"
 
 
+import inspect
 import os
+import time
+import _thread
 
 
+from .brokers import Broker
+from .command import Command
 from .configs import Config
+from .excepts import Error
+from .handler import Handler
+from .objects import Object
+from .parsers import spl
+from .storage import Storage
+from .threads import launch
 
 
-Cfg         = Config()
-Cfg.mod     = "cmd,mod"
-Cfg.name    = __file__.split(os.sep)[-2]
-Cfg.wd      = os.path.expanduser(f"~/.{Cfg.name}")
-Cfg.pidfile = os.path.join(Cfg.wd, f"{Cfg.name}.pid")
+class Cfg(Config):
+
+    def __init___(self):
+        self.mod     = "cmd,mod"
+        self.name    = __file__.split(os.sep)[-2]
+        self.wd      = os.path.expanduser(f"~/.{self.cfg.name}")
+        self.pidfile = os.path.join(self.cfg.wd, f"{self.cfg.name}.pid")
+
+
+class Kernel(Broker, Command, Error, Handler, Storage):
+
+    def __init__(self, *args, **kwargs):
+        Broker.__init__(self)
+        Command.__init__(self)
+        Error.__init__(self)
+        Handler.__init__(self)
+        Storage.__init__(self)
+        self.cfg = Cfg()
+
+    def forever():
+        while 1:
+            try:
+                time.sleep(1.0)
+            except (KeyboardInterrupt, EOFError):
+                _thread.interrupt_main()
+
+    def scan(self, pkg, modstr, initer=False, disable="", wait=True):
+        mds = []
+        for modname in spl(modstr):
+            if modname in spl(disable):
+                continue
+            module = getattr(pkg, modname, None)
+            if not module:
+                continue
+            for _key, cmd in inspect.getmembers(module, inspect.isfunction):
+                if 'event' in cmd.__code__.co_varnames:
+                    self.add(cmd)
+            for _key, clz in inspect.getmembers(module, inspect.isclass):
+                if not issubclass(clz, Object):
+                    continue
+                self.append(clz)
+            if initer and "init" in dir(module):
+                module._thr = launch(module.init, name=f"init {modname}")
+                mds.append(module)
+        if wait and initer:
+            for mod in mds:
+                mod._thr.join()
+        return mds

@@ -25,23 +25,18 @@ class Broker(Object):
 
     objs = Object()
 
-    @staticmethod
-    def add(obj):
-        setattr(Broker.objs, rpr(obj), obj)
+    def add(self, obj):
+        setattr(self.objs, rpr(obj), obj)
 
-    @staticmethod
-    def all():
-        return values(Broker.objs)
+    def all(self):
+        return values(self.objs)
 
-    @staticmethod
-    def first():
-        for key in keys(Broker.objs):
-            return getattr(Broker.objs, key)
+    def first(self):
+        for key in keys(self.objs):
+            return getattr(self.objs, key)
 
-    @staticmethod
-    def remove(obj):
-        delattr(Broker.objs, rpr(obj))
+    def remove(self, obj):
+        delattr(self.objs, rpr(obj))
 
-    @staticmethod
-    def byorig(orig):
-        return getattr(Broker.objs, orig, None)
+    def byorig(self, orig):
+        return getattr(self.objs, orig, None)

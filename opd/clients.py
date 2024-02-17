@@ -6,7 +6,6 @@
 "clients"
 
 
-from .brokers import Broker
 from .command import Command
 from .handler import Handler
 
@@ -25,7 +24,6 @@ class Client(Handler):
     def __init__(self):
         Handler.__init__(self)
         self.register("command", Command.handle)
-        Broker.add(self)
 
     def announce(self, txt):
         self.raw(txt)
