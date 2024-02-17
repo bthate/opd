@@ -16,9 +16,9 @@ import time
 import _thread
 
 
-from .. import Cfg, Default, Object, edit, fmt, keys
-from .. import Broker, Client, Command, Error, Event
-from .. import last, launch, sync
+from opd import Cfg, Default, Object, edit, fmt, keys
+from opd import Broker, Client, Command, Error, Event
+from opd import last, launch, sync
 
 
 NAME = __file__.split(os.sep)[-3]

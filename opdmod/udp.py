@@ -13,7 +13,7 @@ import threading
 import time
 
 
-from .. import Broker, Object, launch
+from opd import Broker, Object, launch
 
 
 def init():

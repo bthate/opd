@@ -9,9 +9,9 @@
 import time
 
 
-from .. import Broker, Event, Timer
-from .. import find, laps, launch, update, sync
-from .. import NoDate, today, to_day, get_day, get_hour
+from opd import Broker, Event, Timer
+from opd import find, laps, launch, update, sync
+from opd import NoDate, today, to_day, get_day, get_hour
 
 
 def init():

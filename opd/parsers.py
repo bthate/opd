@@ -19,15 +19,10 @@ def __dir__():
     return (
         'NoDate',
         'fntime',
-        'get_day',
-        'get_hour',
-        'get_time',
         'laps',
         'parse_cmd',
         'parse_time',
-        'spl',
-        'today',
-        'to_day'
+        'spl'
     )
 
 

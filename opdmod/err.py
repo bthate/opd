@@ -6,7 +6,7 @@
 "status of bots"
 
 
-from .. import Broker, Error
+from opd import Broker, Error
 
 
 def err(event):

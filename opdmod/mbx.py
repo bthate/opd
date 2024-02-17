@@ -11,7 +11,7 @@ import os
 import time
 
 
-from .. import Object, find, fmt, fntime, laps, sync, update
+from opd import Object, find, fmt, fntime, laps, sync, update
 
 
 bdmonths = ['Bo', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']

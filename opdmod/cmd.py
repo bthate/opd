@@ -6,7 +6,7 @@
 "list of commands"
 
 
-from .. import Command
+from opd import Command
 
 
 def cmd(event):

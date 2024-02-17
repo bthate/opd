@@ -7,19 +7,11 @@
 
 
 import os
-import pathlib
 import pwd
 import sys
 import termios
 import time
 import _thread
-
-
-def cdir(pth) -> None:
-    if os.path.exists(pth):
-        return
-    pth = pathlib.Path(pth)
-    os.makedirs(pth, exist_ok=True)
 
 
 def checkpid(pid):

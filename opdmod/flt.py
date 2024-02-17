@@ -6,7 +6,7 @@
 "fleet"
 
 
-from .. import Broker, name
+from opd import Broker, name
 
 
 def flt(event):

@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "opd"
 description = "original programmer daemon"
-version = "201"
+version = "202"
 authors = [
     {name = "Bart Thate", email = "bthate@dds.nl" },
 ]
@@ -23,9 +23,6 @@ classifiers=[
 [project.optional-dependencies]
 dev = []
 
-[project.scripts]
-opd = "opd.__main__:wrapped"
-
 
 [project.urls]
 "home" = "https://pypi.org/project/opd"
@@ -34,9 +31,12 @@ opd = "opd.__main__:wrapped"
 
 
 [tool.setuptools]
+script-files = [
+   "bin/opd",
+]
 packages = [
    "opd",
-   "opd.modules"
+   "opdmod"
 ]
 zip-safe = true
 

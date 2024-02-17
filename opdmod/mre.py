@@ -6,7 +6,7 @@
 "show cached output"
 
 
-from .. import Broker
+from opd import Broker
 
 
 def mre(event):
