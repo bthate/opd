@@ -34,7 +34,7 @@ def __dir__():
 __all__ = __dir__()
 
 
-bdmonths = [
+MONTHS = [
     'Bo',
     'Jan',
     'Feb',
@@ -51,7 +51,7 @@ bdmonths = [
 ]
 
 
-year_formats = [
+FORMATS = [
     "%Y-%m-%d",
     "%d-%m-%Y",
     "%d-%m",
@@ -65,7 +65,7 @@ class NoDate(Exception):
 
 
 def extract_date(daystr):
-    for fmt in year_formats:
+    for fmt in FORMATS:
         try:
             res = ttime.mktime(ttime.strptime(daystr, fmt))
         except:
@@ -101,7 +101,7 @@ def get_day(daystr):
     day = int(day)
     month = int(month)
     yea = int(yea)
-    date = "%s %s %s" % (day, bdmonths[month], yea)
+    date = "%s %s %s" % (day, MONTHS[month], yea)
     return ttime.mktime(ttime.strptime(date, r"%d %b %Y"))
 
 

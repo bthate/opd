@@ -75,6 +75,7 @@ def main():
     Storage.skel()
     parse_cmd(Cfg, " ".join(sys.argv[1:]))
     update(Cfg, Cfg.sets)
+    Storage.wd = Cfg.wd
     if 'a' in Cfg.opts:
         Cfg.mod = ",".join(modules.__dir__())
     if "v" in Cfg.opts:

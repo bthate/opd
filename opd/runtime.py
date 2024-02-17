@@ -10,7 +10,6 @@ import os
 
 
 from .configs import Config
-from .storage import Storage
 
 
 Cfg         = Config()
@@ -18,4 +17,3 @@ Cfg.mod     = "cmd,mod"
 Cfg.name    = __file__.split(os.sep)[-2]
 Cfg.wd      = os.path.expanduser(f"~/.{Cfg.name}")
 Cfg.pidfile = os.path.join(Cfg.wd, f"{Cfg.name}.pid")
-Storage.wd  = Cfg.wd
