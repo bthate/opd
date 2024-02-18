@@ -24,10 +24,10 @@ rpr = object.__repr__
 class Broker(Object):
 
     def __init__(self):
-        Object.__init__()
+        Object.__init__(self)
         self.objs = Object()
 
-    def add(self, obj):
+    def append(self, obj):
         setattr(self.objs, rpr(obj), obj)
 
     def all(self):

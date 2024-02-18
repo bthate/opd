@@ -9,9 +9,10 @@
 from opd.utility import getmain
 
 
-k = getmain("k")
 
 
 def cmd(event):
-    if k:
-        event.reply(",".join(sorted(k.command.cmds)))
+    k = getmain("k")
+    if not k:
+        return
+    event.reply(",".join(sorted(k.cmds)))

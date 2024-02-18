@@ -10,6 +10,7 @@ from .excepts import Error
 from .objects import Object
 from .parsers import parse_cmd
 from .threads import launch
+from .utility import getmain
 
 
 def __dir__():
@@ -19,6 +20,9 @@ def __dir__():
 
 
 __all__ = __dir__()
+
+
+k = getmain("k")
 
 
 class Command(Object):
@@ -38,5 +42,5 @@ class Command(Object):
                 func(evt)
                 evt.show()
             except Exception as exc:
-                Error.add(exc)
+                k.defer(exc)
         evt.ready()

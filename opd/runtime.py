@@ -58,7 +58,7 @@ class Kernel(Broker, Command, Error, Handler, Storage):
             for _key, clz in inspect.getmembers(module, inspect.isclass):
                 if not issubclass(clz, Object):
                     continue
-                self.append(clz)
+                self.whitelist(clz)
             if initer and "init" in dir(module):
                 module._thr = launch(module.init, name=f"init {modname}")
                 mds.append(module)

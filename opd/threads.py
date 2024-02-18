@@ -14,6 +14,7 @@ import types
 
 from .excepts import Error
 from .objects import Object
+from .utility import getmain
 
 
 def __dir__():
@@ -27,6 +28,9 @@ def __dir__():
 
 
 __all__ = __dir__()
+
+
+k = getmain("k")
 
 
 class Thread(threading.Thread):
@@ -56,7 +60,7 @@ class Thread(threading.Thread):
         try:
             self._result = func(*args)
         except Exception as exc:
-            Error.add(exc)
+            k.defer(exc)
             if args and "ready" in dir(args[0]):
                 args[0].ready()
 

@@ -17,21 +17,18 @@ import _thread
 
 
 from opd import Default, Object, edit, fmt, keys
-from opd import Client, Error, Event
+from opd import Client, Event
 from opd import getmain, launch
 
 
 NAME = __file__.split(os.sep)[-3]
 
-
-Error.filter = ["PING", "PONG", "PRIVMSG"]
-debug        = Error.debug
 k            = getmain("k")
-byorig       = k.byorig
 saylock      = _thread.allocate_lock()
 
 
 def init():
+    k.filter = ["PING", "PONG", "PRIVMSG"]
     irc = IRC()
     irc.start()
     irc.events.joined.wait()
@@ -198,7 +195,7 @@ class IRC(Client, Output):
         self.state.nrconnect += 1
         self.events.connected.clear()
         if self.cfg.password:
-            debug("using SASL")
+            k.debug("using SASL")
             self.cfg.sasl = True
             self.cfg.port = "6697"
             ctx = ssl.SSLContext(ssl.PROTOCOL_TLS)
@@ -235,7 +232,7 @@ class IRC(Client, Output):
                ) as ex:
             pass
         except Exception as ex:
-            Error.errors.append(ex)
+            self.defer(ex)
 
     def doconnect(self, server, nck, port=6667):
         while 1:
@@ -248,8 +245,8 @@ class IRC(Client, Output):
                     ConnectionResetError
                    ) as ex:
                 self.state.errors = str(ex)
-                debug(str(ex))
-            debug(f"sleeping {self.cfg.sleep} seconds")
+                k.debug(str(ex))
+            k.debug(f"sleeping {self.cfg.sleep} seconds")
             time.sleep(self.cfg.sleep)
         self.logon(server, nck)
 
@@ -292,7 +289,7 @@ class IRC(Client, Output):
             self.state.pongcheck = True
             self.command('PING', self.cfg.server)
             if self.state.pongcheck:
-                debug("failed pongcheck, restarting")
+                k.debug("failed pongcheck, restarting")
                 self.state.pongcheck = False
                 self.state.keeprunning = False
                 self.events.connected.clear()
@@ -311,7 +308,7 @@ class IRC(Client, Output):
         rawstr = str(txt)
         rawstr = rawstr.replace('\u0001', '')
         rawstr = rawstr.replace('\001', '')
-        debug(txt)
+        k.debug(txt)
         obj = Event()
         obj.args = []
         obj.rawstr = rawstr
@@ -384,9 +381,9 @@ class IRC(Client, Output):
                     ConnectionResetError,
                     BrokenPipeError
                    ) as ex:
-                Error.add(ex)
+                k.defer(ex)
                 self.stop()
-                debug("handler stopped")
+                k.debug("handler stopped")
                 evt = self.event(str(ex))
                 return evt
         try:
@@ -397,7 +394,7 @@ class IRC(Client, Output):
 
     def raw(self, txt):
         txt = txt.rstrip()
-        debug(txt)
+        k.debug(txt)
         txt = txt[:500]
         txt += '\r\n'
         txt = bytes(txt, 'utf-8')
@@ -418,7 +415,7 @@ class IRC(Client, Output):
         self.state.nrsend += 1
 
     def reconnect(self):
-        debug(f"reconnecting to {self.cfg.server}")
+        k.debug(f"reconnecting to {self.cfg.server}")
         try:
             self.disconnect()
         except (ssl.SSLError, OSError):
@@ -478,12 +475,12 @@ class IRC(Client, Output):
 
 
 def cb_auth(evt):
-    bot = byorig(evt.orig)
+    bot = k.byorig(evt.orig)
     bot.command(f'AUTHENTICATE {bot.cfg.password}')
 
 
 def cb_cap(evt):
-    bot = byorig(evt.orig)
+    bot = k.byorig(evt.orig)
     if bot.cfg.password and 'ACK' in evt.arguments:
         bot.direct('AUTHENTICATE PLAIN')
     else:
@@ -491,20 +488,20 @@ def cb_cap(evt):
 
 
 def cb_error(evt):
-    bot = byorig(evt.orig)
+    bot = k.byorig(evt.orig)
     bot.state.nrerror += 1
     bot.state.errors.append(evt.txt)
-    debug(evt.txt)
+    k.debug(evt.txt)
 
 
 def cb_h903(evt):
-    bot = byorig(evt.orig)
+    bot = k.byorig(evt.orig)
     bot.direct('CAP END')
     bot.events.authed.set()
 
 
 def cb_h904(evt):
-    bot = byorig(evt.orig)
+    bot = k.byorig(evt.orig)
     bot.direct('CAP END')
     bot.events.authed.set()
 
@@ -518,25 +515,25 @@ def cb_log(evt):
 
 
 def cb_ready(evt):
-    bot = byorig(evt.orig)
+    bot = k.byorig(evt.orig)
     if bot:
         bot.events.ready.set()
 
 
 def cb_001(evt):
-    bot = byorig(evt.orig)
+    bot = k.byorig(evt.orig)
     bot.logon()
 
 
 def cb_notice(evt):
-    bot = byorig(evt.orig)
+    bot = k.byorig(evt.orig)
     if evt.txt.startswith('VERSION'):
         txt = f'\001VERSION {NAME.upper()} 140 - {bot.cfg.username}\001'
         bot.command('NOTICE', evt.channel, txt)
 
 
 def cb_privmsg(evt):
-    bot = byorig(evt.orig)
+    bot = k.byorig(evt.orig)
     if not bot.cfg.commands:
         return
     if evt.txt:
@@ -548,18 +545,15 @@ def cb_privmsg(evt):
             return
         if evt.txt:
             evt.txt = evt.txt[0].lower() + evt.txt[1:]
-        debug(f"command from {evt.origin}: {evt.txt}")
+        k.debug(f"command from {evt.origin}: {evt.txt}")
         k.handle(evt)
 
 
 def cb_quit(evt):
-    bot = byorig(evt.orig)
-    debug(f"quit from {bot.cfg.server}")
+    bot = k.byorig(evt.orig)
+    k.debug(f"quit from {bot.cfg.server}")
     if evt.orig and evt.orig in bot.zelf:
         bot.stop()
-
-
-"commands"
 
 
 def cfg(event):

@@ -8,7 +8,7 @@
 
 from .command import Command
 from .handler import Handler
-
+from .utility import getmain
 
 def __dir__():
     return (
@@ -17,6 +17,7 @@ def __dir__():
 
 
 __all__ = __dir__()
+
 
 
 class Client(Command, Handler):

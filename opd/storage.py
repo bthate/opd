@@ -43,7 +43,7 @@ class Storage(Object):
         self.classes = {}
         self.wd = ""
 
-    def append(self, clz):
+    def whitelist(self, clz):
         if not clz:
             return
         name = str(clz).split()[1][1:-2]
