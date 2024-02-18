@@ -31,6 +31,10 @@ class Error(Object):
         self.output = print
         self.shown  = []
 
+    def all(self):
+        for exc in self.errors:
+            self.handle(exc)
+
     def debug(self, txt):
         if self.output and not self.skip(txt):
             self.output(txt)
@@ -56,10 +60,6 @@ class Error(Object):
         if self.output:
             txt = str(self.format(exc))
             self.output(txt)
-
-    def show(self):
-        for exc in self.errors:
-            self.handle(exc)
 
     def skip(self, txt):
         for skp in self.filter:

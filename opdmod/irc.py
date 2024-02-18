@@ -232,7 +232,7 @@ class IRC(Client, Output):
                ) as ex:
             pass
         except Exception as ex:
-            self.defer(ex)
+            k.defer(ex)
 
     def doconnect(self, server, nck, port=6667):
         while 1:
@@ -408,7 +408,7 @@ class IRC(Client, Output):
                     ConnectionResetError,
                     BrokenPipeError
                    ) as ex:
-                Error.errors.append(ex)
+                k.defer(ex)
                 self.stop()
                 return
         self.state.last = time.time()
@@ -546,7 +546,7 @@ def cb_privmsg(evt):
         if evt.txt:
             evt.txt = evt.txt[0].lower() + evt.txt[1:]
         k.debug(f"command from {evt.origin}: {evt.txt}")
-        k.handle(evt)
+        k.command(evt)
 
 
 def cb_quit(evt):

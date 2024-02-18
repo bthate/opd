@@ -7,22 +7,17 @@
 
 
 import getpass
-import inspect
 import os
-import pwd
 import readline
 import sys
-import termios
 import time
 
 
 sys.path.insert(0, os.getcwd())
 
 
-from opd import Broker, Client, Command, Config, Default, Error, Event
-from opd import Kernel, Object, Storage
-from opd import cdir, launch, parse_cmd, spl, update
-from opd import checkpid, daemon, forever, getpid, privileges, wrap
+from opd import Client, Config, Event, Kernel, update
+from opd import checkpid, daemon, getpid, parse_cmd, privileges, wrap
 
 
 import opdmod as modules
@@ -39,6 +34,11 @@ k = Kernel()
 
 
 class Console(Client):
+
+    def __init__(self):
+        Client.__init__(self)
+        self.register("command", k.command)
+        k.append(self)
 
     def announce(self, txt):
         pass
@@ -66,13 +66,14 @@ def cmnd(txt, out):
     evn = Event()
     evn.orig = object.__repr__(clt)
     evn.txt = txt
-    k.handle(evn)
+    k.command(evn)
     evn.wait()
     return evn
 
 
 def main():
     k.skel()
+    readline.redisplay()
     parse_cmd(Cfg, " ".join(sys.argv[1:]))
     update(k.cfg, Cfg)
     update(k.cfg, Cfg.sets)
@@ -110,7 +111,7 @@ def main():
 
 def wrapped():
     wrap(main)
-    k.show()
+    k.all()
 
 
 if __name__ == "__main__":

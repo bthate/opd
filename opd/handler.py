@@ -71,7 +71,7 @@ class Handler(Object):
         if not func:
             evt.ready()
             return
-        evt._thr = launch(func, self, evt)
+        evt._thr = launch(func, evt)
  
     def loop(self):
         while not self.stopped.is_set():

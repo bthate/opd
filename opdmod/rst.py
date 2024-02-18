@@ -110,4 +110,4 @@ class RESTHandler(BaseHTTPRequestHandler):
             self.end_headers()
 
     def log(self, code):
-        Error.debug('%s code %s path %s' % (self.address_string(), code, self.path))
+        k.debug('%s code %s path %s' % (self.address_string(), code, self.path))

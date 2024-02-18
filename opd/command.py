@@ -22,9 +22,6 @@ def __dir__():
 __all__ = __dir__()
 
 
-k = getmain("k")
-
-
 class Command(Object):
 
     def __init__(self):
@@ -34,7 +31,7 @@ class Command(Object):
     def add(self, func):
         setattr(self.cmds, func.__name__, func)
 
-    def handle(self, evt):
+    def command(self, evt):
         parse_cmd(evt)
         func = getattr(self.cmds, evt.cmd, None)
         if func:
@@ -42,5 +39,6 @@ class Command(Object):
                 func(evt)
                 evt.show()
             except Exception as exc:
+                k = getmain("k")
                 k.defer(exc)
         evt.ready()
