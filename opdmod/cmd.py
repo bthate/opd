@@ -15,4 +15,4 @@ def cmd(event):
     k = getmain("k")
     if not k:
         return
-    event.reply(",".join(sorted(k.cmds)))
+    event.reply(",".join(sorted(list(k.cmds))))

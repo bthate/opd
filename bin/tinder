@@ -23,7 +23,7 @@ sys.path.insert(0, os.getcwd())
 
 from opd import Client, Default, Error, Event, Kernel, Object
 from opd import Storage
-from opd import keys, laps, launch, parse_cmd, spl
+from opd import keys, laps, launch, parse_cmd, spl, update
 
 
 import opdmod as mods
@@ -44,10 +44,12 @@ Cfg.wd = ".test"
 
 k = Kernel()
 
+
 Storage.wd = Cfg.wd
 
 
 paylock = _thread.allocate_lock()
+
 
 events = []
 
@@ -110,6 +112,7 @@ def payload(clt) -> None:
                 evt.txt = cmd + " " + ex
                 evt.type = "command"
                 clt.put(evt)
+                print(evt)
                 events.append(evt)
                 nmr += 1
         return nmr
@@ -141,16 +144,15 @@ def main() -> None:
     global nrs
     global nrcommand
     global percall
-    Error.output = cprint
-    print(mods)
+    k.output = cprint
     for mod in k.scan(mods, Cfg.mod):
-        print(mod)
         mod.DEBUG = True
-    print(k.cmds)
     nrs = Cfg.index or 1
     nrcommand = len(k.cmds) or 1
     cli = CLI()
+    cli.raw = print
     cli.start()
+    k.append(cli)
     waiters = []
     for _nr in range(nrs):
         launch(payload, cli)
@@ -164,10 +166,11 @@ if __name__ == "__main__":
     if os.path.exists(k.wd):
         shutil.rmtree(k.wd)
     k.skel()
-    parse_cmd(k.cfg, " ".join(sys.argv[1:]))
+    parse_cmd(Cfg, " ".join(sys.argv[1:]))
+    update(k.cfg, Cfg)
     if "p" in k.cfg.opts:
         profile.runctx(main.__code__, globals(), locals())
     else:
         wrap(main)
-    Error.show()
+    k.show()
     print(f"{lap} {nrs} {nrcommand} {percall}")
