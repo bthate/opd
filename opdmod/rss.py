@@ -18,8 +18,7 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import quote_plus, urlencode
 
 
-from opd import Default, Object, fmt, update
-from opd import Broker, Repeater
+from opd import Default, Object, Repeater, fmt, update
 from opd import fntime, getmain, launch, laps
 
 
@@ -103,14 +102,14 @@ class Fetcher(Object):
                     k.sync(fed)
                 result.append(fed)
         if result:
-            sync(Fetcher.seen, Fetcher.seenfn)
+            k.sync(Fetcher.seen, Fetcher.seenfn)
         txt = ''
         feedname = getattr(feed, 'name', None)
         if feedname:
             txt = f'[{feedname}] '
         for obj in result:
             txt2 = txt + self.display(obj)
-            for bot in Broker.all():
+            for bot in k.all():
                 if "announce" in dir(bot):
                     bot.announce(txt2.rstrip())
         return counter
@@ -220,7 +219,7 @@ def dpl(event):
     for fnm, feed in k.find('rss', {'rss': event.args[0]}):
         if feed:
             update(feed, setter)
-            sync(feed)
+            k.sync(feed)
     event.reply('ok')
 
 
@@ -232,7 +231,7 @@ def nme(event):
     for fnm, feed in k.find('rss', selector):
         if feed:
             feed.name = event.args[1]
-            sync(feed)
+            k.sync(feed)
     event.reply('ok')
 
 
@@ -244,7 +243,7 @@ def rem(event):
     for fnm, feed in k.find('rss', selector):
         if feed:
             feed.__deleted__ = True
-            sync(feed, fnm)
+            k.sync(feed, fnm)
     event.reply('ok')
 
 
@@ -256,7 +255,7 @@ def res(event):
     for fnm, feed in k.find('rss', selector, deleted=True):
         if feed:
             feed.__deleted__ = False
-            sync(feed, fnm)
+            k.sync(feed, fnm)
     event.reply('ok')
 
 
@@ -281,5 +280,5 @@ def rss(event):
             return
     feed = Rss()
     feed.rss = event.args[0]
-    sync(feed)
+    k.sync(feed)
     event.reply('ok')

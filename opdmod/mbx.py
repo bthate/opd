@@ -11,13 +11,10 @@ import os
 import time
 
 
-from opd import Object, find, fmt, fntime, laps, sync, update
+from opd import Object, fmt, fntime, getmain, laps, update
 
 
-bdmonths = ['Bo', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-
-
-monthint = {
+MONTH = {
     'Jan': 1,
     'Feb': 2,
     'Mar': 3,
@@ -31,6 +28,9 @@ monthint = {
     'Nov': 11,
     'Dec': 12
 }
+
+
+k = getmain("k")
 
 
 class Email(Object):
@@ -50,7 +50,7 @@ def to_date(date):
         if "-" in res[3]:
             raise ValueError
         int(res[3])
-        ddd = "{:4}-{:#02}-{:#02} {:6}".format(res[3], monthint[res[2]], int(res[1]), res[4])
+        ddd = "{:4}-{:#02}-{:#02} {:6}".format(res[3], MONTH[res[2]], int(res[1]), res[4])
     except (IndexError, KeyError, ValueError) as ex:
         try:
             if "+" in res[4]:
@@ -58,16 +58,16 @@ def to_date(date):
             if "-" in res[4]:
                 raise ValueError from ex
             int(res[4])
-            ddd = "{:4}-{:#02}-{:02} {:6}".format(res[4], monthint[res[1]], int(res[2]), res[3])
+            ddd = "{:4}-{:#02}-{:02} {:6}".format(res[4], MONTH[res[1]], int(res[2]), res[3])
         except (IndexError, KeyError, ValueError):
             try:
-                ddd = "{:4}-{:#02}-{:02} {:6}".format(res[2], monthint[res[1]], int(res[0]), res[3])
+                ddd = "{:4}-{:#02}-{:02} {:6}".format(res[2], MONTH[res[1]], int(res[0]), res[3])
             except (IndexError, KeyError):
                 try:
-                    ddd = "{:4}-{:#02}-{:02}".format(res[2], monthint[res[1]], int(res[0]))
+                    ddd = "{:4}-{:#02}-{:02}".format(res[2], MONTH[res[1]], int(res[0]))
                 except (IndexError, KeyError):
                     try:
-                        ddd = "{:4}-{:#02}".format(res[2], monthint[res[1]])
+                        ddd = "{:4}-{:#02}".format(res[2], MONTH[res[1]])
                     except (IndexError, KeyError):
                         try:
                             ddd = "{:4}".format(res[2])
@@ -81,7 +81,7 @@ def cor(event):
         event.reply("cor <email>")
         return
     nr = -1
-    for _fn, email in find("email", {"From": event.args[0]}):
+    for _fn, email in k.find("email", {"From": event.args[0]}):
         nr += 1
         txt = ""
         if len(event.args) > 1:
@@ -97,7 +97,7 @@ def eml(event):
         event.reply("eml <searchtxtinemail>")
         return
     nr = -1
-    for fn, o in find("email"):
+    for fn, o in k.find("email"):
         if event.rest in o.text:
             nr += 1
             event.reply("%s %s %s" % (nr, fmt(o, "From,Subject"), laps(time.time() - fntime(fn))))
@@ -128,7 +128,7 @@ def mbx(event):
             if payload.get_content_type() == 'text/plain':
                 o.text += payload.get_payload()
         o.text = o.text.replace("\\n", "\n")
-        sync(o)
+        k.sync(o)
         nr += 1
     if nr:
         event.reply("ok %s" % nr)

@@ -11,10 +11,10 @@ import threading
 import _thread
 
 
-from .brokers import Broker
 from .default import Default
 from .objects import Object
 from .threads import launch
+from .utility import getmain
 
 
 def __dir__():
@@ -45,8 +45,9 @@ class Event(Default):
         self.result.append(txt)
 
     def show(self):
+        k = getmain("k")
         for txt in self.result:
-            bot = Broker.byorig(self.orig) or Broker.first()
+            bot = k.byorig(self.orig) or k.first()
             if bot:
                 bot.say(self.channel, txt)
 

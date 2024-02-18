@@ -14,14 +14,16 @@ import time
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
 
-from opd import Default, Object, Error, Storage
-from opd import launch
+from opd import Default, Object, Error, launch, getmain
 
 
 def init():
     rest = REST((Config.hostname, int(Config.port)), RESTHandler)
     launch(rest.start)
     return rest
+
+
+k = getmain("k")
 
 
 def html(txt):
@@ -91,11 +93,11 @@ class RESTHandler(BaseHTTPRequestHandler):
         if self.path == "/":
             self.write_header("text/html")
             txt = ""
-            for fnm in Storage.fns():
+            for fnm in k.fns():
                 txt += f'<a href="http://{Config.hostname}:{Config.port}/{fnm}">{fnm}</a>\n'
             self.send(html(txt.strip()))
             return
-        fnm = Storage.wd + os.sep + "store" + os.sep + self.path
+        fnm = k.wd + os.sep + "store" + os.sep + self.path
         try:
             f = open(fnm, "r", encoding="utf-8")
             txt = f.read()

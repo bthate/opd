@@ -6,11 +6,14 @@
 "fleet"
 
 
-from opd import Broker, name
+from opd import getmain, name
+
+
+k = getmain("k")
 
 
 def flt(event):
     try:
-        event.reply(Broker.all()[int(event.args[0])])
+        event.reply(k.all()[int(event.args[0])])
     except (IndexError, ValueError):
-        event.reply(",".join([name(x).split(".")[-1] for x in Broker.all()]))
+        event.reply(",".join([name(x).split(".")[-1] for x in k.all()]))

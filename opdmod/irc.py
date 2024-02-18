@@ -17,7 +17,7 @@ import _thread
 
 
 from opd import Default, Object, edit, fmt, keys
-from opd import Broker, Client, Command, Error, Event
+from opd import Client, Error, Event
 from opd import getmain, launch
 
 
@@ -25,9 +25,9 @@ NAME = __file__.split(os.sep)[-3]
 
 
 Error.filter = ["PING", "PONG", "PRIVMSG"]
-byorig       = Broker.byorig
 debug        = Error.debug
 k            = getmain("k")
+byorig       = k.byorig
 saylock      = _thread.allocate_lock()
 
 
@@ -549,7 +549,7 @@ def cb_privmsg(evt):
         if evt.txt:
             evt.txt = evt.txt[0].lower() + evt.txt[1:]
         debug(f"command from {evt.origin}: {evt.txt}")
-        Command.handle(evt)
+        k.handle(evt)
 
 
 def cb_quit(evt):

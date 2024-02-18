@@ -19,9 +19,10 @@ def __dir__():
 __all__ = __dir__()
 
 
-class Client(Handler):
+class Client(Command, Handler):
 
     def __init__(self):
+        Command.__init__(self)
         Handler.__init__(self)
         self.register("command", Command.handle)
 

@@ -9,18 +9,20 @@
 import time
 
 
-from opd import Broker, Event, Timer
-from opd import find, laps, launch, update, sync
-from opd import NoDate, today, to_day, get_day, get_hour
+from opd import Event, Timer, laps, launch, update
+from opd import NoDate, getmain, get_day, get_hour, today, to_day
+
+
+k = getmain("k")
 
 
 def init():
-    for fnm, obj in find("timer"):
+    for fnm, obj in k.find("timer"):
         if "time" not in obj:
             continue
         diff = float(obj.time) - time.time()
         if diff > 0:
-            bot = Broker.first()
+            bot = k.first()
             evt = Event()
             update(evt, obj)
             evt.orig = object.__repr__(bot)
@@ -31,7 +33,7 @@ def init():
 def tmr(event):
     if not event.rest:
         nmr = 0
-        for fnm, obj in find('timer'):
+        for fnm, obj in k.find('timer'):
             if "time" not in obj:
                 continue
             lap = float(obj.time) - time.time()
@@ -72,5 +74,5 @@ def tmr(event):
     event.result.append(event.rest)
     timer = Timer(diff, event.show)
     update(timer, event)
-    sync(timer)
+    k.sync(timer)
     launch(timer.start)

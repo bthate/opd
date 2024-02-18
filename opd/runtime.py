@@ -1,13 +1,12 @@
 # This file is placed in the Public Domain.
 #
-# pylint: disable=C,R,W0201
+# pylint: disable=C,R,W0201,W0613,W0212
 
 
 "runtime"
 
 
 import inspect
-import os
 import time
 import _thread
 
@@ -25,11 +24,7 @@ from .threads import launch
 
 class Cfg(Config):
 
-    def __init___(self):
-        self.mod     = "cmd,mod"
-        self.name    = __file__.split(os.sep)[-2]
-        self.wd      = os.path.expanduser(f"~/.{self.cfg.name}")
-        self.pidfile = os.path.join(self.cfg.wd, f"{self.cfg.name}.pid")
+    pass
 
 
 class Kernel(Broker, Command, Error, Handler, Storage):
@@ -42,7 +37,7 @@ class Kernel(Broker, Command, Error, Handler, Storage):
         Storage.__init__(self)
         self.cfg = Cfg()
 
-    def forever():
+    def forever(self):
         while 1:
             try:
                 time.sleep(1.0)

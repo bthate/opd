@@ -59,7 +59,7 @@ class Storage(Object):
         nr = -1
         for fnm in sorted(self.fns(clz), key=fntime):
             obj = Default()
-            fetch(obj, fnm)
+            self.fetch(obj, fnm)
             if not deleted and '__deleted__' in obj:
                 continue
             if selector and not search(obj, selector):
@@ -81,7 +81,7 @@ class Storage(Object):
                         for fll in fls:
                             yield strip(os.path.join(ddd, fll))
 
-    def last(obj, selector=None):
+    def last(self, obj, selector=None):
         if selector is None:
             selector = {}
         result = sorted(
@@ -110,19 +110,17 @@ class Storage(Object):
     def skel(self):
         cdir(os.path.join(self.wd, "store", ""))
 
-    @staticmethod
-    def store(pth=""):
+    def store(self, pth=""):
         return os.path.join(self.wd, "store", pth)
 
-    def sync(obj, pth=None):
+    def sync(self, obj, pth=None):
         if pth is None:
             pth = ident(obj)
         pth2 = self.store(pth)
         write(obj, pth2)
         return pth
 
-    @staticmethod
-    def types():
+    def types(self):
         return os.listdir(self.store())
 
 

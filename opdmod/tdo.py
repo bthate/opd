@@ -9,7 +9,10 @@
 import time
 
 
-from opd import Object, fntime, laps
+from opd import Object, fntime, getmain, laps
+
+
+k = getmain("k")
 
 
 class NoDate(Exception):

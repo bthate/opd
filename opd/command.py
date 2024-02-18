@@ -24,6 +24,7 @@ __all__ = __dir__()
 class Command(Object):
 
     def __init__(self):
+        Object.__init__(self)
         self.cmds = Object()
 
     def add(self, func):
