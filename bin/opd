@@ -73,6 +73,7 @@ def cmnd(txt, out):
 
 def main():
     k.skel()
+    k.register("command", k.command)
     readline.redisplay()
     parse_cmd(Cfg, " ".join(sys.argv[1:]))
     update(k.cfg, Cfg)

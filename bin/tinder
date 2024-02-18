@@ -23,7 +23,10 @@ sys.path.insert(0, os.getcwd())
 
 from opd import Client, Default, Error, Event, Kernel, Object
 from opd import Storage
-from opd import keys, laps, launch, parse_cmd, spl, update
+from opd import keys, laps, launch, parse_cmd, spl, update, wrap
+
+
+k = Kernel()
 
 
 import opdmod as mods
@@ -40,18 +43,17 @@ Cfg.silent = False
 Cfg.skip = ["debug",]
 Cfg.version = "60"
 Cfg.wd = ".test"
-
-
-k = Kernel()
-
-
-Storage.wd = Cfg.wd
+k.wd = Cfg.wd
 
 
 paylock = _thread.allocate_lock()
 
 
 events = []
+lap = 1
+nrs = 1
+nrcommand = 1
+percall = 1
 
 
 param = Object()
@@ -69,6 +71,8 @@ param.pwd = ["bart bla"]
 param.rem = ["hnrss"]
 param.rss = ["http://hnrss.org/newest"]
 param.ver = [""]
+
+
 
 
 class CLI(Client):
@@ -100,7 +104,7 @@ def cprint(txt):
     sys.stdout.flush()
 
 
-def payload(clt) -> None:
+def payload(clt):
     cmds = list(keys(k.cmds))
     random.shuffle(cmds)
     with paylock:
@@ -111,35 +115,14 @@ def payload(clt) -> None:
                 evt.orig = object.__repr__(clt)
                 evt.txt = cmd + " " + ex
                 evt.type = "command"
-                clt.put(evt)
                 print(evt)
+                clt.put(evt)
                 events.append(evt)
                 nmr += 1
         return nmr
 
 
-def wrap(func) -> None:
-    old2 = None
-    try:
-        old2 = termios.tcgetattr(sys.stdin.fileno())
-    except termios.error:
-        pass
-    try:
-        func()
-    except (KeyboardInterrupt, EOFError):
-        print("")
-    finally:
-        if old2:
-            termios.tcsetattr(sys.stdin.fileno(), termios.TCSADRAIN, old2)
-
-
-lap = 1
-nrs = 1
-nrcommand = 1
-percall = 1
-
-
-def main() -> None:
+def main():
     global lap
     global nrs
     global nrcommand
@@ -150,6 +133,7 @@ def main() -> None:
     nrs = Cfg.index or 1
     nrcommand = len(k.cmds) or 1
     cli = CLI()
+    cli.register("command", k.command)
     cli.raw = print
     cli.start()
     k.append(cli)
@@ -172,5 +156,6 @@ if __name__ == "__main__":
         profile.runctx(main.__code__, globals(), locals())
     else:
         wrap(main)
-    k.show()
+    print(k.errors)
+    k.all()
     print(f"{lap} {nrs} {nrcommand} {percall}")
