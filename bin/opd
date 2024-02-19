@@ -16,11 +16,8 @@ import time
 sys.path.insert(0, os.getcwd())
 
 
-from opd import Client, Command, Config, Error, Event, Storage
+from opd import Client, Command, Config, Error, Event, Storage, modules
 from opd import checkpid, daemon, forever, getpid, parse_cmd, privileges, scan, wrap
-
-
-import opdmod as modules
 
 
 Cfg         = Config()
@@ -58,7 +55,6 @@ class Console(Client):
 def cmnd(txt, out):
     clt = Client()
     clt.raw = out
-    Storage.whitelist(clt)
     evn = Event()
     evn.orig = object.__repr__(clt)
     evn.txt = txt

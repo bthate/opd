@@ -24,6 +24,7 @@ from opd.runtime import broker
 
 give = broker.give
 
+
 NAME    = __file__.split(os.sep)[-3]
 saylock = _thread.allocate_lock()
 
@@ -173,6 +174,7 @@ class IRC(Client, Output):
         self.register('PRIVMSG', cb_privmsg)
         self.register('QUIT', cb_quit)
         self.register("366", cb_ready)
+        broker.take(self)
 
     def announce(self, txt):
         for channel in self.channels:
