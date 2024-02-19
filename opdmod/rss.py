@@ -32,7 +32,7 @@ DEBUG = False
 
 
 fetchlock = _thread.allocate_lock()
-k         = getmain("k")
+
 
 class Feed(Default):
 
@@ -55,9 +55,11 @@ class Seen(Default):
 
 class Fetcher(Object):
 
-    dosave = False
-    seen = Seen()
-    seenfn = None
+    def __init__(self):
+        self.dosave = False
+        self.seen = Seen()
+        self.seenfn = None
+        self.kernel = getmain("k")
 
     @staticmethod
     def display(obj):
@@ -81,6 +83,7 @@ class Fetcher(Object):
         return result[:-2].rstrip()
 
     def fetch(self, feed):
+        k = getmain("k")
         with fetchlock:
             counter = 0
             result = []
@@ -94,34 +97,34 @@ class Fetcher(Object):
                         uurl = f'{url.scheme}://{url.netloc}/{url.path}'
                     else:
                         uurl = fed.link
-                    if uurl in Fetcher.seen.urls:
+                    if uurl in self.seen.urls:
                         continue
-                    Fetcher.seen.urls.append(uurl)
+                    self.seen.urls.append(uurl)
                 counter += 1
                 if self.dosave:
-                    k.sync(fed)
+                    self.kernel.sync(fed)
                 result.append(fed)
         if result:
-            k.sync(Fetcher.seen, Fetcher.seenfn)
+            self.kernel.sync(self.seen, self.seenfn)
         txt = ''
         feedname = getattr(feed, 'name', None)
         if feedname:
             txt = f'[{feedname}] '
         for obj in result:
             txt2 = txt + self.display(obj)
-            for bot in k.all():
+            for bot in self.kernel.all():
                 if "announce" in dir(bot):
                     bot.announce(txt2.rstrip())
         return counter
 
     def run(self):
         thrs = []
-        for fnm, feed in k.find('rss'):
+        for fnm, feed in self.kernel.find('rss'):
             thrs.append(launch(self.fetch, feed, name=f"{feed.rss}"))
         return thrs
 
     def start(self, repeat=True):
-        Fetcher.seenfn = k.last(Fetcher.seen)
+        self.seenfn = self.kernel.last(self.seen)
         if repeat:
             repeater = Repeater(300.0, self.run)
             repeater.start()
@@ -216,6 +219,7 @@ def dpl(event):
         event.reply('dpl <stringinurl> <item1,item2>')
         return
     setter = {'display_list': event.args[1]}
+    k = getmain("k")
     for fnm, feed in k.find('rss', {'rss': event.args[0]}):
         if feed:
             update(feed, setter)
@@ -228,6 +232,7 @@ def nme(event):
         event.reply('nme <stringinurl> <name>')
         return
     selector = {'rss': event.args[0]}
+    k = getmain("k")
     for fnm, feed in k.find('rss', selector):
         if feed:
             feed.name = event.args[1]
@@ -240,6 +245,7 @@ def rem(event):
         event.reply('rem <stringinurl>')
         return
     selector = {'rss': event.args[0]}
+    k = getmain("k")
     for fnm, feed in k.find('rss', selector):
         if feed:
             feed.__deleted__ = True
@@ -252,6 +258,7 @@ def res(event):
         event.reply('res <stringinurl>')
         return
     selector = {'rss': event.args[0]}
+    k = getmain("k")
     for fnm, feed in k.find('rss', selector, deleted=True):
         if feed:
             feed.__deleted__ = False
@@ -260,6 +267,7 @@ def res(event):
 
 
 def rss(event):
+    k = getmain("k")
     if not event.rest:
         nrs = 0
         for fnm, feed in k.find('rss'):

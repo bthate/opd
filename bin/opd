@@ -31,7 +31,7 @@ Cfg.pidfile = os.path.join(Cfg.wd, f"{Cfg.name}.pid")
 
 
 k = Kernel()
-
+print(object.__repr__(k))
 
 class Console(Client):
 
@@ -89,6 +89,7 @@ def main():
         print(txt)
         return
     if "c" in Cfg.opts:
+        print(Cfg.mod)
         k.scan(modules, Cfg.mod, True, Cfg.dis, True)
         csl = Console()
         k.append(csl)
@@ -112,7 +113,7 @@ def main():
 
 def wrapped():
     wrap(main)
-    k.all()
+    k.printall()
 
 
 if __name__ == "__main__":
