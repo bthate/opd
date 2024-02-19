@@ -24,22 +24,23 @@ __all__ = __dir__()
 
 class Error(Object):
 
-    def __init__(self):
-        Object.__init__(self)
-        self.errors = []
-        self.filter = []
-        self.output = print
-        self.shown  = []
+    errors = []
+    filter = []
+    output = print
+    shown  = []
 
-    def debug(self, txt):
-        if self.output and not self.skip(txt):
-            self.output(txt)
+    @staticmethod
+    def debug(txt):
+        if Error.output and not Error.skip(txt):
+            Error.output(txt)
 
-    def defer(self, exc):
+    @staticmethod
+    def defer(exc):
         excp = exc.with_traceback(exc.__traceback__)
-        self.errors.append(excp)
+        Error.errors.append(excp)
 
-    def format(self, exc):
+    @staticmethod
+    def format(exc):
         res = ""
         stream = io.StringIO(
                              traceback.print_exception(
@@ -52,18 +53,20 @@ class Error(Object):
             res += line + "\n"
         return res
 
-    def print(self, exc):
-        if self.output:
-            txt = str(self.format(exc))
-            self.output(txt)
+    @staticmethod
+    def print(exc):
+        if Error.output:
+            txt = str(Error.format(exc))
+            Error.output(txt)
 
-    def printall(self):
-        print(self.errors)
-        for exc in self.errors:
-            self.print(exc)
+    @staticmethod
+    def printall():
+        for exc in Error.errors:
+            Error.print(exc)
 
-    def skip(self, txt):
-        for skp in self.filter:
+    @staticmethod
+    def skip(txt):
+        for skp in Error.filter:
             if skp in str(txt):
                 return True
         return False

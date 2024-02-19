@@ -21,12 +21,9 @@ import _thread
 sys.path.insert(0, os.getcwd())
 
 
-from opd import Client, Default, Error, Event, Kernel, Object
+from opd import Client, Command, Default, Error, Event, Object
 from opd import Storage
-from opd import keys, laps, launch, parse_cmd, spl, update, wrap
-
-
-k = Kernel()
+from opd import keys, laps, launch, parse_cmd, scan, spl, update, wrap
 
 
 import opdmod as mods
@@ -43,7 +40,7 @@ Cfg.silent = False
 Cfg.skip = ["debug",]
 Cfg.version = "60"
 Cfg.wd = ".test"
-k.wd = Cfg.wd
+Storage.wd = Cfg.wd
 
 
 paylock = _thread.allocate_lock()
@@ -105,7 +102,7 @@ def cprint(txt):
 
 
 def payload(clt):
-    cmds = list(keys(k.cmds))
+    cmds = list(keys(Command.cmds))
     random.shuffle(cmds)
     with paylock:
         nmr = 0
@@ -127,16 +124,15 @@ def main():
     global nrs
     global nrcommand
     global percall
-    k.output = cprint
-    for mod in k.scan(mods, Cfg.mod):
+    Error.output = cprint
+    for mod in scan(mods, Cfg.mod):
         mod.DEBUG = True
     nrs = Cfg.index or 1
-    nrcommand = len(k.cmds) or 1
+    nrcommand = len(Command.cmds) or 1
     cli = CLI()
-    cli.register("command", k.command)
+    cli.register("command", Command.command)
     cli.raw = print
     cli.start()
-    k.append(cli)
     waiters = []
     for _nr in range(nrs):
         launch(payload, cli)
@@ -147,15 +143,13 @@ def main():
 
 
 if __name__ == "__main__":
-    if os.path.exists(k.wd):
-        shutil.rmtree(k.wd)
-    k.skel()
+    if os.path.exists(Storage.wd):
+        shutil.rmtree(Storage.wd)
+    Storage.skel()
     parse_cmd(Cfg, " ".join(sys.argv[1:]))
-    update(k.cfg, Cfg)
-    if "p" in k.cfg.opts:
+    if "p" in Cfg.opts:
         profile.runctx(main.__code__, globals(), locals())
     else:
         wrap(main)
-    print(k.errors)
-    k.all()
+    Error.printall()
     print(f"{lap} {nrs} {nrcommand} {percall}")

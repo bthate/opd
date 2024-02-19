@@ -6,6 +6,7 @@
 "clients"
 
 
+from .command import Command 
 from .handler import Handler
 
 
@@ -20,11 +21,19 @@ __all__ = __dir__()
 
 class Client(Handler):
 
+    def __init__(self):
+        Handler.__init__(self)
+        self.register("command", Command.command)
+
     def announce(self, txt):
         self.raw(txt)
 
     def say(self, channel, txt):
         self.raw(txt)
+
+    def show(self, evt):
+        for txt in evt.result:
+            self.say(evt.channel, txt)
 
     def raw(self, txt):
         pass

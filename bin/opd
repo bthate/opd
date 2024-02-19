@@ -16,8 +16,8 @@ import time
 sys.path.insert(0, os.getcwd())
 
 
-from opd import Client, Config, Event, Kernel, update
-from opd import checkpid, daemon, getpid, parse_cmd, privileges, wrap
+from opd import Client, Command, Config, Error, Event, Storage
+from opd import checkpid, daemon, forever, getpid, parse_cmd, privileges, scan, wrap
 
 
 import opdmod as modules
@@ -30,15 +30,10 @@ Cfg.wd      = os.path.expanduser(f"~/.{Cfg.name}")
 Cfg.pidfile = os.path.join(Cfg.wd, f"{Cfg.name}.pid")
 
 
-k = Kernel()
-print(object.__repr__(k))
+Storage.wd = Cfg.wd
+
 
 class Console(Client):
-
-    def __init__(self):
-        Client.__init__(self)
-        self.register("command", k.command)
-        k.append(self)
 
     def announce(self, txt):
         pass
@@ -46,6 +41,7 @@ class Console(Client):
     def callback(self, evt):
         Client.callback(self, evt)
         evt.wait()
+        self.show(evt)
 
     def poll(self):
         evt = Event()
@@ -62,43 +58,39 @@ class Console(Client):
 def cmnd(txt, out):
     clt = Client()
     clt.raw = out
-    k.append(clt)
+    Storage.whitelist(clt)
     evn = Event()
     evn.orig = object.__repr__(clt)
     evn.txt = txt
-    k.command(evn)
+    Command.command(evn)
     evn.wait()
     return evn
 
 
 def main():
-    k.skel()
-    k.register("command", k.command)
-    readline.redisplay()
+    Storage.skel()
     parse_cmd(Cfg, " ".join(sys.argv[1:]))
-    update(k.cfg, Cfg)
-    update(k.cfg, Cfg.sets)
-    k.wd = k.wd or Cfg.wd
+    readline.redisplay()
     if 'a' in Cfg.opts:
         Cfg.mod = ",".join(modules.__dir__())
     if "v" in Cfg.opts:
         dte = time.ctime(time.time()).replace("  ", " ")
-        k.debug(f"{Cfg.name.upper()} {Cfg.opts.upper()} started {dte}")
+        Error.debug(f"{Cfg.name.upper()} {Cfg.opts.upper()} started {dte}")
     if "h" in Cfg.opts:
         from . import __doc__ as txt
         print(txt)
         return
     if "c" in Cfg.opts:
-        print(Cfg.mod)
-        k.scan(modules, Cfg.mod, True, Cfg.dis, True)
+        scan(modules, Cfg.mod, True, Cfg.sets.dis, True)
         csl = Console()
-        k.append(csl)
+        if 'z' in Cfg.opts:
+            csl.threaded = False
         csl.start()
-        k.forever()
+        forever()
         return
     if Cfg.otxt:
         Cfg.mod = ",".join(modules.__dir__())
-        k.scan(modules, Cfg.mod, False, Cfg.sets.dis, False)
+        scan(modules, Cfg.mod, False, Cfg.sets.dis, False)
         return cmnd(Cfg.otxt, print)
     if checkpid(getpid(Cfg.pidfile)):
         print("daemon is already running.")
@@ -107,13 +99,13 @@ def main():
     Cfg.user = getpass.getuser()
     daemon(Cfg.pidfile, "v" in Cfg.opts)
     privileges(Cfg.user)
-    k.scan(modules, Cfg.mod, True, Cfg.dis, True)
-    k.forever()
+    scan(modules, Cfg.mod, True, Cfg.dis, True)
+    forever()
 
 
 def wrapped():
     wrap(main)
-    k.printall()
+    Error.printall()
 
 
 if __name__ == "__main__":

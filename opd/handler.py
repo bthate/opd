@@ -14,7 +14,6 @@ import _thread
 from .default import Default
 from .objects import Object
 from .threads import launch
-from .utility import getmain
 
 
 def __dir__():
@@ -44,13 +43,6 @@ class Event(Default):
     def reply(self, txt):
         self.result.append(txt)
 
-    def show(self):
-        k = getmain("k")
-        for txt in self.result:
-            bot = k.byorig(self.orig) or k.first()
-            if bot:
-                bot.say(self.channel, txt)
-
     def wait(self):
         if self._thr:
             self._thr.join()
@@ -65,23 +57,31 @@ class Handler(Object):
         self.cbs      = Object()
         self.queue    = queue.Queue()
         self.stopped  = threading.Event()
+        self.threaded = True
 
     def callback(self, evt):
         func = getattr(self.cbs, evt.type, None)
         if not func:
             evt.ready()
             return
-        evt._thr = launch(func, evt)
- 
+        if self.threaded:
+            evt._thr = launch(func, evt)
+        else:
+            func(evt)
+
     def loop(self):
         while not self.stopped.is_set():
             try:
-                self.callback(self.poll())
+                evt = self.poll()
+                self.callback(evt)
             except (KeyboardInterrupt, EOFError):
                 _thread.interrupt_main()
 
     def poll(self):
         return self.queue.get()
+
+    def post(self, evt):
+        pass
 
     def put(self, evt):
         self.queue.put_nowait(evt)

@@ -24,21 +24,19 @@ __all__ = __dir__()
 
 class Command(Object):
 
-    def __init__(self):
-        Object.__init__(self)
-        self.cmds = Object()
+    cmds = Object()
 
-    def add(self, func):
-        setattr(self.cmds, func.__name__, func)
+    @staticmethod
+    def add(func):
+        setattr(Command.cmds, func.__name__, func)
 
-    def command(self, evt):
+    @staticmethod
+    def command(evt):
         parse_cmd(evt)
-        func = getattr(self.cmds, evt.cmd, None)
+        func = getattr(Command.cmds, evt.cmd, None)
         if func:
             try:
                 func(evt)
-                evt.show()
             except Exception as exc:
-                k = getmain("k")
-                k.defer(exc)
+                Error.defer(exc)
         evt.ready()

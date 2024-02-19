@@ -23,12 +23,7 @@ rpr = object.__repr__
 
 class Broker(Object):
 
-    def __init__(self):
-        Object.__init__(self)
-        self.objs = Object()
-
-    def append(self, obj):
-        setattr(self.objs, rpr(obj), obj)
+    objs = Object()
 
     def all(self):
         return values(self.objs)
@@ -37,8 +32,11 @@ class Broker(Object):
         for key in keys(self.objs):
             return getattr(self.objs, key)
 
+    def give(self, orig):
+        return getattr(self.objs, orig, None)
+
     def remove(self, obj):
         delattr(self.objs, rpr(obj))
 
-    def byorig(self, orig):
-        return getattr(self.objs, orig, None)
+    def take(self, obj):
+        setattr(self.objs, rpr(obj), obj)

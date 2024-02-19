@@ -38,28 +38,29 @@ lock = _thread.allocate_lock()
 
 class Storage(Object):
 
+    classes = {}
+    wd = ""
 
-    def __init__(self):
-        self.classes = {}
-        self.wd = ""
-
-    def whitelist(self, clz):
+    @staticmethod
+    def whitelist(clz):
         if not clz:
             return
         name = str(clz).split()[1][1:-2]
-        self.classes[name] = clz
+        Storage.classes[name] = clz
 
-    def fetch(self, obj, pth):
-        pth2 = self.store(pth)
+    @staticmethod
+    def fetch(obj, pth):
+        pth2 = Storage.store(pth)
         read(obj, pth2)
         return strip(pth)
 
-    def find(self, mtc, selector=None, index=None, deleted=False):
-        clz = self.long(mtc)
+    @staticmethod
+    def find(mtc, selector=None, index=None, deleted=False):
+        clz = Storage.long(mtc)
         nr = -1
-        for fnm in sorted(self.fns(clz), key=fntime):
+        for fnm in sorted(Storage.fns(clz), key=fntime):
             obj = Default()
-            self.fetch(obj, fnm)
+            Storage.fetch(obj, fnm)
             if not deleted and '__deleted__' in obj:
                 continue
             if selector and not search(obj, selector):
@@ -69,9 +70,10 @@ class Storage(Object):
                 continue
             yield (fnm, obj)
 
-    def fns(self, mtc=""):
+    @staticmethod
+    def fns(mtc=""):
         dname = ''
-        pth = self.store(mtc)
+        pth = Storage.store(mtc)
         for rootdir, dirs, _files in os.walk(pth, topdown=False):
             if dirs:
                 for dname in sorted(dirs):
@@ -81,11 +83,12 @@ class Storage(Object):
                         for fll in fls:
                             yield strip(os.path.join(ddd, fll))
 
-    def last(self, obj, selector=None):
+    @staticmethod
+    def last(obj, selector=None):
         if selector is None:
             selector = {}
         result = sorted(
-                        self.find(fqn(obj), selector),
+                        Storage.find(fqn(obj), selector),
                         key=lambda x: fntime(x[0])
                        )
         if result:
@@ -93,35 +96,40 @@ class Storage(Object):
             update(obj, inp[-1])
             return inp[0]
 
-    def long(self, name):
+    @staticmethod
+    def long(name):
         split = name.split(".")[-1].lower()
         res = name
-        for named in self.classes:
+        for named in Storage.classes:
             if split in named.split(".")[-1].lower():
                 res = named
                 break
         if "." not in res:
-            for fnm in self.types():
+            for fnm in Storage.types():
                 claz = fnm.split(".")[-1]
                 if fnm == claz.lower():
                     res = fnm
         return res
 
-    def skel(self):
-        cdir(os.path.join(self.wd, "store", ""))
+    @staticmethod
+    def skel():
+        cdir(os.path.join(Storage.wd, "store", ""))
 
-    def store(self, pth=""):
-        return os.path.join(self.wd, "store", pth)
+    @staticmethod
+    def store(pth=""):
+        return os.path.join(Storage.wd, "store", pth)
 
-    def sync(self, obj, pth=None):
+    @staticmethod
+    def sync(obj, pth=None):
         if pth is None:
             pth = ident(obj)
-        pth2 = self.store(pth)
+        pth2 = Storage.store(pth)
         write(obj, pth2)
         return pth
 
-    def types(self):
-        return os.listdir(self.store())
+    @staticmethod
+    def types():
+        return os.listdir(Storage.store())
 
 
 def cdir(pth) -> None:

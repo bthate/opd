@@ -18,8 +18,11 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import quote_plus, urlencode
 
 
-from opd import Default, Object, Repeater, fmt, update
-from opd import fntime, getmain, launch, laps
+from opd import Default, Object, Repeater, Storage, fmt, update
+from opd import fntime, launch, laps
+
+
+from opd.runtime import broker
 
 
 def init():
@@ -59,7 +62,6 @@ class Fetcher(Object):
         self.dosave = False
         self.seen = Seen()
         self.seenfn = None
-        self.kernel = getmain("k")
 
     @staticmethod
     def display(obj):
@@ -83,7 +85,6 @@ class Fetcher(Object):
         return result[:-2].rstrip()
 
     def fetch(self, feed):
-        k = getmain("k")
         with fetchlock:
             counter = 0
             result = []
@@ -102,29 +103,29 @@ class Fetcher(Object):
                     self.seen.urls.append(uurl)
                 counter += 1
                 if self.dosave:
-                    self.kernel.sync(fed)
+                    Storage.sync(fed)
                 result.append(fed)
         if result:
-            self.kernel.sync(self.seen, self.seenfn)
+            Storage.sync(self.seen, self.seenfn)
         txt = ''
         feedname = getattr(feed, 'name', None)
         if feedname:
             txt = f'[{feedname}] '
         for obj in result:
             txt2 = txt + self.display(obj)
-            for bot in self.kernel.all():
+            for bot in broker.all():
                 if "announce" in dir(bot):
                     bot.announce(txt2.rstrip())
         return counter
 
     def run(self):
         thrs = []
-        for fnm, feed in self.kernel.find('rss'):
+        for fnm, feed in Storage.find('rss'):
             thrs.append(launch(self.fetch, feed, name=f"{feed.rss}"))
         return thrs
 
     def start(self, repeat=True):
-        self.seenfn = self.kernel.last(self.seen)
+        self.seenfn = Storage.last(self.seen)
         if repeat:
             repeater = Repeater(300.0, self.run)
             repeater.start()
@@ -219,11 +220,10 @@ def dpl(event):
         event.reply('dpl <stringinurl> <item1,item2>')
         return
     setter = {'display_list': event.args[1]}
-    k = getmain("k")
-    for fnm, feed in k.find('rss', {'rss': event.args[0]}):
+    for fnm, feed in Storage.find('rss', {'rss': event.args[0]}):
         if feed:
             update(feed, setter)
-            k.sync(feed)
+            Storage.sync(feed)
     event.reply('ok')
 
 
@@ -232,11 +232,10 @@ def nme(event):
         event.reply('nme <stringinurl> <name>')
         return
     selector = {'rss': event.args[0]}
-    k = getmain("k")
-    for fnm, feed in k.find('rss', selector):
+    for fnm, feed in Storage.find('rss', selector):
         if feed:
             feed.name = event.args[1]
-            k.sync(feed)
+            Storage.sync(feed)
     event.reply('ok')
 
 
@@ -245,11 +244,10 @@ def rem(event):
         event.reply('rem <stringinurl>')
         return
     selector = {'rss': event.args[0]}
-    k = getmain("k")
-    for fnm, feed in k.find('rss', selector):
+    for fnm, feed in Storage.find('rss', selector):
         if feed:
             feed.__deleted__ = True
-            k.sync(feed, fnm)
+            Storage.sync(feed, fnm)
     event.reply('ok')
 
 
@@ -258,19 +256,17 @@ def res(event):
         event.reply('res <stringinurl>')
         return
     selector = {'rss': event.args[0]}
-    k = getmain("k")
-    for fnm, feed in k.find('rss', selector, deleted=True):
+    for fnm, feed in Storage.find('rss', selector, deleted=True):
         if feed:
             feed.__deleted__ = False
-            k.sync(feed, fnm)
+            Storage.sync(feed, fnm)
     event.reply('ok')
 
 
 def rss(event):
-    k = getmain("k")
     if not event.rest:
         nrs = 0
-        for fnm, feed in k.find('rss'):
+        for fnm, feed in Storage.find('rss'):
             nrs += 1
             elp = laps(time.time()-fntime(fnm))
             txt = fmt(feed)
@@ -282,11 +278,11 @@ def rss(event):
     if 'http' not in url:
         event.reply('i need an url')
         return
-    for fnm, result in k.find('rss', {'rss': url}):
+    for fnm, result in Storage.find('rss', {'rss': url}):
         if result:
             event.reply(f'already got {url}')
             return
     feed = Rss()
     feed.rss = event.args[0]
-    k.sync(feed)
+    Storage.sync(feed)
     event.reply('ok')
