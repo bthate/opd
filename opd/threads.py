@@ -14,7 +14,6 @@ import types
 
 from. excepts import Error
 from .objects import Object
-from .utility import getmain
 
 
 def __dir__():
