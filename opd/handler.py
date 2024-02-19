@@ -68,6 +68,7 @@ class Handler(Object):
             evt._thr = launch(func, evt)
         else:
             func(evt)
+            evt.ready()
 
     def loop(self):
         while not self.stopped.is_set():
@@ -79,9 +80,6 @@ class Handler(Object):
 
     def poll(self):
         return self.queue.get()
-
-    def post(self, evt):
-        pass
 
     def put(self, evt):
         self.queue.put_nowait(evt)

@@ -17,12 +17,7 @@ import _thread
 
 
 from opd import Command, Default, Error, Object, Storage, edit, fmt, keys
-from opd import Client, Event, launch
-
-
-from opd.runtime import broker
-
-give = broker.give
+from opd import Client, Event, give, launch, take
 
 
 NAME    = __file__.split(os.sep)[-3]
@@ -174,7 +169,7 @@ class IRC(Client, Output):
         self.register('PRIVMSG', cb_privmsg)
         self.register('QUIT', cb_quit)
         self.register("366", cb_ready)
-        broker.take(self)
+        take(self)
 
     def announce(self, txt):
         for channel in self.channels:

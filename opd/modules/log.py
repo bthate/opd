@@ -9,10 +9,7 @@
 import time
 
 
-from opd import Object, fntime, getmain, laps
-
-
-k = getmain("k")
+from opd import Object, Storage, fntime, laps
 
 
 class Log(Object):
@@ -25,7 +22,7 @@ class Log(Object):
 def log(event):
     if not event.rest:
         nmr = 0
-        for fnm, obj in k.find('log'):
+        for fnm, obj in Storage.find('log'):
             lap = laps(time.time() - fntime(fnm))
             event.reply(f'{nmr} {obj.txt} {lap}')
             nmr += 1
@@ -34,5 +31,5 @@ def log(event):
         return
     obj = Log()
     obj.txt = event.rest
-    k.sync(obj)
+    Storage.sync(obj)
     event.reply('ok')

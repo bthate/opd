@@ -21,12 +21,9 @@ import _thread
 sys.path.insert(0, os.getcwd())
 
 
-from opd import Client, Command, Default, Error, Event, Object
-from opd import Storage
+from opd import Client, Command, Default, Error, Event, Object, Storage
 from opd import keys, laps, launch, parse_cmd, scan, spl, update, wrap
-
-
-import opdmod as mods
+from opd import modules
 
 
 STARTTIME = time.time()
@@ -34,7 +31,7 @@ STARTTIME = time.time()
 
 Cfg = Default()
 Cfg.debug = True
-Cfg.mod =  ",".join(mods.__dir__())
+Cfg.mod =  ",".join(modules.__dir__())
 Cfg.name = "tinder"
 Cfg.silent = False
 Cfg.skip = ["debug",]
@@ -125,7 +122,7 @@ def main():
     global nrcommand
     global percall
     Error.output = cprint
-    for mod in scan(mods, Cfg.mod):
+    for mod in scan(modules, Cfg.mod):
         mod.DEBUG = True
     nrs = Cfg.index or 1
     nrcommand = len(Command.cmds) or 1

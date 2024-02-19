@@ -19,10 +19,7 @@ from urllib.parse import quote_plus, urlencode
 
 
 from opd import Default, Object, Repeater, Storage, fmt, update
-from opd import fntime, launch, laps
-
-
-from opd.runtime import broker
+from opd import all, fntime, launch, laps
 
 
 def init():
@@ -113,7 +110,7 @@ class Fetcher(Object):
             txt = f'[{feedname}] '
         for obj in result:
             txt2 = txt + self.display(obj)
-            for bot in broker.all():
+            for bot in all():
                 if "announce" in dir(bot):
                     bot.announce(txt2.rstrip())
         return counter

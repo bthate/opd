@@ -6,7 +6,7 @@
 "clients"
 
 
-from .command import Command 
+from .command import command 
 from .handler import Handler
 
 
@@ -23,7 +23,7 @@ class Client(Handler):
 
     def __init__(self):
         Handler.__init__(self)
-        self.register("command", Command.command)
+        self.register("command", command)
 
     def announce(self, txt):
         self.raw(txt)

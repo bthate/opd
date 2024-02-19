@@ -9,10 +9,7 @@
 import time
 
 
-from opd import Object, fntime, getmain, laps
-
-
-k = getmain("k")
+from opd import Object, Storage, fntime, laps
 
 
 class NoDate(Exception):
@@ -46,7 +43,7 @@ def dne(event):
 def tdo(event):
     if not event.rest:
         nmr = 0
-        for fnm, obj in k.find('todo'):
+        for fnm, obj in find('todo'):
             lap = laps(time.time()-fntime(fnm))
             event.reply(f'{nmr} {obj.txt} {lap}')
             nmr += 1
@@ -55,5 +52,5 @@ def tdo(event):
         return
     obj = Todo()
     obj.txt = event.rest
-    k.sync(obj)
+    sync(obj)
     event.reply('ok')

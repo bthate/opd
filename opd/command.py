@@ -10,12 +10,13 @@ from .excepts import Error
 from .objects import Object
 from .parsers import parse_cmd
 from .threads import launch
-from .utility import getmain
 
 
 def __dir__():
     return (
         "Command",
+        'add',
+        'command'
     )
 
 
@@ -26,17 +27,15 @@ class Command(Object):
 
     cmds = Object()
 
-    @staticmethod
-    def add(func):
-        setattr(Command.cmds, func.__name__, func)
+def add(func):
+    setattr(Command.cmds, func.__name__, func)
 
-    @staticmethod
-    def command(evt):
-        parse_cmd(evt)
-        func = getattr(Command.cmds, evt.cmd, None)
-        if func:
-            try:
-                func(evt)
-            except Exception as exc:
-                Error.defer(exc)
-        evt.ready()
+def command(evt):
+    parse_cmd(evt)
+    func = getattr(Command.cmds, evt.cmd, None)
+    if func:
+        try:
+            func(evt)
+        except Exception as exc:
+            Error.defer(exc)
+    evt.ready()

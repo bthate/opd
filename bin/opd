@@ -16,8 +16,9 @@ import time
 sys.path.insert(0, os.getcwd())
 
 
-from opd import Client, Command, Config, Error, Event, Storage, modules
-from opd import checkpid, daemon, forever, getpid, parse_cmd, privileges, scan, wrap
+from opd import Client, Config, Error, Event, Storage, modules
+from opd import checkpid, daemon, forever, getpid, parse_cmd, privileges
+from opd import command, debug, printall, scan, skel, wrap
 
 
 Cfg         = Config()
@@ -38,7 +39,6 @@ class Console(Client):
     def callback(self, evt):
         Client.callback(self, evt)
         evt.wait()
-        self.show(evt)
 
     def poll(self):
         evt = Event()
@@ -58,20 +58,20 @@ def cmnd(txt, out):
     evn = Event()
     evn.orig = object.__repr__(clt)
     evn.txt = txt
-    Command.command(evn)
+    command(evn)
     evn.wait()
     return evn
 
 
 def main():
-    Storage.skel()
+    skel()
     parse_cmd(Cfg, " ".join(sys.argv[1:]))
     readline.redisplay()
     if 'a' in Cfg.opts:
         Cfg.mod = ",".join(modules.__dir__())
     if "v" in Cfg.opts:
         dte = time.ctime(time.time()).replace("  ", " ")
-        Error.debug(f"{Cfg.name.upper()} {Cfg.opts.upper()} started {dte}")
+        debug(f"{Cfg.name.upper()} {Cfg.opts.upper()} started {dte}")
     if "h" in Cfg.opts:
         from . import __doc__ as txt
         print(txt)
@@ -101,7 +101,7 @@ def main():
 
 def wrapped():
     wrap(main)
-    Error.printall()
+    printall()
 
 
 if __name__ == "__main__":

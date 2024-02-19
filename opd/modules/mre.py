@@ -6,17 +6,14 @@
 "show cached output"
 
 
-from opd import getmain
-
-
-k = getmain("k")
+from opd import give
 
 
 def mre(event):
     if not event.channel:
         event.reply('channel is not set.')
         return
-    bot = k.byorig(event.orig)
+    bot = give(event.orig)
     if 'cache' not in dir(bot):
         event.reply('bot is missing cache')
         return

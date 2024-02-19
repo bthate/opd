@@ -37,6 +37,7 @@ from .excepts import *
 from .handler import *
 from .objects import *
 from .parsers import *
+from .repeats import *
 from .scanner import *
 from .storage import *
 from .threads import *
@@ -59,6 +60,8 @@ def __dir__():
             'Storage',
             'Thread',
             'Timer',
+            'add',
+            'all',
             'cdir',
             'checkpid',
             'construct',
@@ -66,11 +69,14 @@ def __dir__():
             'dump',
             'dumps',
             'edit',
+            'fetch',
+            'first',
             'fmt',
             'fntime',
             'forever',
             'fqn',
             'getpid',
+            'give',
             'ident',
             'items',
             'keys',
@@ -81,15 +87,18 @@ def __dir__():
             'name',
             'parse_cmd',
             'parse_time',
+            'printall',
             'privileges',
-            'read',
+            'remove',
             'scan',
             'search',
+            'skel',
             'spl',
+            'sync',
+            'take',
             'update',
             'values',
-            'wrap',
-            'write'
+            'wrap'
      )
 
 

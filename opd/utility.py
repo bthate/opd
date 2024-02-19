@@ -12,7 +12,26 @@ import pwd
 import sys
 import termios
 import time
+import types
 import _thread
+
+
+def __dir__():
+    return (
+        'cdir',
+        'checkpid',
+        'daemon',
+        'fntime',
+        'forever',
+        'getpid',
+        'name',
+        'privileges',
+        'strip',
+        'wrap'
+    )
+
+
+__all__ = __dir__()
 
 
 def cdir(pth) -> None:
@@ -57,21 +76,25 @@ def daemon(pidfile, verbose=False):
         fds.write(str(os.getpid()))
 
 
+def fntime(daystr):
+    daystr = daystr.replace('_', ':')
+    datestr = ' '.join(daystr.split(os.sep)[-2:])
+    if '.' in datestr:
+        datestr, rest = datestr.rsplit('.', 1)
+    else:
+        rest = ''
+    timed = time.mktime(time.strptime(datestr, '%Y-%m-%d %H:%M:%S'))
+    if rest:
+        timed += float('.' + rest)
+    return timed
+
+
 def forever():
     while 1:
         try:
             time.sleep(1.0)
         except (KeyboardInterrupt, EOFError):
             _thread.interrupt_main()
-
-
-def getmain(name):
-    try:
-        import __main__
-        return getattr(__main__, name, None)
-    except AttributeError:
-        pass
-    return None 
 
 
 def getpid(path):
@@ -81,10 +104,29 @@ def getpid(path):
         return None
 
 
+def name(obj):
+    typ = type(obj)
+    if isinstance(typ, types.ModuleType):
+        return obj.__name__
+    if '__self__' in dir(obj):
+        return f'{obj.__self__.__class__.__name__}.{obj.__name__}'
+    if '__class__' in dir(obj) and '__name__' in dir(obj):
+        return f'{obj.__class__.__name__}.{obj.__name__}'
+    if '__class__' in dir(obj):
+        return f"{obj.__class__.__module__}.{obj.__class__.__name__}"
+    if '__name__' in dir(obj):
+        return f'{obj.__class__.__name__}.{obj.__name__}'
+    return None
+
+
 def privileges(username):
     pwnam = pwd.getpwnam(username)
     os.setgid(pwnam.pw_gid)
     os.setuid(pwnam.pw_uid)
+
+
+def strip(pth, nmr=3):
+    return os.sep.join(pth.split(os.sep)[-nmr:])
 
 
 def wrap(func):
