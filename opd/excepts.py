@@ -61,7 +61,7 @@ def format(exc):
 
 def printexc(exc):
     if Error.output:
-        txt = str(Error.format(exc))
+        txt = str(format(exc))
         Error.output(txt)
 
 def printall():

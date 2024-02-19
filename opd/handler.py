@@ -11,6 +11,7 @@ import threading
 import _thread
 
 
+from .brokers import give, take
 from .default import Default
 from .objects import Object
 from .threads import launch
@@ -43,6 +44,11 @@ class Event(Default):
     def reply(self, txt):
         self.result.append(txt)
 
+    def show(self):
+        bot = give(self.orig)
+        for txt in self.result:
+            bot.say(self.channel, txt)
+
     def wait(self):
         if self._thr:
             self._thr.join()
@@ -58,6 +64,7 @@ class Handler(Object):
         self.queue    = queue.Queue()
         self.stopped  = threading.Event()
         self.threaded = True
+        take(self)
 
     def callback(self, evt):
         func = getattr(self.cbs, evt.type, None)

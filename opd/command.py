@@ -6,7 +6,7 @@
 "commands"
 
 
-from .excepts import Error
+from .excepts import defer
 from .objects import Object
 from .parsers import parse_cmd
 from .threads import launch
@@ -36,6 +36,7 @@ def command(evt):
     if func:
         try:
             func(evt)
+            evt.show()
         except Exception as exc:
-            Error.defer(exc)
+            defer(exc)
     evt.ready()
