@@ -16,8 +16,9 @@ import time
 import _thread
 
 
-from opd import Command, Default, Error, Object, Storage, edit, fmt, keys
-from opd import Client, Event, give, launch, take
+from opd import Command, Default, Error, Object, edit, fmt, keys
+from opd import Client, Event
+from opd import command, debug, give, last, launch, sync, take
 
 
 NAME    = __file__.split(os.sep)[-3]
@@ -195,7 +196,7 @@ class IRC(Client, Output):
         self.state.nrconnect += 1
         self.events.connected.clear()
         if self.cfg.password:
-            Error.debug("using SASL")
+            debug("using SASL")
             self.cfg.sasl = True
             self.cfg.port = "6697"
             ctx = ssl.SSLContext(ssl.PROTOCOL_TLS)
@@ -245,8 +246,8 @@ class IRC(Client, Output):
                     ConnectionResetError
                    ) as ex:
                 self.state.errors = str(ex)
-                Error.debug(str(ex))
-            Error.debug(f"sleeping {self.cfg.sleep} seconds")
+                debug(str(ex))
+            debug(f"sleeping {self.cfg.sleep} seconds")
             time.sleep(self.cfg.sleep)
         self.logon(server, nck)
 
@@ -289,7 +290,7 @@ class IRC(Client, Output):
             self.state.pongcheck = True
             self.command('PING', self.cfg.server)
             if self.state.pongcheck:
-                Error.debug("failed pongcheck, restarting")
+                debug("failed pongcheck, restarting")
                 self.state.pongcheck = False
                 self.state.keeprunning = False
                 self.events.connected.clear()
@@ -308,7 +309,7 @@ class IRC(Client, Output):
         rawstr = str(txt)
         rawstr = rawstr.replace('\u0001', '')
         rawstr = rawstr.replace('\001', '')
-        Error.debug(txt)
+        debug(txt)
         obj = Event()
         obj.args = []
         obj.rawstr = rawstr
@@ -383,7 +384,7 @@ class IRC(Client, Output):
                    ) as ex:
                 Error.defer(ex)
                 self.stop()
-                Error.debug("handler stopped")
+                debug("handler stopped")
                 evt = self.event(str(ex))
                 return evt
         try:
@@ -394,7 +395,7 @@ class IRC(Client, Output):
 
     def raw(self, txt):
         txt = txt.rstrip()
-        Error.debug(txt)
+        debug(txt)
         txt = txt[:500]
         txt += '\r\n'
         txt = bytes(txt, 'utf-8')
@@ -415,7 +416,7 @@ class IRC(Client, Output):
         self.state.nrsend += 1
 
     def reconnect(self):
-        Error.debug(f"reconnecting to {self.cfg.server}")
+        debug(f"reconnecting to {self.cfg.server}")
         try:
             self.disconnect()
         except (ssl.SSLError, OSError):
@@ -448,7 +449,7 @@ class IRC(Client, Output):
         self.state.lastline = splitted[-1]
 
     def start(self):
-        Storage.last(self.cfg)
+        last(self.cfg)
         if self.cfg.channel not in self.channels:
             self.channels.append(self.cfg.channel)
         self.events.connected.clear()
@@ -491,7 +492,7 @@ def cb_error(evt):
     bot = give(evt.orig)
     bot.state.nrerror += 1
     bot.state.errors.append(evt.txt)
-    Error.debug(evt.txt)
+    debug(evt.txt)
 
 
 def cb_h903(evt):
@@ -545,20 +546,20 @@ def cb_privmsg(evt):
             return
         if evt.txt:
             evt.txt = evt.txt[0].lower() + evt.txt[1:]
-        Error.debug(f"command from {evt.origin}: {evt.txt}")
-        Command.command(evt)
+        debug(f"command from {evt.origin}: {evt.txt}")
+        command(evt)
 
 
 def cb_quit(evt):
     bot = give(evt.orig)
-    Error.debug(f"quit from {bot.cfg.server}")
+    debug(f"quit from {bot.cfg.server}")
     if evt.orig and evt.orig in bot.zelf:
         bot.stop()
 
 
 def cfg(event):
     config = Config()
-    path = Storage.last(config)
+    path = last(config)
     if not event.sets:
         event.reply(
                     fmt(
@@ -569,5 +570,5 @@ def cfg(event):
                    )
     else:
         edit(config, event.sets)
-        Storage.sync(config, path)
+        sync(config, path)
         event.reply('ok')

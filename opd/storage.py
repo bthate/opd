@@ -24,6 +24,7 @@ def __dir__():
         'cdir',
         'find',
         'fntime',
+        'last',
         'ident',
         'search',
         'skel',
@@ -52,16 +53,16 @@ def cdir(pth) -> None:
 
 
 def fetch(obj, pth):
-    pth2 = Storage.store(pth)
+    pth2 = store(pth)
     read(obj, pth2)
     return strip(pth)
 
 def find(mtc, selector=None, index=None, deleted=False):
-    clz = Storage.long(mtc)
+    clz = long(mtc)
     nr = -1
-    for fnm in sorted(Storage.fns(clz), key=fntime):
+    for fnm in sorted(fns(clz), key=fntime):
         obj = Default()
-        Storage.fetch(obj, fnm)
+        fetch(obj, fnm)
         if not deleted and '__deleted__' in obj:
             continue
         if selector and not search(obj, selector):
@@ -73,7 +74,7 @@ def find(mtc, selector=None, index=None, deleted=False):
 
 def fns(mtc=""):
     dname = ''
-    pth = Storage.store(mtc)
+    pth = store(mtc)
     for rootdir, dirs, _files in os.walk(pth, topdown=False):
         if dirs:
             for dname in sorted(dirs):
@@ -87,7 +88,7 @@ def last(obj, selector=None):
     if selector is None:
         selector = {}
     result = sorted(
-                    Storage.find(fqn(obj), selector),
+                    find(fqn(obj), selector),
                     key=lambda x: fntime(x[0])
                    )
     if result:
@@ -103,7 +104,7 @@ def long(name):
             res = named
             break
     if "." not in res:
-        for fnm in Storage.types():
+        for fnm in types():
             claz = fnm.split(".")[-1]
             if fnm == claz.lower():
                 res = fnm
@@ -120,13 +121,13 @@ def store(pth=""):
 def sync(obj, pth=None):
     if pth is None:
         pth = ident(obj)
-    pth2 = Storage.store(pth)
+    pth2 = store(pth)
     write(obj, pth2)
     return pth
 
 
 def types():
-    return os.listdir(Storage.store())
+    return os.listdir(store())
 
 
 def fntime(daystr):

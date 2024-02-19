@@ -12,7 +12,7 @@ import time
 import types
 
 
-from. excepts import Error
+from. excepts import defer
 from .objects import Object
 from .utility import name
 
@@ -54,7 +54,7 @@ class Thread(threading.Thread):
         try:
             self._result = func(*args)
         except Exception as exc:
-            Error.defer(exc)
+            defer(exc)
             if args and "ready" in dir(args[0]):
                 args[0].ready()
 

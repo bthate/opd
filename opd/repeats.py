@@ -13,6 +13,7 @@ import types
 
 
 from .objects import Object
+from .threads import launch
 from .utility import name
 
 
