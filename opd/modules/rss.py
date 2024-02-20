@@ -18,8 +18,8 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import quote_plus, urlencode
 
 
-from opd import Default, Object, Repeater, Storage, fmt, update
-from opd import all, find, fntime, last, launch, laps, sync
+from opd import Default, Object, Repeater, fmt, update
+from opd import allobj, find, fntime, last, launch, laps, sync
 
 
 def init():
@@ -110,7 +110,7 @@ class Fetcher(Object):
             txt = f'[{feedname}] '
         for obj in result:
             txt2 = txt + self.display(obj)
-            for bot in all():
+            for bot in allobj():
                 if "announce" in dir(bot):
                     bot.announce(txt2.rstrip())
         return counter

@@ -16,7 +16,7 @@ import time
 sys.path.insert(0, os.getcwd())
 
 
-from opd import Client, Config, Error, Event, Storage, modules
+from opd import Client, Config, Event, Storage, modules
 from opd import checkpid, daemon, forever, getpid, parse_cmd, privileges
 from opd import command, debug, printall, scan, skel, wrap
 

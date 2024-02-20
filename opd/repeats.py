@@ -6,15 +6,12 @@
 "threads"
 
 
-import queue
 import threading
 import time
-import types
 
 
 from .objects import Object
 from .threads import launch
-from .utility import name
 
 
 def __dir__():

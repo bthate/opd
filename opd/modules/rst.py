@@ -14,16 +14,13 @@ import time
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
 
-from opd import Default, Object, launch, getmain
+from opd import Default, Object, Storage, debug, defer, fns, launch
 
 
 def init():
     rest = REST((Config.hostname, int(Config.port)), RESTHandler)
     launch(rest.start)
     return rest
-
-
-k = getmain("k")
 
 
 def html(txt):
@@ -68,8 +65,8 @@ class REST(HTTPServer, Object):
     def error(self, request, addr):
         exctype, excvalue, tb = sys.exc_info()
         exc = exctype(excvalue)
-        k.defer(exc)
-        k.debug('%s %s' % (addr, excvalue))
+        defer(exc)
+        debug('%s %s' % (addr, excvalue))
 
 
 class RESTHandler(BaseHTTPRequestHandler):
@@ -93,11 +90,11 @@ class RESTHandler(BaseHTTPRequestHandler):
         if self.path == "/":
             self.write_header("text/html")
             txt = ""
-            for fnm in k.fns():
+            for fnm in fns():
                 txt += f'<a href="http://{Config.hostname}:{Config.port}/{fnm}">{fnm}</a>\n'
             self.send(html(txt.strip()))
             return
-        fnm = k.wd + os.sep + "store" + os.sep + self.path
+        fnm = Storage.wd + os.sep + "store" + os.sep + self.path
         try:
             f = open(fnm, "r", encoding="utf-8")
             txt = f.read()
@@ -106,8 +103,8 @@ class RESTHandler(BaseHTTPRequestHandler):
             self.send(html(txt))
         except (TypeError, FileNotFoundError, IsADirectoryError) as ex:
             self.send_response(404)
-            k.defer(ex)
+            defer(ex)
             self.end_headers()
 
     def log(self, code):
-        k.debug('%s code %s path %s' % (self.address_string(), code, self.path))
+        debug('%s code %s path %s' % (self.address_string(), code, self.path))

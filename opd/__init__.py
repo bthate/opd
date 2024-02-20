@@ -1,6 +1,6 @@
 # This file is placed in the Public Domain.
 #
-# pylint: disable=C,R,W0401,E0402
+# pylint: disable=C,R,W0401,W0622,E0402
 
 
 """Original Programmer Daemon
@@ -61,7 +61,7 @@ def __dir__():
             'Thread',
             'Timer',
             'add',
-            'all',
+            'allobj',
             'cdir',
             'checkpid',
             'construct',

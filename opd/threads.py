@@ -9,11 +9,9 @@
 import queue
 import threading
 import time
-import types
 
 
 from. excepts import defer
-from .objects import Object
 from .utility import name
 
 

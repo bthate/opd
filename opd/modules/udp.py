@@ -13,10 +13,7 @@ import threading
 import time
 
 
-from opd import Object, getmain, launch
-
-
-k = getmain("k")
+from opd import Object, allobj, launch
 
 
 def init():
@@ -47,7 +44,7 @@ class UDP(Object):
     def output(self, txt, addr=None):
         if addr:
             Cfg.addr = addr
-        for bot in k.all():
+        for bot in allobj():
             bot.announce(txt.replace("\00", ""))
 
     def loop(self):

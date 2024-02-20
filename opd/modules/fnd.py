@@ -6,28 +6,25 @@
 "locate"
 
 
-from opd import fmt, getmain
-
-
-k = getmain("k")
+from opd import find, fmt, long, skel, types
 
 
 def fnd(event):
-    k.skel()
+    skel()
     if not event.rest:
-        res = sorted([x.split('.')[-1].lower() for x in k.types()])
+        res = sorted([x.split('.')[-1].lower() for x in types()])
         if res:
             event.reply(",".join(res))
         return
     otype = event.args[0]
-    clz = k.long(otype)
+    clz = long(otype)
     if "." not in clz:
-        for fnm in k.types():
+        for fnm in types():
             claz = fnm.split(".")[-1]
             if otype == claz.lower():
                 clz = fnm
     nmr = 0
-    for fnm, obj in k.find(clz, event.gets):
+    for fnm, obj in find(clz, event.gets):
         event.reply(f"{nmr} {fmt(obj)}")
         nmr += 1
     if not nmr:

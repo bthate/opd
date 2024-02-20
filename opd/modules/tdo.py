@@ -9,7 +9,7 @@
 import time
 
 
-from opd import Object, Storage, fntime, laps
+from opd import Object, find, fntime, laps, sync
 
 
 class NoDate(Exception):
@@ -30,10 +30,10 @@ def dne(event):
         return
     selector = {'txt': event.args[0]}
     nmr = 0
-    for fnm, obj in k.find('todo', selector):
+    for fnm, obj in find('todo', selector):
         nmr += 1
         obj.__deleted__ = True
-        k.sync(obj, fnm)
+        sync(obj, fnm)
         event.reply('ok')
         break
     if not nmr:

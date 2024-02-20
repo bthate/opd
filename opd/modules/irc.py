@@ -16,9 +16,8 @@ import time
 import _thread
 
 
-from opd import Command, Default, Error, Object, edit, fmt, keys
-from opd import Client, Event
-from opd import command, debug, give, last, launch, sync, take
+from opd import Client, Default, Error, Event, Object, edit, fmt, keys
+from opd import command, debug, defer, give, last, launch, sync, take
 
 
 NAME    = __file__.split(os.sep)[-3]
@@ -233,7 +232,7 @@ class IRC(Client, Output):
                ) as ex:
             pass
         except Exception as ex:
-            Error.defer(ex)
+            defer(ex)
 
     def doconnect(self, server, nck, port=6667):
         while 1:
@@ -382,7 +381,7 @@ class IRC(Client, Output):
                     ConnectionResetError,
                     BrokenPipeError
                    ) as ex:
-                Error.defer(ex)
+                defer(ex)
                 self.stop()
                 debug("handler stopped")
                 evt = self.event(str(ex))
@@ -409,7 +408,7 @@ class IRC(Client, Output):
                     ConnectionResetError,
                     BrokenPipeError
                    ) as ex:
-                Error.defer(ex)
+                defer(ex)
                 self.stop()
                 return
         self.state.last = time.time()

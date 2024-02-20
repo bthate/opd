@@ -11,7 +11,7 @@ import os
 import time
 
 
-from opd import Object, fmt, fntime, getmain, laps, update
+from opd import Object, find, fmt, fntime, laps, sync, update
 
 
 MONTH = {
@@ -28,9 +28,6 @@ MONTH = {
     'Nov': 11,
     'Dec': 12
 }
-
-
-k = getmain("k")
 
 
 class Email(Object):
@@ -81,7 +78,7 @@ def cor(event):
         event.reply("cor <email>")
         return
     nr = -1
-    for _fn, email in k.find("email", {"From": event.args[0]}):
+    for _fn, email in find("email", {"From": event.args[0]}):
         nr += 1
         txt = ""
         if len(event.args) > 1:
@@ -97,7 +94,7 @@ def eml(event):
         event.reply("eml <searchtxtinemail>")
         return
     nr = -1
-    for fn, o in k.find("email"):
+    for fn, o in find("email"):
         if event.rest in o.text:
             nr += 1
             event.reply("%s %s %s" % (nr, fmt(o, "From,Subject"), laps(time.time() - fntime(fn))))
@@ -128,7 +125,7 @@ def mbx(event):
             if payload.get_content_type() == 'text/plain':
                 o.text += payload.get_payload()
         o.text = o.text.replace("\\n", "\n")
-        k.sync(o)
+        sync(o)
         nr += 1
     if nr:
         event.reply("ok %s" % nr)
