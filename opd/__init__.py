@@ -35,6 +35,7 @@ from .configs import *
 from .default import *
 from .excepts import *
 from .handler import *
+from .message import *
 from .objects import *
 from .parsers import *
 from .repeats import *

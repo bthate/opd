@@ -18,10 +18,7 @@ def __dir__():
         'Error',
         'debug',
         'defer',
-        'format',
-        'printexc',
-        'printall',
-        
+        'printall'
     )
 
 
@@ -59,14 +56,17 @@ def format(exc):
         res += line + "\n"
     return res
 
+
 def printexc(exc):
     if Error.output:
         txt = str(format(exc))
         Error.output(txt)
 
+
 def printall():
     for exc in Error.errors:
         printexc(exc)
+
 
 def skip(txt):
     for skp in Error.filter:

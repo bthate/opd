@@ -7,7 +7,6 @@
 
 
 import datetime
-import pathlib
 import os
 import time
 import _thread
@@ -16,12 +15,12 @@ import _thread
 from .default import Default
 from .objects import Object, dump, fqn, load, items, update
 from .parsers import spl
+from .utility import cdir
 
 
 def __dir__():
     return (
         'Storage',
-        'cdir',
         'find',
         'fntime',
         'last',
@@ -44,18 +43,11 @@ class Storage(Object):
     wd = ""
 
 
-def cdir(pth) -> None:
-    if os.path.exists(pth):
-        return
-    pth = pathlib.Path(pth)
-    os.makedirs(pth, exist_ok=True)
-
-
-
 def fetch(obj, pth):
     pth2 = store(pth)
     read(obj, pth2)
     return strip(pth)
+
 
 def find(mtc, selector=None, index=None, deleted=False):
     clz = long(mtc)
@@ -72,6 +64,7 @@ def find(mtc, selector=None, index=None, deleted=False):
             continue
         yield (fnm, obj)
 
+
 def fns(mtc=""):
     dname = ''
     pth = store(mtc)
@@ -84,6 +77,7 @@ def fns(mtc=""):
                     for fll in fls:
                         yield strip(os.path.join(ddd, fll))
 
+
 def last(obj, selector=None):
     if selector is None:
         selector = {}
@@ -95,6 +89,7 @@ def last(obj, selector=None):
         inp = result[-1]
         update(obj, inp[-1])
         return inp[0]
+
 
 def long(name):
     split = name.split(".")[-1].lower()
@@ -109,6 +104,7 @@ def long(name):
             if fnm == claz.lower():
                 res = fnm
     return res
+
 
 def skel():
     cdir(os.path.join(Storage.wd, "store", ""))

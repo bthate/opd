@@ -27,8 +27,10 @@ class Command(Object):
 
     cmds = Object()
 
+
 def add(func):
     setattr(Command.cmds, func.__name__, func)
+
 
 def command(evt):
     parse_cmd(evt)

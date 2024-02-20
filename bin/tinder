@@ -23,7 +23,7 @@ sys.path.insert(0, os.getcwd())
 
 from opd import Client, Command, Default, Error, Event, Object, Storage
 from opd import keys, laps, launch, parse_cmd, scan, spl, update, wrap
-from opd import modules
+from opd import command, modules, printall, skel
 
 
 STARTTIME = time.time()
@@ -109,7 +109,6 @@ def payload(clt):
                 evt.orig = object.__repr__(clt)
                 evt.txt = cmd + " " + ex
                 evt.type = "command"
-                print(evt)
                 clt.put(evt)
                 events.append(evt)
                 nmr += 1
@@ -127,7 +126,7 @@ def main():
     nrs = Cfg.index or 1
     nrcommand = len(Command.cmds) or 1
     cli = CLI()
-    cli.register("command", Command.command)
+    cli.register("command", command)
     cli.raw = print
     cli.start()
     waiters = []
@@ -142,11 +141,11 @@ def main():
 if __name__ == "__main__":
     if os.path.exists(Storage.wd):
         shutil.rmtree(Storage.wd)
-    Storage.skel()
+    skel()
     parse_cmd(Cfg, " ".join(sys.argv[1:]))
     if "p" in Cfg.opts:
         profile.runctx(main.__code__, globals(), locals())
     else:
         wrap(main)
-    Error.printall()
+    printall()
     print(f"{lap} {nrs} {nrcommand} {percall}")

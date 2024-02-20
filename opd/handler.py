@@ -3,7 +3,7 @@
 # pylint: disable=C,R,W0212,E0402
 
 
-"event handler"
+"handler"
 
 
 import queue
@@ -11,49 +11,18 @@ import threading
 import _thread
 
 
-from .brokers import give, take
-from .default import Default
+from .brokers import take
 from .objects import Object
 from .threads import launch
 
 
 def __dir__():
     return (
-        'Event',
-        'Handler'
+        'Handler',
    ) 
 
 
 __all__ = __dir__()
-
-
-class Event(Default):
-
-    def __init__(self):
-        Default.__init__(self)
-        self._ready  = threading.Event()
-        self._thr    = None
-        self.done    = False
-        self.orig    = None
-        self.result  = []
-        self.txt     = ""
-
-    def ready(self):
-        self._ready.set()
-
-    def reply(self, txt):
-        self.result.append(txt)
-
-    def show(self):
-        bot = give(self.orig)
-        for txt in self.result:
-            bot.say(self.channel, txt)
-
-    def wait(self):
-        if self._thr:
-            self._thr.join()
-        self._ready.wait()
-        return self.result
 
 
 class Handler(Object):

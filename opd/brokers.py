@@ -11,7 +11,7 @@ from .objects import Object, keys, values
 
 def __dir__():
     return (
-        "Broker",
+        'Broker',
         'allobj',
         'first',
         'give',
