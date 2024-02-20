@@ -16,9 +16,9 @@ from .objects import Object
 def __dir__():
     return (
         'Error',
+        'add',
         'debug',
-        'defer',
-        'printall'
+        'print'
     )
 
 
@@ -33,14 +33,14 @@ class Error(Object):
     shown  = []
 
 
+def add(exc):
+    excp = exc.with_traceback(exc.__traceback__)
+    Error.errors.append(excp)
+
+
 def debug(txt):
     if Error.output and not skip(txt):
         Error.output(txt)
-
-
-def defer(exc):
-    excp = exc.with_traceback(exc.__traceback__)
-    Error.errors.append(excp)
 
 
 def format(exc):
@@ -57,13 +57,13 @@ def format(exc):
     return res
 
 
-def printexc(exc):
+def out(exc):
     if Error.output:
         txt = str(format(exc))
         Error.output(txt)
 
 
-def printall():
+def print():
     for exc in Error.errors:
         printexc(exc)
 

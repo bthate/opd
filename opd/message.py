@@ -9,7 +9,7 @@
 import threading
 
 
-from .brokers import give
+from .brokers import get
 from .default import Default
 
 
@@ -40,7 +40,7 @@ class Event(Default):
         self.result.append(txt)
 
     def show(self):
-        bot = give(self.orig)
+        bot = get(self.orig)
         for txt in self.result:
             bot.say(self.channel, txt)
 

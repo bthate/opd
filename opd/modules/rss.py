@@ -18,8 +18,14 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import quote_plus, urlencode
 
 
-from opd import Default, Object, Repeater, fmt, update
-from opd import allobj, find, fntime, last, launch, laps, sync
+from opd.brokers import getall
+from opd.default import Default
+from opd.objects import Object, fmt, update
+from opd.parsers import laps
+from opd.repeats import Repeater
+from opd.storage import find, last, sync
+from opd.utility import fntime
+from opd.threads import launch
 
 
 def init():

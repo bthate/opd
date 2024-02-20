@@ -15,7 +15,7 @@ import _thread
 from .default import Default
 from .objects import Object, dump, fqn, load, items, update
 from .parsers import spl
-from .utility import cdir
+from .utility import cdir, fntime, strip
 
 
 def __dir__():
@@ -27,7 +27,7 @@ def __dir__():
         'ident',
         'search',
         'skel',
-        'sync',
+        'sync'
     )
 
 
@@ -43,10 +43,11 @@ class Storage(Object):
     wd = ""
 
 
-def fetch(obj, pth):
-    pth2 = store(pth)
-    read(obj, pth2)
-    return strip(pth)
+def add(clz):
+    if not clz:
+        return
+    name = str(clz).split()[1][1:-2]
+    Storage.classes[name] = clz
 
 
 def find(mtc, selector=None, index=None, deleted=False):
@@ -114,33 +115,12 @@ def store(pth=""):
     return os.path.join(Storage.wd, "store", pth)
 
 
-def sync(obj, pth=None):
-    if pth is None:
-        pth = ident(obj)
-    pth2 = store(pth)
-    write(obj, pth2)
-    return pth
-
 
 def types():
     return os.listdir(store())
 
 
-def fntime(daystr):
-    daystr = daystr.replace('_', ':')
-    datestr = ' '.join(daystr.split(os.sep)[-2:])
-    if '.' in datestr:
-        datestr, rest = datestr.rsplit('.', 1)
-    else:
-        rest = ''
-    timed = time.mktime(time.strptime(datestr, '%Y-%m-%d %H:%M:%S'))
-    if rest:
-        timed += float('.' + rest)
-    return timed
-
-
-def strip(pth, nmr=3):
-    return os.sep.join(pth.split(os.sep)[-nmr:])
+"methods"
 
 
 def ident(obj):
@@ -148,6 +128,12 @@ def ident(obj):
                         fqn(obj),
                         os.path.join(*str(datetime.datetime.now()).split())
                        )
+
+
+def fetch(obj, pth):
+    pth2 = store(pth)
+    read(obj, pth2)
+    return strip(pth)
 
 
 def read(obj, pth):
@@ -174,11 +160,12 @@ def search(obj, selector):
     return res
 
 
-def whitelist(clz):
-    if not clz:
-        return
-    name = str(clz).split()[1][1:-2]
-    Storage.classes[name] = clz
+def sync(obj, pth=None):
+    if pth is None:
+        pth = ident(obj)
+    pth2 = store(pth)
+    write(obj, pth2)
+    return pth
 
 
 def write(obj, pth):

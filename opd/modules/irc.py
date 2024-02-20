@@ -16,8 +16,15 @@ import time
 import _thread
 
 
-from opd import Client, Default, Error, Event, Object, edit, fmt, keys
-from opd import command, debug, defer, give, last, launch, sync, take
+from opd.brokers import add as brokeradd 
+from opd.clients import Client
+from opd.command import command
+from opd.default import Default
+from opd.excepts import Error, add, debug
+from opd.message import Event
+from opd.objects import Object, edit, fmt, keys
+from opd.storage import last, sync
+from opd.threads import launch
 
 
 NAME    = __file__.split(os.sep)[-3]
@@ -169,7 +176,7 @@ class IRC(Client, Output):
         self.register('PRIVMSG', cb_privmsg)
         self.register('QUIT', cb_quit)
         self.register("366", cb_ready)
-        take(self)
+        brokeradd(self)
 
     def announce(self, txt):
         for channel in self.channels:
@@ -232,7 +239,7 @@ class IRC(Client, Output):
                ) as ex:
             pass
         except Exception as ex:
-            defer(ex)
+            add(ex)
 
     def doconnect(self, server, nck, port=6667):
         while 1:
@@ -381,7 +388,7 @@ class IRC(Client, Output):
                     ConnectionResetError,
                     BrokenPipeError
                    ) as ex:
-                defer(ex)
+                add(ex)
                 self.stop()
                 debug("handler stopped")
                 evt = self.event(str(ex))
@@ -408,7 +415,7 @@ class IRC(Client, Output):
                     ConnectionResetError,
                     BrokenPipeError
                    ) as ex:
-                defer(ex)
+                add(ex)
                 self.stop()
                 return
         self.state.last = time.time()

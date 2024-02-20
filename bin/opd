@@ -16,12 +16,23 @@ import time
 sys.path.insert(0, os.getcwd())
 
 
-from opd import Client, Config, Event, Storage, modules
-from opd import checkpid, daemon, forever, getpid, parse_cmd, privileges
-from opd import command, debug, printall, scan, skel, wrap
+from opd.clients import Client
+from opd.command import command
+from opd.default import Default
+from opd.excepts import debug
+from opd.excepts import print as errprint
+from opd.message import Event
+from opd.parsers import parse_cmd
+from opd.scanner import scan
+from opd.storage import Storage, skel
+from opd.utility import checkpid, daemon, forever, checkpid, getpid
+from opd.utility import privileges, wrap
 
 
-Cfg         = Config()
+from opd import modules
+
+
+Cfg         = Default()
 Cfg.mod     = "cmd,mod"
 Cfg.name    = "opd"
 Cfg.wd      = os.path.expanduser(f"~/.{Cfg.name}")
@@ -49,7 +60,7 @@ class Console(Client):
 
     def say(self, channel, txt):
         txt = txt.encode('utf-8', 'replace').decode()
-        print(txt)
+        errprint(txt)
 
 
 def cmnd(txt, out):
@@ -101,7 +112,7 @@ def main():
 
 def wrapped():
     wrap(main)
-    printall()
+    errprint()
 
 
 if __name__ == "__main__":

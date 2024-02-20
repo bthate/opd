@@ -12,7 +12,7 @@ import inspect
 from .command import add
 from .objects import Object
 from .parsers import spl
-from .storage import whitelist
+from .storage import add as storeadd
 from .threads import launch
 
 
@@ -39,7 +39,7 @@ def scan(pkg, modstr, initer=False, disable="", wait=True):
         for _key, clz in inspect.getmembers(module, inspect.isclass):
             if not issubclass(clz, Object):
                 continue
-            whitelist(clz)
+            storeadd(clz)
         if initer and "init" in dir(module):
             module._thr = launch(module.init, name=f"init {modname}")
             mds.append(module)

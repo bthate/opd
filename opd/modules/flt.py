@@ -6,11 +6,12 @@
 "fleet"
 
 
-from opd import allobj, name
+from opd.brokers import getall
+from opd.utility import name
 
 
 def flt(event):
     try:
-        event.reply(allobj()[int(event.args[0])])
+        event.reply(getall()[int(event.args[0])])
     except (IndexError, ValueError):
-        event.reply(",".join([name(x).split(".")[-1] for x in allobj()]))
+        event.reply(",".join([name(x).split(".")[-1] for x in getall()]))

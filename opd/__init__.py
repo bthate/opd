@@ -31,7 +31,6 @@ options:
 from .brokers import *
 from .clients import *
 from .command import *
-from .configs import *
 from .default import *
 from .excepts import *
 from .handler import *
@@ -50,7 +49,6 @@ def __dir__():
             'Broker',
             'Client',
             'Command',
-            'Config',
             'Default',
             'Error',
             'Event',

@@ -6,7 +6,7 @@
 "commands"
 
 
-from .excepts import defer
+from .excepts import add as addexc
 from .objects import Object
 from .parsers import parse_cmd
 from .threads import launch
@@ -40,5 +40,5 @@ def command(evt):
             func(evt)
             evt.show()
         except Exception as exc:
-            defer(exc)
+            addexc(exc)
     evt.ready()
