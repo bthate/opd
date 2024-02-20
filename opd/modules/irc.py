@@ -16,15 +16,16 @@ import time
 import _thread
 
 
-from opd.brokers import add as brokeradd 
-from opd.clients import Client
-from opd.command import command
-from opd.default import Default
-from opd.excepts import Error, add, debug
-from opd.message import Event
-from opd.objects import Object, edit, fmt, keys
-from opd.storage import last, sync
-from opd.threads import launch
+from ..brokers import get
+from ..brokers import add as brokeradd 
+from ..clients import Client
+from ..command import command
+from ..default import Default
+from ..excepts import Error, add, debug
+from ..message import Event
+from ..objects import Object, edit, fmt, keys
+from ..storage import last, sync
+from ..threads import launch
 
 
 NAME    = __file__.split(os.sep)[-3]
@@ -482,12 +483,12 @@ class IRC(Client, Output):
 
 
 def cb_auth(evt):
-    bot = give(evt.orig)
+    bot = get(evt.orig)
     bot.command(f'AUTHENTICATE {bot.cfg.password}')
 
 
 def cb_cap(evt):
-    bot = give(evt.orig)
+    bot = get(evt.orig)
     if bot.cfg.password and 'ACK' in evt.arguments:
         bot.direct('AUTHENTICATE PLAIN')
     else:
@@ -495,20 +496,20 @@ def cb_cap(evt):
 
 
 def cb_error(evt):
-    bot = give(evt.orig)
+    bot = get(evt.orig)
     bot.state.nrerror += 1
     bot.state.errors.append(evt.txt)
     debug(evt.txt)
 
 
 def cb_h903(evt):
-    bot = give(evt.orig)
+    bot = get(evt.orig)
     bot.direct('CAP END')
     bot.events.authed.set()
 
 
 def cb_h904(evt):
-    bot = give(evt.orig)
+    bot = get(evt.orig)
     bot.direct('CAP END')
     bot.events.authed.set()
 
@@ -522,25 +523,25 @@ def cb_log(evt):
 
 
 def cb_ready(evt):
-    bot = give(evt.orig)
+    bot = get(evt.orig)
     if bot:
         bot.events.ready.set()
 
 
 def cb_001(evt):
-    bot = give(evt.orig)
+    bot = get(evt.orig)
     bot.logon()
 
 
 def cb_notice(evt):
-    bot = give(evt.orig)
+    bot = get(evt.orig)
     if evt.txt.startswith('VERSION'):
         txt = f'\001VERSION {NAME.upper()} 140 - {bot.cfg.username}\001'
         bot.command('NOTICE', evt.channel, txt)
 
 
 def cb_privmsg(evt):
-    bot = give(evt.orig)
+    bot = get(evt.orig)
     if not bot.cfg.commands:
         return
     if evt.txt:
@@ -557,7 +558,7 @@ def cb_privmsg(evt):
 
 
 def cb_quit(evt):
-    bot = give(evt.orig)
+    bot = get(evt.orig)
     debug(f"quit from {bot.cfg.server}")
     if evt.orig and evt.orig in bot.zelf:
         bot.stop()

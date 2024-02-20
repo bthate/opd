@@ -10,7 +10,8 @@ import threading
 import time
 
 
-from opd import Object, laps, update
+from ..objects import Object, update
+from ..parsers import laps
 
 
 STARTTIME = time.time()

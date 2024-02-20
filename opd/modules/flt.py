@@ -6,8 +6,8 @@
 "fleet"
 
 
-from opd.brokers import getall
-from opd.utility import name
+from ..brokers import getall
+from ..utility import name
 
 
 def flt(event):

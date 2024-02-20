@@ -25,7 +25,7 @@ from opd.message import Event
 from opd.parsers import parse_cmd
 from opd.scanner import scan
 from opd.storage import Storage, skel
-from opd.utility import checkpid, daemon, forever, checkpid, getpid
+from opd.utility import checkpid, daemon, forever, getpid
 from opd.utility import privileges, wrap
 
 
@@ -112,7 +112,7 @@ def main():
 
 def wrapped():
     wrap(main)
-    errprint()
+    errors()
 
 
 if __name__ == "__main__":

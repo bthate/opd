@@ -18,7 +18,7 @@ def __dir__():
         'Error',
         'add',
         'debug',
-        'print'
+        'errors'
     )
 
 
@@ -63,9 +63,9 @@ def out(exc):
         Error.output(txt)
 
 
-def print():
+def errors():
     for exc in Error.errors:
-        printexc(exc)
+        out(exc)
 
 
 def skip(txt):

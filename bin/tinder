@@ -21,9 +21,17 @@ import _thread
 sys.path.insert(0, os.getcwd())
 
 
-from opd import Client, Command, Default, Error, Event, Object, Storage
-from opd import keys, laps, launch, parse_cmd, scan, spl, update, wrap
-from opd import command, modules, printall, skel
+from opd.clients import Client
+from opd.command import Command, command
+from opd.default import Default
+from opd.excepts import Error, debug, errors
+from opd.message import Event
+from opd.objects import Object, keys, update
+from opd.parsers import laps, parse_cmd, spl
+from opd.scanner import scan
+from opd.storage import Storage, skel
+from opd.threads import launch
+from opd.utility import wrap
 
 
 STARTTIME = time.time()
@@ -31,7 +39,6 @@ STARTTIME = time.time()
 
 Cfg = Default()
 Cfg.debug = True
-Cfg.mod =  ",".join(modules.__dir__())
 Cfg.name = "tinder"
 Cfg.silent = False
 Cfg.skip = ["debug",]
@@ -41,6 +48,9 @@ Storage.wd = Cfg.wd
 
 
 paylock = _thread.allocate_lock()
+
+
+from opd import modules
 
 
 events = []
@@ -65,8 +75,6 @@ param.pwd = ["bart bla"]
 param.rem = ["hnrss"]
 param.rss = ["http://hnrss.org/newest"]
 param.ver = [""]
-
-
 
 
 class CLI(Client):
@@ -143,9 +151,13 @@ if __name__ == "__main__":
         shutil.rmtree(Storage.wd)
     skel()
     parse_cmd(Cfg, " ".join(sys.argv[1:]))
+    if "v" in Cfg.opts:
+        dte = time.ctime(time.time()).replace("  ", " ")
+        debug(f"{Cfg.name.upper()} {Cfg.opts.upper()} started {dte}")
+    Cfg.mod =  ",".join(modules.__dir__())
     if "p" in Cfg.opts:
         profile.runctx(main.__code__, globals(), locals())
     else:
         wrap(main)
-    printall()
+    print()
     print(f"{lap} {nrs} {nrcommand} {percall}")

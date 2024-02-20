@@ -18,14 +18,14 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import quote_plus, urlencode
 
 
-from opd.brokers import getall
-from opd.default import Default
-from opd.objects import Object, fmt, update
-from opd.parsers import laps
-from opd.repeats import Repeater
-from opd.storage import find, last, sync
-from opd.utility import fntime
-from opd.threads import launch
+from ..brokers import getall
+from ..default import Default
+from ..objects import Object, fmt, update
+from ..parsers import laps
+from ..repeats import Repeater
+from ..storage import find, last, sync
+from ..utility import fntime
+from ..threads import launch
 
 
 def init():
@@ -116,7 +116,7 @@ class Fetcher(Object):
             txt = f'[{feedname}] '
         for obj in result:
             txt2 = txt + self.display(obj)
-            for bot in allobj():
+            for bot in getall():
                 if "announce" in dir(bot):
                     bot.announce(txt2.rstrip())
         return counter
@@ -155,6 +155,20 @@ class Parser(Object):
     def parse(txt, item='title,link'):
         result = []
         for line in txt.split('<item>'):
+            line = line.strip()
+            obj = Object()
+            for itm in item.split(","):
+                setattr(obj, itm, Parser.getitem(line, itm))
+            result.append(obj)
+        return result
+
+
+class OPML(Parser):
+
+    @staticmethod
+    def parse(txt, item='outline'):
+        result = []
+        for line in txt.split('<outline>'):
             line = line.strip()
             obj = Object()
             for itm in item.split(","):
