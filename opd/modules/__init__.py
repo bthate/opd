@@ -6,12 +6,13 @@
 "modules"
 
 
-from . import cmd, irc, log, mod, mre, pwd, rss, tdo, flt, thr
+from . import cmd, ena, irc, log, mod, mre, pwd, rss, tdo, flt, thr
 
 
 def __dir__():
     return (
         'cmd',
+        'ena',
         'flt',
         'irc',
         'log',
