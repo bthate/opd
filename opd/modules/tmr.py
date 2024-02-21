@@ -46,7 +46,7 @@ def tmr(event):
         if word.startswith("+"):
             try:
                 seconds = int(word[1:])
-            except:
+            except (ValueError, IndexError):
                 event.reply("%s is not an integer" % seconds)
                 return
         else:

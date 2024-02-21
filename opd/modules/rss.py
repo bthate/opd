@@ -18,12 +18,13 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import quote_plus, urlencode
 
 
-from ..brokers import getall
+from ..brokers import Broker
 from ..default import Default
+from ..locates import find, last
 from ..objects import Object, fmt, update
 from ..parsers import laps
+from ..persist import sync
 from ..repeats import Repeater
-from ..storage import find, last, sync
 from ..utility import fntime
 from ..threads import launch
 
@@ -116,7 +117,7 @@ class Fetcher(Object):
             txt = f'[{feedname}] '
         for obj in result:
             txt2 = txt + self.display(obj)
-            for bot in getall():
+            for bot in Broker.all():
                 if "announce" in dir(bot):
                     bot.announce(txt2.rstrip())
         return counter

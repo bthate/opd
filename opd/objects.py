@@ -31,14 +31,6 @@ def __dir__():
 __all__ = __dir__()
 
 
-def spl(txt):
-    try:
-        res = txt.split(',')
-    except (TypeError, ValueError):
-        res = txt
-    return [x for x in res if x]
-
-
 class Object:
 
     def __contains__(self, key):
@@ -240,3 +232,14 @@ def dumps(*args, **kw) -> str:
     ""
     kw["cls"] = ObjectEncoder
     return json.dumps(*args, **kw)
+
+
+"utility"
+
+
+def spl(txt):
+    try:
+        res = txt.split(',')
+    except (TypeError, ValueError):
+        res = txt
+    return [x for x in res if x]

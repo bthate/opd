@@ -9,10 +9,10 @@
 import inspect
 
 
-from .command import add
+from .command import Command
 from .objects import Object
 from .parsers import spl
-from .storage import add as storeadd
+from .storage import Storage
 from .threads import launch
 
 
@@ -35,11 +35,11 @@ def scan(pkg, modstr, initer=False, disable="", wait=True):
             continue
         for _key, cmd in inspect.getmembers(module, inspect.isfunction):
             if 'event' in cmd.__code__.co_varnames:
-                add(cmd)
+                Command.add(cmd)
         for _key, clz in inspect.getmembers(module, inspect.isclass):
             if not issubclass(clz, Object):
                 continue
-            storeadd(clz)
+            Storage.add(clz)
         if initer and "init" in dir(module):
             module._thr = launch(module.init, name=f"init {modname}")
             mds.append(module)

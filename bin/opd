@@ -17,14 +17,13 @@ sys.path.insert(0, os.getcwd())
 
 
 from opd.clients import Client
-from opd.command import command
+from opd.command import Command
 from opd.default import Default
-from opd.excepts import debug
-from opd.excepts import print as errprint
+from opd.excepts import Error
 from opd.message import Event
 from opd.parsers import parse_cmd
 from opd.scanner import scan
-from opd.storage import Storage, skel
+from opd.storage import Storage
 from opd.utility import checkpid, daemon, forever, getpid
 from opd.utility import privileges, wrap
 
@@ -69,20 +68,20 @@ def cmnd(txt, out):
     evn = Event()
     evn.orig = object.__repr__(clt)
     evn.txt = txt
-    command(evn)
+    Command.command(evn)
     evn.wait()
     return evn
 
 
 def main():
-    skel()
+    Storage.skel()
     parse_cmd(Cfg, " ".join(sys.argv[1:]))
     readline.redisplay()
     if 'a' in Cfg.opts:
         Cfg.mod = ",".join(modules.__dir__())
     if "v" in Cfg.opts:
         dte = time.ctime(time.time()).replace("  ", " ")
-        debug(f"{Cfg.name.upper()} {Cfg.opts.upper()} started {dte}")
+        Error.debug(f"{Cfg.name.upper()} {Cfg.opts.upper()} started {dte}")
     if "h" in Cfg.opts:
         from . import __doc__ as txt
         print(txt)
@@ -112,7 +111,7 @@ def main():
 
 def wrapped():
     wrap(main)
-    errors()
+    Error.show()
 
 
 if __name__ == "__main__":

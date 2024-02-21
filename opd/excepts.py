@@ -16,9 +16,6 @@ from .objects import Object
 def __dir__():
     return (
         'Error',
-        'add',
-        'debug',
-        'errors'
     )
 
 
@@ -32,44 +29,44 @@ class Error(Object):
     output = print
     shown  = []
 
+    @staticmethod
+    def add(exc):
+        excp = exc.with_traceback(exc.__traceback__)
+        Error.errors.append(excp)
 
-def add(exc):
-    excp = exc.with_traceback(exc.__traceback__)
-    Error.errors.append(excp)
+    @staticmethod
+    def debug(txt):
+        if Error.output and not Error.skip(txt):
+            Error.output(txt)
 
+    @staticmethod
+    def format(exc):
+        res = ""
+        stream = io.StringIO(
+                             traceback.print_exception(
+                                                       type(exc),
+                                                       exc,
+                                                       exc.__traceback__
+                                                      )
+                            )
+        for line in stream.readlines():
+            res += line + "\n"
+        return res
 
-def debug(txt):
-    if Error.output and not skip(txt):
-        Error.output(txt)
+    @staticmethod
+    def out(exc):
+        if Error.output:
+            txt = str(Error.format(exc))
+            Error.output(txt)
 
+    @staticmethod
+    def show():
+        for exc in Error.errors:
+            Error.out(exc)
 
-def format(exc):
-    res = ""
-    stream = io.StringIO(
-                         traceback.print_exception(
-                                                   type(exc),
-                                                   exc,
-                                                   exc.__traceback__
-                                                  )
-                        )
-    for line in stream.readlines():
-        res += line + "\n"
-    return res
-
-
-def out(exc):
-    if Error.output:
-        txt = str(format(exc))
-        Error.output(txt)
-
-
-def errors():
-    for exc in Error.errors:
-        out(exc)
-
-
-def skip(txt):
-    for skp in Error.filter:
-        if skp in str(txt):
-            return True
-    return False
+    @staticmethod
+    def skip(txt):
+        for skp in Error.filter:
+            if skp in str(txt):
+                return True
+        return False

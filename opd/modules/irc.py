@@ -1,7 +1,7 @@
 # This file is placed in the Public Domain.
 #
 # pylint: disable=C,R,W0105,W0612,W0718,E0402
-
+# ruff: noqa: F841
 
 "internet relay chat"
 
@@ -16,19 +16,21 @@ import time
 import _thread
 
 
-from ..brokers import get
-from ..brokers import add as brokeradd 
+from ..brokers import Broker
 from ..clients import Client
-from ..command import command
+from ..command import Command
 from ..default import Default
-from ..excepts import Error, add, debug
+from ..excepts import Error
+from ..locates import last
 from ..message import Event
 from ..objects import Object, edit, fmt, keys
-from ..storage import last, sync
+from ..persist import sync
 from ..threads import launch
 
 
 NAME    = __file__.split(os.sep)[-3]
+debug   = Error.debug
+get     = Broker.get
 saylock = _thread.allocate_lock()
 
 
@@ -177,7 +179,7 @@ class IRC(Client, Output):
         self.register('PRIVMSG', cb_privmsg)
         self.register('QUIT', cb_quit)
         self.register("366", cb_ready)
-        brokeradd(self)
+        Broker.add(self)
 
     def announce(self, txt):
         for channel in self.channels:
@@ -240,7 +242,7 @@ class IRC(Client, Output):
                ) as ex:
             pass
         except Exception as ex:
-            add(ex)
+            Error.add(ex)
 
     def doconnect(self, server, nck, port=6667):
         while 1:
@@ -389,7 +391,7 @@ class IRC(Client, Output):
                     ConnectionResetError,
                     BrokenPipeError
                    ) as ex:
-                add(ex)
+                Error.add(ex)
                 self.stop()
                 debug("handler stopped")
                 evt = self.event(str(ex))
@@ -416,7 +418,7 @@ class IRC(Client, Output):
                     ConnectionResetError,
                     BrokenPipeError
                    ) as ex:
-                add(ex)
+                Error.add(ex)
                 self.stop()
                 return
         self.state.last = time.time()
@@ -554,7 +556,7 @@ def cb_privmsg(evt):
         if evt.txt:
             evt.txt = evt.txt[0].lower() + evt.txt[1:]
         debug(f"command from {evt.origin}: {evt.txt}")
-        command(evt)
+        Command.command(evt)
 
 
 def cb_quit(evt):

@@ -6,17 +6,14 @@
 "commands"
 
 
-from .excepts import add as addexc
+from .excepts import Error
 from .objects import Object
 from .parsers import parse_cmd
-from .threads import launch
 
 
 def __dir__():
     return (
         "Command",
-        'add',
-        'command'
     )
 
 
@@ -27,18 +24,18 @@ class Command(Object):
 
     cmds = Object()
 
+    @staticmethod
+    def add(func):
+        setattr(Command.cmds, func.__name__, func)
 
-def add(func):
-    setattr(Command.cmds, func.__name__, func)
-
-
-def command(evt):
-    parse_cmd(evt)
-    func = getattr(Command.cmds, evt.cmd, None)
-    if func:
-        try:
-            func(evt)
-            evt.show()
-        except Exception as exc:
-            addexc(exc)
-    evt.ready()
+    @staticmethod
+    def command(evt):
+        parse_cmd(evt)
+        func = getattr(Command.cmds, evt.cmd, None)
+        if func:
+            try:
+                func(evt)
+                evt.show()
+            except Exception as exc:
+                Error.add(exc)
+        evt.ready()

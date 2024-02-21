@@ -6,14 +6,14 @@
 "show cached output"
 
 
-from ..brokers import get
+from ..brokers import Broker
 
 
 def mre(event):
     if not event.channel:
         event.reply('channel is not set.')
         return
-    bot = get(event.orig)
+    bot = Broker.get(event.orig)
     if 'cache' not in dir(bot):
         event.reply('bot is missing cache')
         return

@@ -12,11 +12,6 @@ from .objects import Object, keys, values
 def __dir__():
     return (
         'Broker',
-        'add',
-        'get',
-        'getall',
-        'first',
-        'remove'
     )
 
 
@@ -30,23 +25,23 @@ class Broker(Object):
 
     objs = Object()
 
+    @staticmethod
+    def add(obj):
+        setattr(Broker.objs, rpr(obj), obj)
 
-def add(obj):
-    setattr(Broker.objs, rpr(obj), obj)
+    @staticmethod
+    def all():
+        return values(Broker.objs)
 
+    @staticmethod
+    def first():
+        for key in keys(Broker.objs):
+            return getattr(Broker.objs, key)
 
-def getall():
-    return values(Broker.objs)
+    @staticmethod
+    def get(orig):
+        return getattr(Broker.objs, orig, None)
 
-
-def first():
-    for key in keys(Broker.objs):
-        return getattr(Broker.objs, key)
-
-
-def get(orig):
-    return getattr(Broker.objs, orig, None)
-
-
-def remove(obj):
-    delattr(Broker.objs, rpr(obj))
+    @staticmethod
+    def remove(obj):
+        delattr(Broker.objs, rpr(obj))

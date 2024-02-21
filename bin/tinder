@@ -151,13 +151,12 @@ if __name__ == "__main__":
         shutil.rmtree(Storage.wd)
     skel()
     parse_cmd(Cfg, " ".join(sys.argv[1:]))
-    if "v" in Cfg.opts:
-        dte = time.ctime(time.time()).replace("  ", " ")
-        debug(f"{Cfg.name.upper()} {Cfg.opts.upper()} started {dte}")
+    dte = time.ctime(time.time()).replace("  ", " ")
+    debug(f"{Cfg.name.upper()} {Cfg.opts.upper()} started {dte}")
     Cfg.mod =  ",".join(modules.__dir__())
     if "p" in Cfg.opts:
         profile.runctx(main.__code__, globals(), locals())
     else:
         wrap(main)
-    print()
+    errors()
     print(f"{lap} {nrs} {nrcommand} {percall}")

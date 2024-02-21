@@ -9,9 +9,10 @@
 import time
 
 
+from ..locates import find
 from ..objects import Object
 from ..parsers import laps
-from ..storage import find, sync
+from ..persist import sync
 from ..utility import fntime
 
 

@@ -11,7 +11,7 @@ import threading
 import _thread
 
 
-from .brokers import add
+from .brokers import Broker
 from .objects import Object
 from .threads import launch
 
@@ -33,7 +33,7 @@ class Handler(Object):
         self.queue    = queue.Queue()
         self.stopped  = threading.Event()
         self.threaded = True
-        add(self)
+        Broker.add(self)
 
     def callback(self, evt):
         func = getattr(self.cbs, evt.type, None)
