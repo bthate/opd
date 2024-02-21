@@ -44,19 +44,6 @@ class Persist(Object):
         name = str(clz).split()[1][1:-2]
         setattr(Persist.classes, name, clz)
 
-    @staticmethod
-    def fns(mtc=""):
-        dname = ''
-        pth = store(mtc)
-        for rootdir, dirs, _files in os.walk(pth, topdown=False):
-            if dirs:
-                for dname in sorted(dirs):
-                    if dname.count('-') == 2:
-                        ddd = os.path.join(rootdir, dname)
-                        fls = sorted(os.listdir(ddd))
-                        for fll in fls:
-                            yield strip(os.path.join(ddd, fll))
-
 
 def long(name):
     split = name.split(".")[-1].lower()
