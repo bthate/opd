@@ -11,7 +11,7 @@ import time
 
 from ..brokers import Broker
 from ..locates import find
-from ..message import Event
+from ..message import Message
 from ..objects import update
 from ..parsers import NoDate, get_day, get_hour, laps, today
 from ..parsers import to_day
@@ -27,7 +27,7 @@ def init():
         diff = float(obj.time) - time.time()
         if diff > 0:
             bot = Broker.first()
-            evt = Event()
+            evt = Message()
             update(evt, obj)
             evt.orig = object.__repr__(bot)
             timer = Timer(diff, evt.show)

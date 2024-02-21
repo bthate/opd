@@ -3,7 +3,7 @@
 # pylint: disable=C,R
 
 
-"events"
+"messages"
 
 
 import threading
@@ -22,7 +22,7 @@ def __dir__():
 __all__ = __dir__()
 
 
-class Event(Default):
+class Message(Default):
 
     def __init__(self):
         Default.__init__(self)

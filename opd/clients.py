@@ -8,7 +8,7 @@
 
 from .command import command 
 from .handler import Handler
-from .message import Event
+from .message import Message
 
 
 def __dir__():
@@ -44,7 +44,7 @@ class Client(Handler):
 def cmnd(txt, out):
     clt = Client()
     clt.raw = out
-    evn = Event()
+    evn = Message()
     evn.orig = object.__repr__(clt)
     evn.txt = txt
     command(evn)

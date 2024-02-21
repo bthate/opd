@@ -11,7 +11,7 @@ import time
 
 
 from ..brokers import Broker
-from ..message import Event
+from ..message import Message
 from ..objects import Object, construct, keys
 from ..parsers import laps
 from ..repeats import Repeater
@@ -29,7 +29,7 @@ def init():
     for key in keys(oorzaken):
         val = getattr(oorzaken, key, None)
         if val and int(val) > 10000:
-            evt = Event()
+            evt = Message()
             evt.txt = ""
             evt.rest = key
             sec = seconds(val)
@@ -317,14 +317,14 @@ def iswanted(k, line):
 def daily():
     while 1:
         time.sleep(24*60*60)
-        evt = Event()
+        evt = Message()
         cbnow(evt)
 
 
 def hourly():
     while 1:
         time.sleep(60*60)
-        evt = Event()
+        evt = Message()
         cbnow(evt)
 
 

@@ -20,7 +20,7 @@ from opd.clients import Client, cmnd
 from opd.command import command
 from opd.default import Default
 from opd.excepts import Error, debug, enable
-from opd.message import Event
+from opd.message import Message
 from opd.parsers import parse_cmd
 from opd.scanner import scan
 from opd.utility import checkpid, daemon, forever, getpid, privileges, wrap
@@ -50,7 +50,7 @@ class Console(Client):
         evt.wait()
 
     def poll(self):
-        evt = Event()
+        evt = Message()
         evt.orig = object.__repr__(self)
         evt.txt = input("> ")
         evt.type = "command"

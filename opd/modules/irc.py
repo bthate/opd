@@ -22,7 +22,7 @@ from ..command import command
 from ..default import Default
 from ..excepts import Error, debug
 from ..locates import last
-from ..message import Event
+from ..message import Message
 from ..objects import Object, edit, fmt, keys
 from ..persist import sync
 from ..threads import launch
@@ -318,7 +318,7 @@ class IRC(Client, Output):
         rawstr = rawstr.replace('\u0001', '')
         rawstr = rawstr.replace('\001', '')
         debug(txt)
-        obj = Event()
+        obj = Message()
         obj.args = []
         obj.rawstr = rawstr
         obj.command = ''

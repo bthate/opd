@@ -36,7 +36,6 @@ class Error(Object):
         excp = exc.with_traceback(exc.__traceback__)
         Error.errors.append(excp)
 
-
     @staticmethod
     def format(exc):
         res = ""
