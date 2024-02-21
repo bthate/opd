@@ -20,7 +20,7 @@ from ..brokers import Broker
 from ..clients import Client
 from ..command import command
 from ..default import Default
-from ..excepts import Error
+from ..excepts import Error, debug
 from ..locates import last
 from ..message import Event
 from ..objects import Object, edit, fmt, keys
@@ -29,7 +29,6 @@ from ..threads import launch
 
 
 NAME    = __file__.split(os.sep)[-3]
-debug   = Error.debug
 get     = Broker.get
 saylock = _thread.allocate_lock()
 

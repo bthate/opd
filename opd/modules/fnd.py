@@ -6,7 +6,10 @@
 "locate"
 
 
-from opd import find, fmt, long, skel, types
+from ..locates import find
+from ..objects import fmt
+from ..persist import long
+from ..workdir import skel, types
 
 
 def fnd(event):

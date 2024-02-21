@@ -9,8 +9,15 @@
 import time
 
 
-from opd import Event, Timer, laps, launch, sync, update
-from opd import NoDate, find, first, get_day, get_hour, today, to_day
+from ..brokers import Broker
+from ..locates import find
+from ..message import Event
+from ..objects import update
+from ..parsers import NoDate, get_day, get_hour, laps, today
+from ..parsers import to_day
+from ..repeats import Timer
+from ..persist import sync
+from ..threads import launch
 
 
 def init():
@@ -19,7 +26,7 @@ def init():
             continue
         diff = float(obj.time) - time.time()
         if diff > 0:
-            bot = first()
+            bot = Broker.first()
             evt = Event()
             update(evt, obj)
             evt.orig = object.__repr__(bot)

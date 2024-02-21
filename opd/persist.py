@@ -1,6 +1,6 @@
 # This file is placed in the Public Domain.
 #
-#
+# pylint: disable=C,R
 
 
 "eternity"
@@ -11,9 +11,9 @@ import os
 import _thread
 
 
-from opd.objects import Object, dump, fqn, load, update
-from opd.utility import cdir, strip
-from opd.workdir import Workdir, store, types
+from .objects import Object, dump, fqn, load, update
+from .utility import cdir, strip
+from .workdir import store, types
 
 
 def __dir__():
@@ -21,7 +21,6 @@ def __dir__():
         'Persist',
         'ident',
         'fetch',
-        'last',
         'read',
         'sync',
         'write'

@@ -17,9 +17,9 @@ sys.path.insert(0, os.getcwd())
 
 
 from opd.clients import Client
-from opd.command import Command
+from opd.command import command
 from opd.default import Default
-from opd.excepts import Error
+from opd.excepts import Error, debug
 from opd.message import Event
 from opd.parsers import parse_cmd
 from opd.scanner import scan
@@ -58,7 +58,7 @@ class Console(Client):
 
     def say(self, channel, txt):
         txt = txt.encode('utf-8', 'replace').decode()
-        errprint(txt)
+        print(txt)
 
 
 def cmnd(txt, out):
@@ -67,7 +67,7 @@ def cmnd(txt, out):
     evn = Event()
     evn.orig = object.__repr__(clt)
     evn.txt = txt
-    Command.command(evn)
+    command(evn)
     evn.wait()
     return evn
 
@@ -80,7 +80,7 @@ def main():
         Cfg.mod = ",".join(modules.__dir__())
     if "v" in Cfg.opts:
         dte = time.ctime(time.time()).replace("  ", " ")
-        Error.debug(f"{Cfg.name.upper()} {Cfg.opts.upper()} started {dte}")
+        debug(f"{Cfg.name.upper()} {Cfg.opts.upper()} started {dte}")
     if "h" in Cfg.opts:
         from . import __doc__ as txt
         print(txt)

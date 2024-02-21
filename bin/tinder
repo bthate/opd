@@ -24,15 +24,14 @@ sys.path.insert(0, os.getcwd())
 from opd.clients import Client
 from opd.command import Command, command
 from opd.default import Default
-from opd.excepts import Error, debug, errors
+from opd.excepts import Error, debug
 from opd.message import Event
 from opd.objects import Object, keys, update
 from opd.parsers import laps, parse_cmd, spl
 from opd.scanner import scan
-from opd.storage import Storage, skel
 from opd.threads import launch
 from opd.utility import wrap
-
+from opd.workdir import Workdir, skel
 
 STARTTIME = time.time()
 
@@ -44,7 +43,7 @@ Cfg.silent = False
 Cfg.skip = ["debug",]
 Cfg.version = "60"
 Cfg.wd = ".test"
-Storage.wd = Cfg.wd
+Workdir.wd = Cfg.wd
 
 
 paylock = _thread.allocate_lock()
@@ -147,8 +146,8 @@ def main():
 
 
 if __name__ == "__main__":
-    if os.path.exists(Storage.wd):
-        shutil.rmtree(Storage.wd)
+    if os.path.exists(Workdir.wd):
+        shutil.rmtree(Workdir.wd)
     skel()
     parse_cmd(Cfg, " ".join(sys.argv[1:]))
     dte = time.ctime(time.time()).replace("  ", " ")
@@ -158,5 +157,5 @@ if __name__ == "__main__":
         profile.runctx(main.__code__, globals(), locals())
     else:
         wrap(main)
-    errors()
+    Error.show()
     print(f"{lap} {nrs} {nrcommand} {percall}")

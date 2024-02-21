@@ -8,11 +8,23 @@
 
 import os
 
+
 from .default import Default
 from .objects import fqn, search, update
 from .persist import fetch, long
 from .workdir import store
 from .utility import fntime, strip
+
+
+def __dir__():
+    return (
+        'find',
+        'fns',
+        'last'
+    )
+
+
+__all__ = __dir__()
 
 
 def find(mtc, selector=None, index=None, deleted=False):
