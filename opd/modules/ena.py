@@ -29,12 +29,15 @@ def dis(event):
         event.reply(f"disable {mods}")
         return
     what = event.args[0]
-    mod = getattr(sys.modules, what, None)
+    mod = getattr(modules, what, None)
+    print(mod)
     if mod:
-        try:
-            mod.shutdown()
-        except Exception as ex:
-            Error.add(mod)
+        func = getattr(mod, "shutdown")
+        if func:
+            try:
+                func()
+            except Exception as ex:
+               Error.add(mod)
 
 
 def ena(event):

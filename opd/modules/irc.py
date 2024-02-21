@@ -36,11 +36,27 @@ saylock = _thread.allocate_lock()
 Error.filter = ["PING", "PONG", "PRIVMSG"]
 
 
+myirc = None
+
+
 def init():
+    global myirc
     irc = IRC()
+    myirc = object.__repr__(irc)
+    debug(f"IRC starting {myirc}")
     irc.start()
     irc.events.joined.wait()
     return irc
+
+
+def shutdown():
+    debug(f"IRC stopping {myirc}")
+    irc = Broker.get(myirc)
+    if irc:
+        irc.state.pongcheck = True
+        irc.state.keeprunning = False
+        irc.events.connected.clear()
+        irc.stop()
 
 
 class Config(Default):
@@ -163,6 +179,7 @@ class IRC(Client, Output):
         self.events.ready = threading.Event()
         self.sock = None
         self.state = Default()
+        self.state.dostop = False
         self.state.keeprunning = False
         self.state.lastline = ""
         self.state.nrconnect = 0
@@ -291,6 +308,9 @@ class IRC(Client, Output):
 
     def keep(self):
         while not self.stopped.is_set():
+            if self.stopkeep:
+                 self.stopkeep = False
+                 break
             self.events.connected.wait()
             self.events.authed.wait()
             self.state.keeprunning = True
@@ -474,6 +494,8 @@ class IRC(Client, Output):
             launch(self.keep)
 
     def stop(self):
+        #self.command("QUIT", "byebye")
+        self.stopkeep = True
         self.disconnect()
         self.dostop.set()
         self.oput(None, None)
@@ -498,6 +520,8 @@ def cb_cap(evt):
 
 def cb_error(evt):
     bot = get(evt.orig)
+    if not bot.state.nrerror:
+        bot.state.nrerror = 0
     bot.state.nrerror += 1
     bot.state.errors.append(evt.txt)
     debug(evt.txt)
@@ -580,3 +604,4 @@ def cfg(event):
         edit(config, event.sets)
         sync(config, path)
         event.reply('ok')
+

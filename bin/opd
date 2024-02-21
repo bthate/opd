@@ -31,7 +31,7 @@ from opd import modules
 
 
 Cfg         = Default()
-Cfg.mod     = "cmd,ena,mod"
+Cfg.mod     = "cmd,ena,mod,thr"
 Cfg.name    = "opd"
 Cfg.wd      = os.path.expanduser(f"~/.{Cfg.name}")
 Cfg.pidfile = os.path.join(Cfg.wd, f"{Cfg.name}.pid")
