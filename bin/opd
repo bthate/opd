@@ -16,10 +16,10 @@ import time
 sys.path.insert(0, os.getcwd())
 
 
-from opd.clients import Client
+from opd.clients import Client, cmnd
 from opd.command import command
 from opd.default import Default
-from opd.excepts import Error, debug
+from opd.excepts import Error, debug, enable
 from opd.message import Event
 from opd.parsers import parse_cmd
 from opd.scanner import scan
@@ -61,18 +61,8 @@ class Console(Client):
         print(txt)
 
 
-def cmnd(txt, out):
-    clt = Client()
-    clt.raw = out
-    evn = Event()
-    evn.orig = object.__repr__(clt)
-    evn.txt = txt
-    command(evn)
-    evn.wait()
-    return evn
-
-
 def main():
+    enable(print)
     skel()
     parse_cmd(Cfg, " ".join(sys.argv[1:]))
     readline.redisplay()

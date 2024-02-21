@@ -26,7 +26,3 @@ options:
 -h     display help
 -v     use verbose
 """
-# This file is placed in the Public Domain.
-#
-# pylint: disable=C,R,W0401,W0622,E0402
-

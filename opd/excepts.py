@@ -16,7 +16,8 @@ from .objects import Object
 def __dir__():
     return (
         'Error',
-        'debug'
+        'debug',
+        'enable'
     )
 
 
@@ -27,7 +28,7 @@ class Error(Object):
 
     errors = []
     filter = []
-    output = print
+    output = None
     shown  = []
 
     @staticmethod
@@ -72,3 +73,8 @@ class Error(Object):
 def debug(txt):
     if Error.output and not Error.skip(txt):
         Error.output(txt)
+
+
+def enable(out):
+    Error.output = out
+    

@@ -6,13 +6,15 @@
 "clients"
 
 
-from .command import Command 
+from .command import command 
 from .handler import Handler
+from .message import Event
 
 
 def __dir__():
     return (
-        "Client",
+        'Client',
+        'cmnd'
     )
 
 
@@ -23,7 +25,7 @@ class Client(Handler):
 
     def __init__(self):
         Handler.__init__(self)
-        self.register("command", Command)
+        self.register("command", command)
 
     def announce(self, txt):
         self.raw(txt)
@@ -37,3 +39,14 @@ class Client(Handler):
 
     def raw(self, txt):
         pass
+
+
+def cmnd(txt, out):
+    clt = Client()
+    clt.raw = out
+    evn = Event()
+    evn.orig = object.__repr__(clt)
+    evn.txt = txt
+    command(evn)
+    evn.wait()
+    return evn
