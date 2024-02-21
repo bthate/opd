@@ -12,7 +12,7 @@ import inspect
 from .command import Command
 from .objects import Object
 from .parsers import spl
-from .storage import Storage
+from .persist import Persist
 from .threads import launch
 
 
@@ -39,7 +39,7 @@ def scan(pkg, modstr, initer=False, disable="", wait=True):
         for _key, clz in inspect.getmembers(module, inspect.isclass):
             if not issubclass(clz, Object):
                 continue
-            Storage.add(clz)
+            Persist.add(clz)
         if initer and "init" in dir(module):
             module._thr = launch(module.init, name=f"init {modname}")
             mds.append(module)

@@ -23,9 +23,8 @@ from opd.excepts import Error
 from opd.message import Event
 from opd.parsers import parse_cmd
 from opd.scanner import scan
-from opd.storage import Storage
-from opd.utility import checkpid, daemon, forever, getpid
-from opd.utility import privileges, wrap
+from opd.utility import checkpid, daemon, forever, getpid, privileges, wrap
+from opd.workdir import Workdir, skel
 
 
 from opd import modules
@@ -38,7 +37,7 @@ Cfg.wd      = os.path.expanduser(f"~/.{Cfg.name}")
 Cfg.pidfile = os.path.join(Cfg.wd, f"{Cfg.name}.pid")
 
 
-Storage.wd = Cfg.wd
+Workdir.wd = Cfg.wd
 
 
 class Console(Client):
@@ -74,7 +73,7 @@ def cmnd(txt, out):
 
 
 def main():
-    Storage.skel()
+    skel()
     parse_cmd(Cfg, " ".join(sys.argv[1:]))
     readline.redisplay()
     if 'a' in Cfg.opts:

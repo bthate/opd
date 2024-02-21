@@ -18,7 +18,7 @@ import _thread
 
 from ..brokers import Broker
 from ..clients import Client
-from ..command import Command
+from ..command import command
 from ..default import Default
 from ..excepts import Error
 from ..locates import last
@@ -556,7 +556,7 @@ def cb_privmsg(evt):
         if evt.txt:
             evt.txt = evt.txt[0].lower() + evt.txt[1:]
         debug(f"command from {evt.origin}: {evt.txt}")
-        Command.command(evt)
+        command(evt)
 
 
 def cb_quit(evt):
