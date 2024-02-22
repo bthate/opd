@@ -9,7 +9,7 @@
 import unittest
 
 
-from opd import Object, fmt, fqn, items, keys, update, values
+from opd.objects import Object, fmt, fqn, items, keys, update, values
 
 
 VALIDJSON = '{"test": "bla"}'

@@ -1,26 +1,23 @@
 # This file is placed in the Public Domain.
 #
-#
+# pylint: disable=C,R,W0718
 
 
 "enable/disable"
-
-
-import sys
 
 
 from ..excepts import Error
 from ..scanner import scan
 
 
-from .. import modules
+from .. import  modules
 
 
 def __dir__():
     return (
        'dis',
        'ena'
-    ) 
+    )
 
 
 def dis(event):
@@ -37,7 +34,7 @@ def dis(event):
             try:
                 func()
             except Exception as ex:
-               Error.add(mod)
+                Error.add(ex)
 
 
 def ena(event):

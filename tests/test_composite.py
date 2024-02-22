@@ -9,7 +9,7 @@
 import unittest
 
 
-from opd import Object
+from opd.objects import Object
 
 
 class TestComposite(unittest.TestCase):

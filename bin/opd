@@ -17,7 +17,6 @@ sys.path.insert(0, os.getcwd())
 
 
 from opd.clients import Client, cmnd
-from opd.command import command
 from opd.default import Default
 from opd.excepts import Error, debug, enable
 from opd.message import Message

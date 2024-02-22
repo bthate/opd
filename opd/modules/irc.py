@@ -1,6 +1,6 @@
 # This file is placed in the Public Domain.
 #
-# pylint: disable=C,R,W0105,W0612,W0718,E0402
+# pylint: disable=C,R,W0105,W0612,W0718,E0402,W0201,W0603
 # ruff: noqa: F841
 
 "internet relay chat"
@@ -309,8 +309,8 @@ class IRC(Client, Output):
     def keep(self):
         while not self.stopped.is_set():
             if self.stopkeep:
-                 self.stopkeep = False
-                 break
+                self.stopkeep = False
+                break
             self.events.connected.wait()
             self.events.authed.wait()
             self.state.keeprunning = True

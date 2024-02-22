@@ -16,8 +16,8 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 
 from ..default import Default
 from ..excepts import Error, debug
+from ..locates import fns
 from ..objects import Object
-from ..persist import Persist
 from ..threads import launch
 from ..workdir import Workdir
 
@@ -95,7 +95,7 @@ class RESTHandler(BaseHTTPRequestHandler):
         if self.path == "/":
             self.write_header("text/html")
             txt = ""
-            for fnm in Persist.fns():
+            for fnm in fns():
                 txt += f'<a href="http://{Config.hostname}:{Config.port}/{fnm}">{fnm}</a>\n'
             self.send(html(txt.strip()))
             return
