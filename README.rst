@@ -35,6 +35,7 @@ INSTALL
 ::
 
     $ pipx install opd
+    $ pipx ensurepath
 
 USAGE
 

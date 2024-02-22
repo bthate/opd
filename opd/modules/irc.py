@@ -43,7 +43,6 @@ def init():
     global myirc
     irc = IRC()
     myirc = object.__repr__(irc)
-    debug(f"IRC starting {myirc}")
     irc.start()
     irc.events.joined.wait()
     return irc
@@ -308,8 +307,8 @@ class IRC(Client, Output):
 
     def keep(self):
         while not self.stopped.is_set():
-            if self.stopkeep:
-                self.stopkeep = False
+            if self.state.stopkeep:
+                self.state.stopkeep = False
                 break
             self.events.connected.wait()
             self.events.authed.wait()
@@ -495,7 +494,7 @@ class IRC(Client, Output):
 
     def stop(self):
         #self.command("QUIT", "byebye")
-        self.stopkeep = True
+        self.state.stopkeep = True
         self.disconnect()
         self.dostop.set()
         self.oput(None, None)
