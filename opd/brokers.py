@@ -3,7 +3,7 @@
 # pylint: disable=C,R,E0402
 
 
-"broker"
+"object cache"
 
 
 from .objects import Object, keys, values

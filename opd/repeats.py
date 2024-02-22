@@ -17,7 +17,6 @@ from .threads import launch
 def __dir__():
     return (
        'Repeater',
-       'Timer'
     )
 
 
