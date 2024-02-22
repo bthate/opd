@@ -27,9 +27,8 @@ def dis(event):
         return
     what = event.args[0]
     mod = getattr(modules, what, None)
-    print(mod)
     if mod:
-        func = getattr(mod, "shutdown")
+        func = getattr(mod, "shutdown", None)
         if func:
             try:
                 func()
