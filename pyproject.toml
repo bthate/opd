@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "opd"
 description = "original programmer daemon"
-version = "202"
+version = "210"
 authors = [
     {name = "Bart Thate", email = "bthate@dds.nl" },
 ]
@@ -33,6 +33,7 @@ dev = []
 [tool.setuptools]
 script-files = [
    "bin/opd",
+   "bin/opdctl"
 ]
 packages = [
    "opd",
