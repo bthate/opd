@@ -1,0 +1,7 @@
+grep -R sys opd
+grep -R "print(" opd
+grep -R __import__ opd
+grep -R importlib opd
+grep -R "import sys" opd
+#grep -R "import os" opd
+
