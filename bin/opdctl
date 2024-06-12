@@ -50,10 +50,10 @@ from opd import modules
 
 Cfg             = Default()
 Cfg.dis         = ""
-Cfg.mod         = "cmd,err,log,mod,tdo,thr,tmr"
+Cfg.mod         = "cmd,err,irc,log,mod,rss,tdo,thr,tmr"
 Cfg.name        = "opd"
 Cfg.opts        = ""
-Cfg.version     = "210"
+Cfg.version     = "211"
 Cfg.wdr         = os.path.expanduser(f"~/.{Cfg.name}")
 Cfg.pidfile     = os.path.join(Cfg.wdr, f"{Cfg.name}.pid")
 

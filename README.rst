@@ -10,7 +10,6 @@ SYNOPSIS
 
     opdctl <cmd> [key=val] [key==val]
     opdctl [-a] [-c] [-v]
-    opd
 
 DESCRIPTION
 
@@ -49,8 +48,7 @@ USAGE
     use opdctl to configure the daemon
 
     $ opdctl cmd
-    cmd,err,mod,req,thr,ver
-    $
+    cfg,cmd,dne,dpl,err,log,mod,mre,nme,pwd,rem,res,rss,syn,tdo,thr,tmr
 
     the -c option starts a console
 
@@ -60,19 +58,18 @@ USAGE
     the -v option turns on verbose    
 
     $ opdctl -cv
-    OPD CV started Sat Feb 10 13:50:56 2024
+    Jun 12 13:09:58 2024 OPD CV CMD,ERR,IRC,LOG,MOD,RSS,TDO,THR,TMR
     > 
 
-    use mod= to load additional modules
+    use dis= to unload modules
 
-    $ opdctl mod=irc,rss
+    $ opdctl -c dis=irc
     $
 
     the ``mod`` command shows a list of modules
 
     $ opdctl mod
-    cmd,err,irc,log,mod,rss,tdo,thr
-    $
+    cmd,err,irc,log,mod,opm,rss,tdo,thr,tmr
 
     the -a option will load all available modules
 
