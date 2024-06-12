@@ -50,7 +50,7 @@ from opd import modules
 
 Cfg             = Default()
 Cfg.dis         = ""
-Cfg.mod         = "cmd,err,log,mod,req,slg,tdo,thr,tmr"
+Cfg.mod         = "cmd,err,log,mod,tdo,thr,tmr"
 Cfg.name        = "opd"
 Cfg.opts        = ""
 Cfg.version     = "210"

@@ -23,7 +23,7 @@ from opd import modules
 
 Cfg             = Default()
 Cfg.dis         = ""
-Cfg.mod         = "cmd,err,irc,log,mod,req,rss,tdo,thr,tmr"
+Cfg.mod         = "cmd,err,irc,log,mod,rss,tdo,thr,tmr"
 Cfg.opts        = ""
 Cfg.name        = "opd"
 Cfg.version     = "210"

@@ -8,9 +8,9 @@ SYNOPSIS
 
 ::
 
+    opdctl <cmd> [key=val] [key==val]
+    opdctl [-a] [-c] [-v]
     opd
-    opd <cmd> [key=val] [key==val]
-    opd [-a] [-c] [-v]
 
 DESCRIPTION
 
@@ -46,37 +46,32 @@ USAGE
     $ opd
     $
 
-    if there is already a daemon running the program won't start
+    use opdctl to configure the daemon
 
-    $ bin/opd
-    daemon is already running.
-
-    provding a command it will run it in the cli
-
-    $ opd cmd
+    $ opdctl cmd
     cmd,err,mod,req,thr,ver
     $
 
     the -c option starts a console
 
-    $ opd -c
+    $ opdctl -c
     >
 
     the -v option turns on verbose    
 
-    $ opd -cv
+    $ opdctl -cv
     OPD CV started Sat Feb 10 13:50:56 2024
     > 
 
     use mod= to load additional modules
 
-    $ opd mod=irc,rss
+    $ opdctl mod=irc,rss
     $
 
     the ``mod`` command shows a list of modules
 
-    $ opd mod
-    cmd,err,fnd,irc,log,mod,req,rss,tdo,thr
+    $ opdctl mod
+    cmd,err,irc,log,mod,rss,tdo,thr
     $
 
     the -a option will load all available modules
@@ -87,21 +82,21 @@ CONFIGURATION
 
     irc
 
-    $ opd cfg server=<server>
-    $ opd cfg channel=<channel>
-    $ opd cfg nick=<nick>
+    $ opdctl cfg server=<server>
+    $ opdctl cfg channel=<channel>
+    $ opdctl cfg nick=<nick>
 
     sasl
 
-    $ opd pwd <nsvnick> <nspass>
-    $ opd cfg password=<frompwd>
+    $ opdctl pwd <nsvnick> <nspass>
+    $ opdctl cfg password=<frompwd>
 
     rss
 
-    $ opd rss <url>
-    $ opd dpl <url> <item1,item2>
-    $ opd rem <url>
-    $ opd nme <url> <name>
+    $ opdctl rss <url>
+    $ opdctl dpl <url> <item1,item2>
+    $ opdctl rem <url>
+    $ opdctl nme <url> <name>
 
 COMMANDS
 
@@ -111,13 +106,11 @@ COMMANDS
     cfg - irc configuration
     dlt - remove a user
     dpl - sets display items
-    fnd - find objects 
     log - log some text
     met - add a user
     mre - displays cached output
     pwd - sasl nickserv name/pass
     rem - removes a rss feed
-    req - reconsider
     rss - add a feed
     thr - show the running threads
 
@@ -142,7 +135,7 @@ SYSTEMD
     RemainAfterExit=yes
 
     [Install]
-    WantedBy=multi-user.target
+    WantedBy=default.target
 
     then run this
 
@@ -157,8 +150,8 @@ FILES
 
     ~/.opd
     ~/.local/bin/opd
-    ~/.local/pipx/venvs/opd/
-    ~/.local/pipx/venvs/opd/share/doc/opd/README.rst 
+    ~/.local/bin/opdctl
+    ~/.local/pipx/venvs/opd/*
 
 AUTHOR
 
