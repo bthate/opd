@@ -19,10 +19,10 @@ import _thread
 sys.path.insert(0, os.getcwd())
 
 
-from opd.interface import *
+from op.interface import *
 
 
-from opd import modules
+from op import modules
 
 
 if os.path.exists("files"):

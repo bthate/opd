@@ -1,1 +1,1 @@
-pylint opd bin/opd bin/opdctl bin/tinder tests
+pylint op bin/opd bin/opc bin/op bin/tinder tests
