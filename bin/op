@@ -14,16 +14,16 @@ import sys
 sys.path.insert(0, os.getcwd())
 
 
-from opd.config  import Config
-from opd.cmds    import Commands
-from opd.persist import Persist, skel
-from opd.errors  import errors, later
-from opd.main    import cmnd, enable, scan
-from opd.parse   import parse
-from opd.utils   import modnames
+from op.config  import Config
+from op.cmds    import Commands
+from op.persist import Persist, skel
+from op.errors  import errors, later
+from op.main    import cmnd, enable, scan
+from op.parse   import parse
+from op.utils   import modnames
 
 
-from opd import modules
+from op import modules
 
 
 Cfg         = Config()

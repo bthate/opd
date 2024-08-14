@@ -15,16 +15,16 @@ import termios
 sys.path.insert(0, os.getcwd())
 
 
-from opd.config  import Config
-from opd.console import Console
-from opd.errors  import errors
-from opd.persist import Persist, skel
-from opd.main    import cmnd, enable, init, scan
-from opd.parse   import parse
-from opd.utils   import forever, modnames
+from op.config  import Config
+from op.console import Console
+from op.errors  import errors
+from op.persist import Persist, skel
+from op.main    import cmnd, enable, init, scan
+from op.parse   import parse
+from op.utils   import forever, modnames
 
 
-from opd import modules
+from op import modules
 
 
 if os.path.exists("mods"):
