@@ -7,7 +7,7 @@
 import unittest
 
 
-from opd.modules.opm import Parser
+from opd.modules.rss import OPMLParser
 
 
 class TestAttrs(unittest.TestCase):
@@ -16,7 +16,7 @@ class TestAttrs(unittest.TestCase):
 
     def test_attrs(self):
         "test attributes."
-        res = Parser.parse(TXT, "outline")
+        res = OPMLParser.parse(TXT, "outline")
         self.assertTrue(len(res) == 50)
 
 
