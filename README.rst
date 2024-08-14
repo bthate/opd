@@ -46,11 +46,11 @@ INSTALL
 
     <new terminal>
 
-    $ op srv > obx.service
+    $ op srv > opd.service
     # mv *.service /etc/systemd/system/
     # systemctl enable opd --now
 
-    joins #opd on localhost
+    joins #op on localhost
 
 
 USAGE
@@ -134,4 +134,4 @@ COPYRIGHT
 
 ::
 
-    OBX is Public Domain.
+    OPD is Public Domain.
