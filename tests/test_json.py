@@ -7,9 +7,9 @@
 import unittest
 
 
-from opd.object  import Object
-from opd.encoder import dumps
-from opd.decoder import loads
+from op.object  import Object
+from op.encoder import dumps
+from op.decoder import loads
 
 
 VALIDJSON = "{'test': 'bla'}"

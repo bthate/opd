@@ -15,7 +15,7 @@ DESCRIPTION
 
 ::
 
-    OPD is a python3 library implementing the 'opd' package. It
+    OPD is a python3 library implementing the 'op' package. It
     provides all the tools to program a bot, such as disk perisistence
     for configuration files, event handler to handle the client/server
     connection, code to introspect modules for commands, deferred

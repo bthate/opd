@@ -32,13 +32,13 @@ dev = []
 
 [tool.setuptools]
 script-files = [
+   "bin/op",
+   "bin/opc",
    "bin/opd",
-   "bin/opdsh",
-   "bin/opdctl"
 ]
 packages = [
-   "opd",
-   "opd.modules"
+   "op",
+   "op.modules"
 ]
 zip-safe = true
 

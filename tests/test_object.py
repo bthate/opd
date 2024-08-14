@@ -9,7 +9,7 @@
 import unittest
 
 
-from opd.object import Object, fmt, fqn, items, keys, update, values
+from op.object import Object, fmt, fqn, items, keys, update, values
 
 
 VALIDJSON = '{"test": "bla"}'
@@ -139,11 +139,11 @@ class TestObject(unittest.TestCase):
 
     def test_module(self):
         "test module name."
-        self.assertEqual(Object().__module__, "opd.object")
+        self.assertEqual(Object().__module__, "op.object")
 
     def test_fqn(self):
         "test full qualified domain name."
-        self.assertEqual(fqn(Object()), "opd.object.Object")
+        self.assertEqual(fqn(Object()), "op.object.Object")
 
     def test_repr(self):
         "test representation."

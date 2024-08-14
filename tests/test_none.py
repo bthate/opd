@@ -10,7 +10,6 @@
 import unittest
 
 
-
 class TestNone(unittest.TestCase):
 
     def test_nope(self):

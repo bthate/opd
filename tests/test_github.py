@@ -7,7 +7,7 @@
 import unittest
 
 
-from opd.modules.rss import Parser
+from op.modules.rss import Parser
 
 
 class TestAtom(unittest.TestCase):

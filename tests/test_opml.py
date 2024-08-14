@@ -7,7 +7,7 @@
 import unittest
 
 
-from opd.modules.rss import OPMLParser
+from op.modules.rss import OPMLParser
 
 
 class TestOPML(unittest.TestCase):

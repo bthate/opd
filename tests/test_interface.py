@@ -10,10 +10,10 @@ import sys
 import unittest
 
 
-from opd.interface import *
+from op.interface import *
 
 
-import opd
+import op
 
 
 PACKAGE = [
@@ -93,7 +93,7 @@ DIFF = [
 ]
 
 
-OBJECT = opd
+OBJECT = op
 
 
 class TestInterface(unittest.TestCase): # pylint: disable=R0903

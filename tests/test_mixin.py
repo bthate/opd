@@ -7,7 +7,7 @@
 import unittest
 
 
-from opd.object import Object
+from op.object import Object
 
 
 class Mix: # pylint: disable=R0903
