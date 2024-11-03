@@ -9,9 +9,7 @@ SYNOPSIS
 
 ::
 
-    op  <cmd> [key=val] [key==val]
-    opc [-i] [-v]
-    opd 
+    opdctl  <cmd> [key=val] [key==val]
 
 
 DESCRIPTION
@@ -46,11 +44,11 @@ INSTALL
 
     <new terminal>
 
-    $ op srv > opd.service
+    $ opdctl srv > opd.service
     # mv *.service /etc/systemd/system/
     # systemctl enable opd --now
 
-    joins #op on localhost
+    joins #opd on localhost
 
 
 USAGE
@@ -59,24 +57,24 @@ USAGE
 
     without any argument the bot does nothing::
 
-    $ op
+    $ opdctl
     $
 
     see list of commands
 
-    $ op cmd
-    cmd,skl,srv
-
-
-    start a console
-
-    $ opc
-    >
+    $ opdctl cmd
+    cfg,cmd,dne,dpl,err,exp,fnd,imp,log,mod,mre,nme,pwd
+    rem,res,rss,srv,syn,tdo,thr,upt
 
     start daemon
 
     $ opd
-    $ 
+    $
+
+    start service
+
+    $ opds
+    <runs until ctrl-c>
 
 
 CONFIGURATION
@@ -85,41 +83,57 @@ CONFIGURATION
 
     irc
 
-    $ op cfg server=<server>
-    $ op cfg channel=<channel>
-    $ op cfg nick=<nick>
+    $ opdctl cfg server=<server>
+    $ opdctl cfg channel=<channel>
+    $ opdctl cfg nick=<nick>
 
     sasl
 
-    $ op pwd <nsvnick> <nspass>
-    $ op cfg password=<frompwd>
+    $ opdctl pwd <nsvnick> <nspass>
+    $ opdctl cfg password=<frompwd>
 
     rss
 
-    $ op rss <url>
-    $ op dpl <url> <item1,item2>
-    $ op rem <url>
-    $ op nme <url> <name>
+    $ opdctl rss <url>
+    $ opdctl dpl <url> <item1,item2>
+    $ opdctl rem <url>
+    $ opdctl nme <url> <name>
 
 
 COMMANDS
 
 ::
 
-    cfg - irc configuration
-    cmd - commands
-    mre - displays cached output
-    pwd - sasl nickserv name/pass
+    list of commands
+
+    | ``cfg`` - irc configuration
+    | ``cmd`` - commands
+    | ``dpl`` - sets display items
+    | ``err`` - show errors
+    | ``exp`` - export opml (stdout)
+    | ``imp`` - import opml
+    | ``log`` - log text
+    | ``mre`` - display cached output
+    | ``now`` - show genocide stats
+    | ``pwd`` - sasl nickserv name/pass
+    | ``rem`` - removes a rss feed
+    | ``res`` - restore deleted feeds
+    | ``req`` - reconsider
+    | ``rss`` - add a feed
+    | ``syn`` - sync rss feeds
+    | ``tdo`` - add todo item
+    | ``thr`` - show running threads
+    | ``upt`` - show uptime
 
 
 FILES
 
 ::
 
-    ~/.op
-    ~/.local/bin/op
-    ~/.local/bin/opc
+    ~/.opd
+    ~/.local/bin/opdctl
     ~/.local/bin/opd
+    ~/.local/bin/opds
     ~/.local/pipx/venvs/opd/*
 
 
