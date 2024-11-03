@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "opd"
 description = "Original Programmer Daemon"
-version = "220"
+version = "300"
 authors = [
     {name = "Bart Thate", email = "bthate@dds.nl" },
 ]
@@ -32,25 +32,13 @@ dev = []
 
 [tool.setuptools]
 script-files = [
-   "bin/op",
-   "bin/opc",
-   "bin/opd",
+   'bin/opdctl',
+   'bin/opd',
+   'bin/opdc',
+   'bin/opds'
 ]
 packages = [
-   "op",
-   "op.modules"
+   "opd",
+   "opd.modules"
 ]
 zip-safe = true
-
-
-[tool.setuptools.data-files]
-"share/doc/opd" = [
-    "README.rst",
-]
-
-[tool.setuptools.exclude-package-data]
-"*" = [
-    "env*",
-    "html*",
-    "test*"
-]

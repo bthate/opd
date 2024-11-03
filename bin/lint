@@ -1,1 +1,0 @@
-pylint op bin/opd bin/opc bin/op bin/tinder tests

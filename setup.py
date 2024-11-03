@@ -9,4 +9,9 @@ import setuptools
 
 
 if __name__ == "__main__":
-    setuptools.setup(scripts=["bin/op", "bin/opc", "bin/opd"])
+    setuptools.setup(scripts=[
+        'bin/opdctl',
+        'bin/opd',
+        'bin/opdc',
+        'bin/opds'
+    ])

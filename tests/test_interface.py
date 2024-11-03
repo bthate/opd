@@ -1,5 +1,6 @@
 # This file is placed in the Public Domain.
-# pylint: disable=W0401,W0614,W0622
+# pylint: disable=C,R,W0401,W0614,W0622
+# ruff: noqa: F403,F405
 
 
 "interface"
@@ -10,42 +11,17 @@ import sys
 import unittest
 
 
-from op.interface import *
+import opd
+import opd.object
+import opd.persist
 
 
-import op
+from opd.object import *
 
 
 PACKAGE = [
-    '__builtins__',
-    '__cached__',
-    '__doc__',
-    '__file__',
-    '__loader__',
-    '__name__',
-    '__package__',
-    '__path__',
-    '__spec__',
-    'cache',
-    'client',
-    'cmds',
-    'decoder',
-    'default',
-    'encoder',
-    'errors',
-    'event',
-    'interface',
-    'lock',
-    'log',
-    'main',
     'object',
-    'parse',
-    'persist',
-    'reactor',
-    'repeater',
-    'thread',
-    'timer',
-    'utils'
+    'persist'
 ]
 
 
@@ -83,55 +59,27 @@ METHODS = [
 ]
 
 
-DICT = {}
-
-
-DIFF = [
-    "__dict__",
-    "__module__",
-    "__slots__",
-]
-
-
-OBJECT = op
-
-
-class TestInterface(unittest.TestCase): # pylint: disable=R0903
-
-    "TestInterface"
+class TestInterface(unittest.TestCase):
 
     def test_package(self):
-        "test methods interface."
         okd = True
-        for meth in PACKAGE:
-            func1 = getattr(OBJECT, meth)
-            if not func1:
-                continue
-            func2 = DICT.get(meth)
-            if not func2:
-                continue
-            if dir(func1) != dir(func2):
-                print(func1, func2)
+        for mod in PACKAGE:
+            mod1 = getattr(opd, mod, None)
+            if not mod1:
                 okd = False
-            sys.stdout.flush()
+                print(mod)
+                break
         self.assertTrue(okd)
 
-
     def test_objects(self):
-        "test methods interface."
         okd = True
         obj = Object()
+        dirr = dir(obj)
+        print(dirr)
         for meth in METHODS:
-            func1 = getattr(obj, meth)
-            if not func1:
-                continue
-            func2 = DICT.get(meth)
-            if not func2:
-                continue
-            if dir(func1) != dir(func2):
-                print(func1, func2)
+            if meth not in dirr:
                 okd = False
-            sys.stdout.flush()
+                print(f"{meth} not found")
         self.assertTrue(okd)
 
 
