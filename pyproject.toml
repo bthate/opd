@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "opd"
 description = "Original Programmer Daemon"
-version = "300"
+version = "310"
 authors = [
     {name = "Bart Thate", email = "bthate@dds.nl" },
 ]
@@ -24,6 +24,12 @@ classifiers=[
 dev = []
 
 
+[project.scripts]
+'opdctl'  = 'opd.__main__:wrapped'
+'opd' = 'opd.daemon:main'
+'opds' = 'opd.service:wrapped'
+
+
 [project.urls]
 "home" = "https://pypi.org/project/opd"
 "bugs" = "https://github.com/bthate/opd/issues"
@@ -31,12 +37,6 @@ dev = []
 
 
 [tool.setuptools]
-script-files = [
-   'bin/opdctl',
-   'bin/opd',
-   'bin/opdc',
-   'bin/opds'
-]
 packages = [
    "opd",
    "opd.modules"

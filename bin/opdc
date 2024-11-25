@@ -16,10 +16,11 @@ import time
 sys.path.insert(0, os.getcwd())
 
 
-from opd.persist import Workdir
-from opd.command import NAME, Config, command, forever, parse, scanner
-from opd.modules import face
-from opd.runtime import Client, Errors, Event, errors, later
+from opd.object   import Config, parse
+from opd.persist  import NAME, Workdir
+from opd.__main__ import command, scan
+from opd.modules  import face
+from opd.runtime  import Client, Errors, Event, errors, forever, later
 
 
 "defines"
@@ -85,7 +86,7 @@ def main():
     parse(cfg, " ".join(sys.argv[1:]))
     if "v" in cfg.opts:
         banner()
-    for mod, thr in scanner(face, init="i" in cfg.opts, disable=cfg.sets.dis):
+    for mod, thr in scan(face, init="i" in cfg.opts, disable=cfg.sets.dis):
         if "v" in cfg.opts and "output" in dir(mod):
             mod.output = print
         if thr and "w" in cfg.opts:
