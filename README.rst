@@ -157,7 +157,7 @@ source is at `https://github.com/bthate/opd  <https://github.com/bthate/opd>`_
 |
 | ``~/.opd``
 | ``~/.local/bin/opd``
-| ``~/.local/bin/opdc`
+| ``~/.local/bin/opdc``
 | ``~/.local/bin/opdctl``
 | ``~/.local/bin/opds``
 | ``~/.local/pipx/venvs/opd/*``
