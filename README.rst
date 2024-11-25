@@ -33,8 +33,7 @@ on an error, etc.
 
 OPD is Public Domain.
 
-1. You need to set PYTHONPATH="." if you run this locally.
-2. You might need to uninstall and rm -fR ~/.cache/pip in case of error.
+#. You might need to uninstall and rm -fR ~/.cache/pip in case of error.
 
 
 **INSTALL**
@@ -85,16 +84,6 @@ start service
 | ``<runs until ctrl-c>``
 |
 
-show request to the prosecutor
-
-|
-| $ ``opd req``
-| Information and Evidence Unit
-| Office of the Prosecutor
-| Post Office Box 19519
-| 2500 CM The Hague
-| The Netherlands
-|
 
 **COMMANDS**
 
