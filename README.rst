@@ -8,7 +8,7 @@
 
 |
 | ``opdctl <cmd> [key=val] [key==val]``
-| ``opdc [-cviw]
+| ``opdc [-cviw]``
 | ``opd`` 
 | ``opds``
 |
