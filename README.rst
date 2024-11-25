@@ -6,7 +6,6 @@
 
 **SYNOPSIS**
 
-|
 | ``opdctl <cmd> [key=val] [key==val]``
 | ``opdc [-cviw]``
 | ``opd`` 
@@ -44,7 +43,6 @@ makes storing and reading to/from json possible.
 
 installation is done with pipx
 
-|
 | ``$ pipx install opd``
 | ``$ pipx ensurepath``
 |
@@ -61,14 +59,12 @@ installation is done with pipx
 
 use ``opdctl`` to control the program, default it does nothing
 
-|
 | ``$ opdctl``
 | ``$``
 |
 
 see list of commands
 
-|
 | ``$ opd cmd``
 | ``cfg,cmd,dne,dpl,err,exp,imp,log,mod,mre,nme,``
 | ``now,pwd,rem,req,res,rss,srv,syn,tdo,thr,upt``
@@ -76,14 +72,12 @@ see list of commands
 
 start daemon
 
-|
 | ``$ opd``
 | ``$``
 |
 
 start service
 
-|
 | ``$ opds``
 | ``<runs until ctrl-c>``
 |
@@ -93,7 +87,6 @@ start service
 
 here is a list of available commands
 
-|
 | ``cfg`` - irc configuration
 | ``cmd`` - commands
 | ``dpl`` - sets display items
@@ -118,7 +111,6 @@ here is a list of available commands
 
 irc
 
-|
 | ``$ opdctl cfg server=<server>``
 | ``$ opdctl cfg channel=<channel>``
 | ``$ opdctl cfg nick=<nick>``
@@ -126,14 +118,12 @@ irc
 
 sasl
 
-|
 | ``$ opdctl pwd <nsvnick> <nspass>``
 | ``$ opdctl cfg password=<frompwd>``
 |
 
 rss
 
-|
 | ``$ opdctl rss <url>``
 | ``$ opdctl dpl <url> <item1,item2>``
 | ``$ opdctl rem <url>``
@@ -142,7 +132,6 @@ rss
 
 opml
 
-|
 | ``$ opdctl exp``
 | ``$ opdctl imp <filename>``
 |
@@ -154,7 +143,6 @@ source is at `https://github.com/bthate/opd  <https://github.com/bthate/opd>`_
 
 **FILES**
 
-|
 | ``~/.opd``
 | ``~/.local/bin/opd``
 | ``~/.local/bin/opdc``
@@ -165,12 +153,10 @@ source is at `https://github.com/bthate/opd  <https://github.com/bthate/opd>`_
 
 **AUTHOR**
 
-|
 | Bart Thate <``bthate@dds.nl``>
 |
 
 **COPYRIGHT**
 
-|
 | ``OPD`` is Public Domain.
 |
