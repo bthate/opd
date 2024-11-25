@@ -1,151 +1,64 @@
-NAME
-
-::
-
-    OPD - Original Programmer Daemon
-
-
-SYNOPSIS
-
-::
-
-    opdctl  <cmd> [key=val] [key==val]
+| **Information and Evidence Unit**
+| **Office of the Prosecutor**
+| **Post Office Box 19519**
+| **2500 CM The Hague**
+| **The Netherlands**
+|
 
 
-DESCRIPTION
+Hello Office of the Prosecutor, 
 
-::
+i write you in the context of communications and claims under art.15 of
+the Rome Statute. i want to inform the prosecutor that the king of the
+netherlands and his government are commiting 3 of the 5 crimes defined
+in the Rome Statute.
 
-    OPD has all the python3 code to program a unix cli program, such as
-    disk perisistence for configuration files, event handler to
-    handle the client/server connection, code to introspect modules
-    for commands, deferred exception handling to not crash on an
-    error, a parser to parse commandline options and values, etc.
+The dutch government has introduced three new forced care laws, the Wfz
+(wet forensische zorg) for criminals, the WvGGZ (Wet verplichte GGZ) for
+the disturbed and addicted and the Wzd (Wet zorg en dwang) for the
+handicapped.
 
-    OPD uses object programming (OP) that allows for easy json save//load
-    to/from disk of objects. It provides an "clean namespace" Object class
-    that only has dunder methods, so the namespace is not cluttered with
-    method names. This makes storing and reading to/from json possible.
+Both the chamber suggesting these laws to the king and the king himself
+have been informed about the fact the the substances administered under
+these laws are proven to be poison (1).
 
-    OPD has a demo bot, it can connect to IRC, fetch and display RSS
-    feeds, take todo notes, keep a shopping list and log text. You can
-    also copy/paste the service file and run it under systemd for 24/7
-    presence in a IRC channel.
+There is proof the medication used in forced treatments in the
+netherlands are poison.
 
-    OPD is Public Domain.
+1) haloperidol
 
+https://echa.europa.eu/substance-information/-/substanceinfo/100.000.142
 
-INSTALL
+2) clozapine
 
-::
+https://echa.europa.eu/substance-information/-/substanceinfo/100.024.831
 
-    $ pipx install opd
-    $ pipx ensurepath
+3) olanzapine
 
-    <new terminal>
+https://echa.europa.eu/substance-information/-/substanceinfo/100.125.320
 
-    $ opdctl srv > opd.service
-    # mv *.service /etc/systemd/system/
-    # systemctl enable opd --now
+4) aripriprazole
 
-    joins #opd on localhost
+https://echa.europa.eu/substance-information/-/substanceinfo/100.112.532
 
 
-USAGE
+With the mass scale torture with poison the king of the netherlands and
+his chamber:
 
-::
+(1) kills
+(2) does grave bodily and mental harm
+(3) makes impotent
 
-    without any argument the bot does nothing::
+on the following victim groups here in the Netherlands:
 
-    $ opdctl
-    $
+(1) verslaafden (addicts)
+(2) bejaarden (elderly)
+(3) ggz patienten (psychiatric patients)
+(4) criminelen (criminials)
+(5) gehandicapten (handicapped)
 
-    see list of commands
-
-    $ opdctl cmd
-    cfg,cmd,dne,dpl,err,exp,fnd,imp,log,mod,mre,nme,pwd
-    rem,res,rss,srv,syn,tdo,thr,upt
-
-    start daemon
-
-    $ opd
-    $
-
-    start service
-
-    $ opds
-    <runs until ctrl-c>
-
-
-CONFIGURATION
-
-::
-
-    irc
-
-    $ opdctl cfg server=<server>
-    $ opdctl cfg channel=<channel>
-    $ opdctl cfg nick=<nick>
-
-    sasl
-
-    $ opdctl pwd <nsvnick> <nspass>
-    $ opdctl cfg password=<frompwd>
-
-    rss
-
-    $ opdctl rss <url>
-    $ opdctl dpl <url> <item1,item2>
-    $ opdctl rem <url>
-    $ opdctl nme <url> <name>
-
-
-COMMANDS
-
-::
-
-    list of commands
-
-    | ``cfg`` - irc configuration
-    | ``cmd`` - commands
-    | ``dpl`` - sets display items
-    | ``err`` - show errors
-    | ``exp`` - export opml (stdout)
-    | ``imp`` - import opml
-    | ``log`` - log text
-    | ``mre`` - display cached output
-    | ``now`` - show genocide stats
-    | ``pwd`` - sasl nickserv name/pass
-    | ``rem`` - removes a rss feed
-    | ``res`` - restore deleted feeds
-    | ``req`` - reconsider
-    | ``rss`` - add a feed
-    | ``syn`` - sync rss feeds
-    | ``tdo`` - add todo item
-    | ``thr`` - show running threads
-    | ``upt`` - show uptime
-
-
-FILES
-
-::
-
-    ~/.opd
-    ~/.local/bin/opdctl
-    ~/.local/bin/opd
-    ~/.local/bin/opds
-    ~/.local/pipx/venvs/opd/*
-
-
-AUTHOR
-
-::
-
-    Bart Thate <bthate@dds.nl>
-
-
-COPYRIGHT
-
-::
-
-    OPD is Public Domain.
+Since the members of the chamber and the king were aware that these
+medicine are poison at the time they voted for this law and the day the
+Wfz law took effect (1-1-2019), i ask the prosecutor to prosecute the
+king for making the commiting of the above mentioned crimes (killing,
+torture and impotent making) possible.

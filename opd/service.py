@@ -1,5 +1,5 @@
 # This file is in the Public Domain.
-# pylint: disable=C0116,E0402
+# pylint: disable=C0116,C0415,E0402
 
 
 "service"
@@ -9,7 +9,7 @@ import os
 
 
 from .modules import face
-from .persist import NAME, Workdir, pidfile, pidname
+from .persist import NAME, pidfile, pidname
 from .runtime import errors, forever, scan, wrap
 
 

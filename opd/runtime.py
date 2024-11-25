@@ -6,6 +6,7 @@
 
 
 import inspect
+import os
 import queue
 import threading
 import time
@@ -64,6 +65,14 @@ def modloop(*pkgs, disable=""):
             if modname.startswith("__"):
                 continue
             yield getattr(pkg, modname)
+
+
+def privileges():
+    import pwd
+    import getpass
+    pwnam2 = pwd.getpwnam(getpass.getuser())
+    os.setgid(pwnam2.pw_gid)
+    os.setuid(pwnam2.pw_uid)
 
 
 def scan(*pkgs, init=False, disable=""):
@@ -357,6 +366,7 @@ def __dir__():
         'later',
         'launch',
         'name',
+        'privileges',
         'scan',
         'spl',
         'wrap'

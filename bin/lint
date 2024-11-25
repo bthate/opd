@@ -9,27 +9,17 @@ import os
 import sys
 
 
-"defines"
-
-
-NAME = "fop"
-
-
-"utilities"
+NAME = "opd"
 
 
 def popen(txt):
-    "run text in popen."
     for line in os.popen(txt).readlines():
         print(line.rstrip())
         sys.stdout.flush()
-
-
-"runtime"
 
 
 if os.path.exists("bin/clean"):
     popen("bin/clean")
 
 
-popen(f"pylint {NAME} bin/{NAME}ctl bin/{NAME}d bin/{NAME}s bin/tinder tests")
+popen(f"pylint {NAME} bin/opdc bin/tinder tests")

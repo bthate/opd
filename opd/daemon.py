@@ -38,8 +38,8 @@ def daemon(verbose=False):
 
 
 def privileges():
-    import getpass
     import pwd
+    import getpass
     pwnam2 = pwd.getpwnam(getpass.getuser())
     os.setgid(pwnam2.pw_gid)
     os.setuid(pwnam2.pw_uid)
