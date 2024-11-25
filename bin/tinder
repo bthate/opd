@@ -155,4 +155,3 @@ if __name__ == "__main__":
         print(line)
     print(f"{len(events)} events remained")
     sys.stdout.flush()
-    time.sleep(1.0)
