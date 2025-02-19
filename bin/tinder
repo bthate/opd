@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 # This file is placed in the Public Domain.
-# pylint: disable=C,W0105,W0201,W0212,W0718
 
 
-"tinder"
+"simulate clients"
 
 
 import os
@@ -17,26 +16,29 @@ import _thread
 sys.path.insert(0, os.getcwd())
 
 
-from opd.__main__ import NAME, Config, command, parse, scan
-from opd.modules import face
-from opd.object  import Object
-from opd.persist import Workdir, laps, skel
-from opd.runtime import BufferedClient, Commands, Errors, Event
-from opd.runtime import  errors, later, launch
+
+from opd.clients import Buffered, Config
+from opd.command import Commands, command, parse
+from opd.excepts import errors, later
+from opd.message import Message
+from opd.objects import Object, items, keys, values
+from opd.package import STARTTIME, Table
+from opd.threads import Thread, launch
+from opd.utility import elapsed
+from opd.workdir import Workdir, skel
+
+
+import opd.modules as MODS
 
 
 cfg = Config()
 cfg.index = 0
 
 
-LAP = 1
-NRS = 1
-NRCOMMAND = 1
-PERCALL   = 1
-STARTTIME = time.time()
-
-
-face.rss.DEBUG = True
+lap = 1
+nrs = 1
+nrcommand = 1
+percall   = 1
 
 
 events = []
@@ -44,61 +46,67 @@ paylock = _thread.allocate_lock()
 
 
 param = Object()
-param.cmd = [""]
-param.dne = ["mekker", ""]
 param.dpl = ["hnrss title,url", ""]
-param.exp = ['']
-param.fnd = ["log", "todo", "rss", "config", "urls", ""]
 param.imp = ["tests/feeds.opml", ""]
-param.log = ["bla", ""]
-param.mod = [""]
-param.mre = [""]
 param.nme = ["hnrss hackernews", ""]
 param.pwd = ["bla mekker", ""]
 param.rem = ["hnrss", ""]
-param.res = [""]
-param.rss = ["http://hnrss.org/newest", ""]
+param.res = ["hnrss"]
+param.req = [""]
 param.srv = [""]
-param.tdo = ["mekker", ""]
+param.thr = [""]
 param.ver = [""]
+param.cmd = [""]
+param.mod = [""]
+param.mre = [""]
+param.exp = ['']
+param.fnd = ["log", "rss", "config"]
+param.dne = ["mekker", ""]
 
 
-class CLI(BufferedClient):
+pre = Object()
+pre.log = ["bla", ""]
+pre.cfg = ["cfg nick=mekker", ""]
+pre.rss = ["http://hnrss.org/newest", ""]
+pre.tdo = ["mekker", ""]
+
+
+class CLI(Buffered):
 
     def __init__(self):
-        BufferedClient.__init__(self)
+        Buffered.__init__(self)
         self.register("command", command)
 
     def raw(self, txt):
         if "v" in cfg.opts:
             print(txt)
-            sys.stdout.flush()
 
 
 def banner():
     tme = time.ctime(time.time()).replace("  ", " ")
-    print(f"{NAME.upper()} since {tme}")
+    print(f"{Config.name.upper()} since {tme}")
+    print(",".join(sorted(keys(Commands.cmds))))
 
 
 def consume(evts):
     done = []
-    for evt in evts:
-        evt.wait()
-        done.append(evt)
+    for event in evts:
+        event.wait()
+        done.append(event)
     for todo in done:
         events.remove(todo)
     return done
 
 
-def payload(clt):
+def payload(clt, cmds):
     nmr = 0
-    for cmdd in sorted(Commands.cmds):
-        for ex in getattr(param, cmdd, [""]):
-            evt = Event()
-            evt.txt = cmdd + " " + ex
-            evt.type = "command"
-            events.append(evt)
-            clt.put(evt)
+    for cmd, examples in items(cmds):
+        for example in examples:
+            event = Message()
+            event.txt = cmd + " " + example
+            event.type = "command"
+            events.append(event)
+            clt.put(event)
             nmr += 1
     return nmr
 
@@ -121,12 +129,16 @@ def wrap(function):
 
 
 def main():
-    Workdir.wdr = ".test"
+    global nrs
+    global nrcommand
     parse(cfg, " ".join(sys.argv[1:]))
-    scan(face)
-    nrcommands = len(Commands.cmds) or 1
+    for mod in Table.all(MODS):
+        Commands.scan(mod)
+        mod.DEBUG = True
+    nrcommand = len(Commands.cmds) or 1
     if "v" in cfg.opts:
         banner()
+        print("verbose is on")
     if "f" not in cfg.opts:
         if os.path.exists(Workdir.wdr):
             shutil.rmtree(Workdir.wdr)
@@ -136,22 +148,36 @@ def main():
     nrs = cfg.index or 1
     thrs = []
     for _nr in range(nrs):
-        thrs.append(launch(payload, clt))
+        thrs.append(launch(payload, clt, pre))
+    for thr in thrs:
+        thr.join()
+    for _nr in range(nrs):
+        thrs.append(launch(payload, clt, param))
     for thr in thrs:
         thr.join()
     consume(events)
-    clt.wait()
     clt.stop()
-    endtime = time.time()
-    lap = laps(endtime-STARTTIME)
-    percall = (endtime-STARTTIME)/(nrs*nrcommands)
-    print(f"{lap} {nrs} {nrcommands} {percall}")
-    if not Errors.errors:
-        print("no errors")
+    if "w" in cfg.opts:
+        clt.wait()
+
 
 if __name__ == "__main__":
+    Workdir.wdr = ".test"
     wrap(main)
-    for line in errors():
-        print(line)
-    print(f"{len(events)} events remained")
+    endtime = time.time()
+    lap = elapsed(endtime-STARTTIME)
+    percall = (endtime-STARTTIME)/(nrs*nrcommand)
+    if "b" in cfg.opts:
+        Thread.bork = True
+    if "v" in cfg.opts:
+        if not list(errors()):
+            print("no errors")
+        for line in errors():
+            print(line)
+        if events:
+            for evt in events:
+                print(evt)
+            print(f"{len(events)} events")
+        print(f"{lap} {nrs} {nrcommand} {percall}")
     sys.stdout.flush()
+    sys.exit(0)

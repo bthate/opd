@@ -1,5 +1,4 @@
 # This file is placed in the Public Domain.
-# pylint: disable=C,R,W0105,W0622
 
 
 "objects"
@@ -8,10 +7,10 @@
 import unittest
 
 
-from opd.object import Object, items, keys, update, values
+from opd.objects import Object, items, keys, update, values
 
 
-import opd.object
+import opd.objects
 
 
 VALIDJSON = '{"test": "bla"}'
@@ -70,7 +69,7 @@ attrs2 = (
 
 
 OBJECT  = Object()
-PACKAGE = opd.object
+PACKAGE = opd.objects
 
 
 class TestObject(unittest.TestCase):
@@ -179,7 +178,7 @@ class TestObject(unittest.TestCase):
         self.assertTrue(okd)
 
     def test_module(self):
-        self.assertEqual(Object().__module__, "opd.object")
+        self.assertEqual(Object().__module__, "opd.objects")
 
     def test_register(self):
         obj = Object()

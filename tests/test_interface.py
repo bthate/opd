@@ -1,5 +1,4 @@
 # This file is placed in the Public Domain.
-# pylint: disable=C,R,W0401,W0614,W0622
 # ruff: noqa: F403,F405
 
 
@@ -12,16 +11,44 @@ import unittest
 
 
 import opd
-import opd.object
+import opd.clients
+import opd.command
+import opd.decoder
+import opd.default
+import opd.encoder
+import opd.excepts
+import opd.locater
+import opd.message
+import opd.objects
+import opd.package
 import opd.persist
+import opd.reactor
+import opd.runtime
+import opd.threads
+import opd.utility
+import opd.workdir
 
 
-from opd.object import *
+from opd.objects import *
 
 
 PACKAGE = [
-    'object',
-    'persist'
+    'clients',
+    'command',
+    'decoder',
+    'default',
+    'encoder',
+    'excepts',
+    'locater',
+    'message',
+    'objects',
+    'package',
+    'persist',
+    'reactor',
+    'runtime',
+    'threads',
+    'utility',
+    'workdir'
 ]
 
 

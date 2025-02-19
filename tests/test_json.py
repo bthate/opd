@@ -1,5 +1,4 @@
 # This file is placed in the Public Domain.
-# pylint: disable=C
 
 
 "json"
@@ -8,7 +7,9 @@
 import unittest
 
 
-from opd.object import Object, dumps, loads
+from opd.decoder import loads
+from opd.encoder import dumps
+from opd.objects import Object
 
 
 VALIDJSON = "{'test': 'bla'}"

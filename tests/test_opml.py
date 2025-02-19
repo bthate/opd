@@ -7,7 +7,7 @@
 import unittest
 
 
-from opd.modules.opm import OPMLParser
+from opd.modules.rss import OPML
 
 
 class TestOPML(unittest.TestCase):
@@ -16,12 +16,12 @@ class TestOPML(unittest.TestCase):
 
     def test_opml(self):
         "test opml export."
-        res = OPMLParser.parse(TXT, "outline", "title,type,text,xmlUrl")
+        res = OPML.parse(TXT, "outline", "title,type,text,xmlUrl")
         self.assertTrue(len(res) == 20)
 
     def test_import(self):
         "test opml import."
-        res = OPMLParser.parse(TXT2, "outline", "name,display_list,xmlUrl")
+        res = OPML.parse(TXT2, "outline", "name,display_list,xmlUrl")
         self.assertTrue(len(res) == 1)
 
 
