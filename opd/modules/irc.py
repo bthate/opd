@@ -37,7 +37,6 @@ saylock = _thread.allocate_lock()
 
 
 def debug(txt):
-    print(txt)
     for ign in IGNORE:
         if ign in txt:
             return

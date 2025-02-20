@@ -161,8 +161,6 @@ def wrap(func):
     finally:
         if old:
             termios.tcsetattr(sys.stdin.fileno(), termios.TCSADRAIN, old)
-    for line in errors():
-        output(line)
 
 
 def main():
@@ -176,5 +174,8 @@ def main():
 
 if __name__ == "__main__":
     Workdir.wdr = os.path.expanduser(f"~/.{cfg.name}")
+    if check("v"):
+        for line in errors():
+            output(line)
     main()
     sys.exit(0)
