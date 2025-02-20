@@ -1,19 +1,17 @@
 **NAME**
 
-
-``opd`` - Original Programmer Daemon
-
+|
+| ``opd`` - **O**riginal **P**rogrammer **D***aemon
+|
 
 **SYNOPSIS**
 
+|
 | ``opdctl <cmd> [key=val] [key==val]``
-| ``opdc [-cviw]``
-| ``opd`` 
-| ``opds``
+| ``opd [-sv]`` 
 |
 
 **DESCRIPTION**
-
 
 ``opd`` is a python3 bot, it can connect to IRC, fetch and display RSS
 feeds, take todo notes, keep a shopping list and log text. You can
@@ -25,8 +23,8 @@ perisistence for configuration files, event handler to handle the
 client/server connection, deferred exception handling to not crash
 on an error, etc.
 
-``opd`` contains all the python3 code to program objects in a functional
-way. It provides a base Object class that has only dunder methods, all
+``opd`` contains python3 code to program objects in a functional way.
+It provides a base Object class that has only dunder methods, all
 methods are factored out into functions with the objects as the first
 argument. It is called Object Programming (OP), OOP without the
 oriented.
@@ -38,11 +36,11 @@ makes storing and reading to/from json possible.
 
 ``opd`` is Public Domain.
 
-
 **INSTALL**
 
 installation is done with pipx
 
+|
 | ``$ pipx install opd``
 | ``$ pipx ensurepath``
 |
@@ -59,35 +57,46 @@ installation is done with pipx
 
 use ``opdctl`` to control the program, default it does nothing
 
+|
 | ``$ opdctl``
 | ``$``
 |
 
 see list of commands
 
-| ``$ opd cmd``
+|
+| ``$ opdctl cmd``
 | ``cfg,cmd,dne,dpl,err,exp,imp,log,mod,mre,nme,``
 | ``now,pwd,rem,req,res,rss,srv,syn,tdo,thr,upt``
 |
 
+
+start a console
+
+|
+| `` $ opdctl -c``
+| `` >``
+|
+
 start daemon
 
+|
 | ``$ opd``
 | ``$``
 |
 
 start service
-
-| ``$ opds``
-| ``<runs until ctrl-c>``
 |
 
+| ``$ opd -s``
+| ``<runs until ctrl-c>``
+|
 
 **COMMANDS**
 
 here is a list of available commands
 
-| ``cfg`` - irc configuration
+|
 | ``cmd`` - commands
 | ``dpl`` - sets display items
 | ``err`` - show errors
@@ -111,6 +120,7 @@ here is a list of available commands
 
 irc
 
+|
 | ``$ opdctl cfg server=<server>``
 | ``$ opdctl cfg channel=<channel>``
 | ``$ opdctl cfg nick=<nick>``
@@ -118,12 +128,14 @@ irc
 
 sasl
 
+|
 | ``$ opdctl pwd <nsvnick> <nspass>``
 | ``$ opdctl cfg password=<frompwd>``
 |
 
 rss
 
+|
 | ``$ opdctl rss <url>``
 | ``$ opdctl dpl <url> <item1,item2>``
 | ``$ opdctl rem <url>``
@@ -132,31 +144,34 @@ rss
 
 opml
 
+|
 | ``$ opdctl exp``
 | ``$ opdctl imp <filename>``
 |
 
 **SOURCE**
 
-source is at `https://github.com/bthate/opd  <https://github.com/bthate/opd>`_
-
+|
+| source is at `https://github.com/bthate/opd  <https://github.com/bthate/opd>`_
+|
 
 **FILES**
 
+|
 | ``~/.opd``
 | ``~/.local/bin/opd``
-| ``~/.local/bin/opdc``
 | ``~/.local/bin/opdctl``
-| ``~/.local/bin/opds``
 | ``~/.local/pipx/venvs/opd/*``
 |
 
 **AUTHOR**
 
+|
 | Bart Thate <``bthate@dds.nl``>
 |
 
 **COPYRIGHT**
 
+|
 | ``OPD`` is Public Domain.
 |
