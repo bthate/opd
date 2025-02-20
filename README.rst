@@ -1,6 +1,6 @@
 **NAME**
 
-``opd`` - **O**riginal **P**rogrammer **D***aemon
+``opd`` - **O** riginal **P** rogrammer **D*** aemon
 
 **SYNOPSIS**
 
@@ -72,8 +72,8 @@ see list of commands
 start a console
 
 |
-| `` $ opdctl -c``
-| `` >``
+| ``$ opdctl -c``
+| ``>``
 |
 
 start daemon
