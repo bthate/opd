@@ -23,7 +23,6 @@ import opd.objects
 import opd.package
 import opd.persist
 import opd.reactor
-import opd.runtime
 import opd.threads
 import opd.utility
 import opd.workdir
@@ -45,7 +44,6 @@ PACKAGE = [
     'package',
     'persist',
     'reactor',
-    'runtime',
     'threads',
     'utility',
     'workdir'
