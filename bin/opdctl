@@ -2,7 +2,7 @@
 # This file is placed in the Public Domain.
 
 
-"scripts"
+"Original Programmer Daemon Control"
 
 
 import os
@@ -34,6 +34,9 @@ from opd import modules as MODS
 cfg   = Config()
 p     = os.path.join
 pname = f"{cfg.name}.modules"
+
+
+"output"
 
 
 def nil(txt):
@@ -292,6 +295,7 @@ def main():
 if __name__ == "__main__":
     Workdir.wdr = os.path.expanduser(f"~/.{cfg.name}")
     main()
-    for line in errors():
-        output(line)
+    if check("v"):
+        for line in errors():
+            output(line)
     sys.exit(0)

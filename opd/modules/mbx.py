@@ -11,7 +11,8 @@ import time
 
 from ..locater import find, fntime
 from ..objects import Object, fmt, update
-from ..persist import elapsed, write
+from ..persist import write
+from ..utility import elapsed
 
 
 "email"

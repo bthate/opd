@@ -13,7 +13,7 @@ import time
 
 from ..clients import Fleet
 from ..objects import Object
-from ..runtime import launch
+from ..threads import launch
 
 
 DEBUG = True

@@ -23,8 +23,10 @@ from ..message import Message
 from ..objects import Object, edit, fmt, keys
 from ..persist import ident, write
 from ..reactor import Fleet, Reactor
-from ..runtime import output
 from ..threads import later, launch
+
+
+"defines"
 
 
 IGNORE = ["PING", "PONG", "PRIVMSG"]
@@ -42,12 +44,19 @@ def debug(txt):
     output(txt)
 
 
+def output(txt):
+    print(txt)
+
+
 def init():
     irc = IRC()
     irc.start()
     irc.events.ready.wait()
     debug(f'{fmt(irc.cfg, skip="edited,password")}')
     return irc
+
+
+"config"
 
 
 class Config(Default):
@@ -76,6 +85,9 @@ class Config(Default):
         self.realname = Config.realname
         self.server = Config.server
         self.username = Config.username
+
+
+"output"
 
 
 class TextWrap(textwrap.TextWrapper):
@@ -155,6 +167,9 @@ class Output:
         if chan in dir(Output.cache):
             return len(getattr(Output.cache, chan, []))
         return 0
+
+
+"Teh IRC"
 
 
 class IRC(Reactor, Output):
@@ -640,6 +655,9 @@ def pwd(event):
     base = base64.b64encode(enc)
     dcd = base.decode('ascii')
     event.reply(dcd)
+
+
+"interface"
 
 
 def __dir__():
