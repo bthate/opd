@@ -1,12 +1,14 @@
 **NAME**
 
-``opd`` - **O** riginal **P** rogrammer **D*** aemon
+
+``opd`` - **O** riginal **P** rogrammer **D** aemon
+
 
 **SYNOPSIS**
 
 |
-| ``opdctl <cmd> [key=val] [key==val]``
-| ``opd [-sv]`` 
+| ``opd <cmd> [key=val] [key==val]``
+| ``opd [-cdsv]`` 
 |
 
 **DESCRIPTION**
@@ -44,7 +46,7 @@ installation is done with pipx
 |
 | <new terminal>
 |
-| ``$ opdctl srv > opd.service``
+| ``$ opd srv > opd.service``
 | ``$ sudo mv opd.service /etc/systemd/system/``
 | ``$ sudo systemctl enable opd --now``
 |
@@ -53,17 +55,17 @@ installation is done with pipx
 
 **USAGE**
 
-use ``opdctl`` to control the program, default it does nothing
+use ``opd`` to control the program, default it does nothing
 
 |
-| ``$ opdctl``
+| ``$ opd``
 | ``$``
 |
 
 see list of commands
 
 |
-| ``$ opdctl cmd``
+| ``$ opd cmd``
 | ``cfg,cmd,dne,dpl,err,exp,imp,log,mod,mre,nme,``
 | ``now,pwd,rem,req,res,rss,srv,syn,tdo,thr,upt``
 |
@@ -72,7 +74,7 @@ see list of commands
 start a console
 
 |
-| ``$ opdctl -c``
+| ``$ opd -c``
 | ``>``
 |
 
@@ -119,32 +121,32 @@ here is a list of available commands
 irc
 
 |
-| ``$ opdctl cfg server=<server>``
-| ``$ opdctl cfg channel=<channel>``
-| ``$ opdctl cfg nick=<nick>``
+| ``$ opd cfg server=<server>``
+| ``$ opd cfg channel=<channel>``
+| ``$ opd cfg nick=<nick>``
 |
 
 sasl
 
 |
-| ``$ opdctl pwd <nsvnick> <nspass>``
-| ``$ opdctl cfg password=<frompwd>``
+| ``$ opd pwd <nsvnick> <nspass>``
+| ``$ opd cfg password=<frompwd>``
 |
 
 rss
 
 |
-| ``$ opdctl rss <url>``
-| ``$ opdctl dpl <url> <item1,item2>``
-| ``$ opdctl rem <url>``
-| ``$ opdctl nme <url> <name>``
+| ``$ opd rss <url>``
+| ``$ opd dpl <url> <item1,item2>``
+| ``$ opd rem <url>``
+| ``$ opd nme <url> <name>``
 |
 
 opml
 
 |
-| ``$ opdctl exp``
-| ``$ opdctl imp <filename>``
+| ``$ opd exp``
+| ``$ opd imp <filename>``
 |
 
 **SOURCE**
@@ -158,7 +160,6 @@ opml
 |
 | ``~/.opd``
 | ``~/.local/bin/opd``
-| ``~/.local/bin/opdctl``
 | ``~/.local/pipx/venvs/opd/*``
 |
 

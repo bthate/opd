@@ -16,7 +16,11 @@ import _thread
 sys.path.insert(0, os.getcwd())
 
 
-from opd.clients import Config
+from opd.clients import Client, Config
+from opd.command import Commands, command, parse
+from opd.encoder import dumps
+from opd.excepts import errors, later
+from opd.message import Message
 from opd.package import Table
 from opd.workdir import Workdir, pidname
 
@@ -53,9 +57,6 @@ def disable():
     output = nil
 
 
-"handlers"
-
-
 def handler(signum, frame):
     sys.exit(0)
 
@@ -63,7 +64,44 @@ def handler(signum, frame):
 signal.signal(signal.SIGHUP, handler)
 
 
+"clients"
+
+
+class CLI(Client):
+
+    def __init__(self):
+        Client.__init__(self)
+        self.register("command", command)
+
+    def announce(self, txt):
+        pass
+
+    def raw(self, txt):
+        output(txt.encode('utf-8', 'replace').decode("utf-8"))
+
+
+class Console(CLI):
+
+    def announce(self, txt):
+        pass
+
+    def callback(self, evt):
+        CLI.callback(self, evt)
+        evt.wait()
+
+    def poll(self):
+        evt = Message()
+        evt.txt = input("> ")
+        evt.type = "command"
+        return evt
+
+
 "utilities"
+
+
+def banner():
+    tme = time.ctime(time.time()).replace("  ", " ")
+    output(f"{cfg.name.upper()} since {tme}")
 
 
 def check(txt):
@@ -105,6 +143,7 @@ def forever():
             _thread.interrupt_main()
 
 
+
 def pidfile(filename):
     if os.path.exists(filename):
         os.unlink(filename)
@@ -128,18 +167,95 @@ def privileges():
 def background():
     daemon("-v" in sys.argv)
     privileges()
-    if not check("v"):
-        disable()
+    disable()
     pidfile(pidname(cfg.name))
+    Commands.add(cmd)
     Table.inits(cfg.init or "irc,rss", pname)
     forever()
+
+
+def console():
+    import readline # noqa: F401
+    Commands.add(cmd)
+    parse(cfg, " ".join(sys.argv[1:]))
+    cfg.init = cfg.sets.init or cfg.init
+    cfg.opts = cfg.opts
+    if "v" in cfg.opts:
+        banner()
+    if "i" in cfg.opts or cfg.init:
+        for _mod, thr in Table.inits(cfg.init, pname):
+            if "w" in cfg.opts:
+                thr.join()
+    csl = Console()
+    csl.start()
+    forever()
+
+
+def control():
+    if len(sys.argv) == 1:
+        return
+    Commands.add(cmd)
+    Commands.add(srv)
+    Commands.add(tbl)
+    parse(cfg, " ".join(sys.argv[1:]))
+    csl = CLI()
+    evt = Message()
+    evt.orig = repr(csl)
+    evt.type = "command"
+    evt.txt = cfg.otxt
+    command(evt)
+    evt.wait()
 
 
 def service():
+    signal.signal(signal.SIGHUP, handler)
     privileges()
     pidfile(pidname(cfg.name))
+    Commands.add(cmd)
     Table.inits(cfg.init or "irc,rss", pname)
     forever()
+
+
+"commands"
+
+
+def cmd(event):
+    event.reply(",".join(sorted(Commands.names)))
+
+
+def srv(event):
+    import getpass
+    name = getpass.getuser()
+    event.reply(TXT % (cfg.name.upper(), name, name, name, cfg.name))
+
+
+def tbl(event):
+    for mod in Table.all(MODS):
+        Commands.scan(mod)
+    event.reply("# This file is placed in the Public Domain.")
+    event.reply("")
+    event.reply("")
+    event.reply('"lookup tables"')
+    event.reply("")
+    event.reply("")
+    event.reply(f"NAMES = {dumps(Commands.names, indent=4, sort_keys=True)}")
+
+
+"data"
+
+
+TXT = """[Unit]
+Description=%s
+After=network-online.target
+
+[Service]
+Type=simple
+User=%s
+Group=%s
+ExecStart=/home/%s/.local/bin/%s -s
+
+[Install]
+WantedBy=multi-user.target"""
 
 
 "runtime"
@@ -164,18 +280,22 @@ def wrap(func):
 
 
 def main():
-    if check("s"):
-        service()
-    elif check("v"):
+    if check("v"):
         enable()
-    else:
+    if check("c"):
+        wrap(console)
+    elif check("s"):
+        wrap(service)
+    elif check("d"):
         background()
+    else:
+        wrap(control)
 
 
 if __name__ == "__main__":
     Workdir.wdr = os.path.expanduser(f"~/.{cfg.name}")
+    main()
     if check("v"):
         for line in errors():
             output(line)
-    main()
     sys.exit(0)

@@ -90,6 +90,8 @@ def toudp(host, port, txt):
 
 
 def udp(event):
+    if DEBUG:
+        return
     if event.rest:
         toudp(Cfg.host, Cfg.port, event.rest)
         return

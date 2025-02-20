@@ -18,12 +18,21 @@ from ..objects import Object
 from ..threads import launch
 
 
+"defines"
+
+
 a = os.path.abspath
 d = os.path.dirname
 p = os.path.join
 
 
-BASE = p(d(d(__file__)), "html", "")
+BASE = 
+
+
+if not os.path.exists(BASE):
+    BASE = None
+
+
 DEBUG = False
 
 
@@ -31,6 +40,8 @@ DEBUG = False
 
 
 def init():
+    if DEBUG or BASE is None:
+        return
     try:
         rest = HTTP((Config.hostname, int(Config.port)), HTTPHandler)
     except OSError as ex:
@@ -62,6 +73,7 @@ class WebError(Exception):
 
 class Config(Default):
 
+    base     = p(d(d(__file__)), "html", "")
     hostname = "localhost"
     port     = 8000
 
@@ -136,8 +148,7 @@ class HTTPHandler(BaseHTTPRequestHandler):
             return
         if self.path == "/":
             self.path = "/index.html"
-        path = a(BASE + self.path)
-        print(path)
+        path = a(Config.base + self.path)
         if not os.path.exists(path):
             self.write_header("text/html")
             self.send_response(404)
@@ -175,3 +186,31 @@ class HTTPHandler(BaseHTTPRequestHandler):
             self.send_response(404)
             later(ex)
             self.end_headers()
+
+
+def web(event):
+    config = Config()
+    fnm = last(config)
+    if not event.sets:
+        event.reply(
+                    fmt(
+                        config,
+                        keys(config)
+                       )
+                   )
+    else:
+        edit(config, event.sets)
+        write(config, fnm)
+        event.done()
+
+
+"interface"
+
+
+def __dir__():
+    return (
+        'DEBUG',
+        'Config',
+        'HTTP',
+        'web'
+    )
