@@ -1,8 +1,6 @@
 **NAME**
 
-|
-| ``opd`` - **O**riginal **P**rogrammer **D***aemon
-|
+``opd`` - **O**riginal **P**rogrammer **D***aemon
 
 **SYNOPSIS**
 
