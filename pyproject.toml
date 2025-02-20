@@ -30,7 +30,6 @@ classifiers=[
 [tool.setuptools]
 script-files = [
     "bin/opd",
-    "bin/opdctl"
 ]
 packages = [
    "opd",

@@ -26,13 +26,6 @@ d = os.path.dirname
 p = os.path.join
 
 
-BASE = 
-
-
-if not os.path.exists(BASE):
-    BASE = None
-
-
 DEBUG = False
 
 
@@ -40,7 +33,7 @@ DEBUG = False
 
 
 def init():
-    if DEBUG or BASE is None:
+    if DEBUG:
         return
     try:
         rest = HTTP((Config.hostname, int(Config.port)), HTTPHandler)
