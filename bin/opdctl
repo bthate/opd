@@ -282,6 +282,8 @@ def wrap(func):
 
 
 def main():
+    if check("v"):
+        enable()
     if check("c"):
         wrap(console)
     elif check("s"):
