@@ -173,7 +173,6 @@ def background():
 
 def console():
     import readline # noqa: F401
-    enable()
     Commands.add(cmd)
     parse(cfg, " ".join(sys.argv[1:]))
     cfg.init = cfg.sets.init or cfg.init
@@ -192,7 +191,6 @@ def console():
 def control():
     if len(sys.argv) == 1:
         return
-    enable()
     Commands.add(cmd)
     Commands.add(srv)
     Commands.add(tbl)
@@ -208,7 +206,6 @@ def control():
 
 def service():
     signal.signal(signal.SIGHUP, handler)
-    enable()
     privileges()
     pidfile(pidname(cfg.name))
     Commands.add(cmd)
@@ -277,8 +274,6 @@ def wrap(func):
     finally:
         if old:
             termios.tcsetattr(sys.stdin.fileno(), termios.TCSADRAIN, old)
-    for line in errors():
-        output(line)
 
 
 def main():
@@ -291,10 +286,12 @@ def main():
     elif check("d"):
         background()
     else:
-        control()
+        wrap(control)
 
 
 if __name__ == "__main__":
     Workdir.wdr = os.path.expanduser(f"~/.{cfg.name}")
     main()
+    for line in errors():
+        output(line)
     sys.exit(0)

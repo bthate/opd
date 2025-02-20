@@ -53,6 +53,9 @@ def disable():
     output = nil
 
 
+"handlers"
+
+
 def handler(signum, frame):
     sys.exit(0)
 
@@ -133,7 +136,6 @@ def background():
 
 
 def service():
-    signal.signal(signal.SIGHUP, handler)
     privileges()
     pidfile(pidname(cfg.name))
     Table.inits(cfg.init or "irc,rss", pname)
