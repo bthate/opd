@@ -10,7 +10,7 @@ import json
 from .objects import Object
 
 
-class ObjectEncoder(json.JSONEncoder):
+class Encoder(json.JSONEncoder):
 
     def __init__(self, *args, **kwargs):
         json.JSONEncoder.__init__(self, *args, **kwargs)
@@ -32,7 +32,7 @@ class ObjectEncoder(json.JSONEncoder):
 
 
 def dumps(*args, **kw) -> str:
-    kw["cls"] = ObjectEncoder
+    kw["cls"] = Encoder
     return json.dumps(*args, **kw)
 
 

@@ -177,7 +177,7 @@ if __name__ == "__main__":
         if events:
             for evt in events:
                 print(evt)
-            print(f"{len(events)} events")
+        print(f"{len(events)} events")
         print(f"{lap} {nrs} {nrcommand} {percall}")
     sys.stdout.flush()
     sys.exit(0)

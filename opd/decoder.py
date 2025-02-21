@@ -11,7 +11,7 @@ import typing
 from .objects import Object, construct
 
 
-class ObjectDecoder(json.JSONDecoder):
+class Decoder(json.JSONDecoder):
 
     def __init__(self, *args, **kwargs):
         json.JSONDecoder.__init__(self, *args, **kwargs)
@@ -30,7 +30,7 @@ def hook(objdict) -> Object:
 
 
 def loads(string, *args, **kw) -> Object:
-    kw["cls"] = ObjectDecoder
+    kw["cls"] = Decoder
     kw["object_hook"] = hook
     return json.loads(string, *args, **kw)
 
