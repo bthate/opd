@@ -14,7 +14,6 @@ import opd
 import opd.clients
 import opd.command
 import opd.decoder
-import opd.default
 import opd.encoder
 import opd.excepts
 import opd.locater
@@ -35,7 +34,6 @@ PACKAGE = [
     'clients',
     'command',
     'decoder',
-    'default',
     'encoder',
     'excepts',
     'locater',
