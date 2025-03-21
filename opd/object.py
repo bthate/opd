@@ -4,7 +4,7 @@
 "a clean namespace"
 
 
-import typing
+import json
 
 
 class Object:
@@ -22,7 +22,7 @@ class Object:
         return str(self.__dict__)
 
 
-class Default:
+class Default(Object):
 
     def __getattr__(self, key):
         return self.__dict__.get(key, "")
@@ -93,7 +93,7 @@ def fqn(obj) -> str:
     return kin
 
 
-def items(obj) -> [(str,typing.Any)]:
+def items(obj) -> []:
     if isinstance(obj,type({})):
         return obj.items()
     return obj.__dict__.items()
@@ -112,8 +112,64 @@ def update(obj, data) -> None:
         obj.__dict__.update(data)
 
 
-def values(obj) -> [typing.Any]:
+def values(obj) -> []:
     return obj.__dict__.values()
+
+
+"decoder"
+
+
+class Decoder(json.JSONDecoder):
+
+    def __init__(self, *args, **kwargs):
+        json.JSONDecoder.__init__(self, *args, **kwargs)
+
+    def decode(self, s, _w=None):
+        val = json.JSONDecoder.decode(self, s)
+        if isinstance(val, dict):
+            return hook(val)
+        return val
+
+
+def hook(objdict) -> Object:
+    obj = Object()
+    construct(obj, objdict)
+    return obj
+
+
+def loads(string, *args, **kw) -> Object:
+    kw["cls"] = Decoder
+    kw["object_hook"] = hook
+    return json.loads(string, *args, **kw)
+
+
+"encoding"
+
+
+class Encoder(json.JSONEncoder):
+
+    def __init__(self, *args, **kwargs):
+        json.JSONEncoder.__init__(self, *args, **kwargs)
+
+    def default(self, o) -> str:
+        if isinstance(o, dict):
+            return o.items()
+        if issubclass(type(o), Object):
+            return vars(o)
+        if isinstance(o, list):
+            return iter(o)
+        try:
+            return json.JSONEncoder.default(self, o)
+        except TypeError:
+            try:
+                return vars(o)
+            except TypeError:
+                return repr(o)
+
+
+def dumps(*args, **kw) -> str:
+    kw["cls"] = Encoder
+    return json.dumps(*args, **kw)
 
 
 def __dir__():
@@ -121,11 +177,13 @@ def __dir__():
         'Default',
         'Object',
         'construct',
+        'dumps',
         'edit',
         'fmt',
         'fqn',
         'items',
         'keys',
+        'loads',
         'update',
         'values'
     )

@@ -9,13 +9,11 @@ import os
 import time
 
 
-from ..locater import find, fntime
-from ..objects import Object, fmt, update
-from ..persist import write
-from ..utility import elapsed
-
-
-"email"
+from ..disk    import write
+from ..find    import find, ident
+from ..object  import Object, fmt, keys, update
+from ..utils   import elapsed, extract_date
+from ..workdir import store
 
 
 class Email(Object):
@@ -23,9 +21,6 @@ class Email(Object):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.text = ""
-
-
-"utility"
 
 
 def todate(date):
@@ -67,33 +62,28 @@ def todate(date):
 "commands"
 
 
-def cor(event):
-    if not event.args:
-        event.reply("cor <email>")
-        return
-    nr = -1
-    for _fn, email in find("email", {"From": event.args[0]}):
-        nr += 1
-        txt = ""
-        if len(event.args) > 1:
-            txt = ",".join(event.args[1:])
-        else:
-            txt = "From,Subject"
-        event.reply("%s %s %s" % (nr, fmt(email, txt, plain=True), elapsed(time.time() - fntime(email.__stp__))))
-
-
 def eml(event):
     nrs = -1
-    result = sorted(find("email", event.gets), key=lambda x: todate(getattr(x[1], "Date", "")))
+    args = ["From", "Subject"]
+    if len(event.args) > 1:
+        args.extend(event.args[1:])
+    if event.gets:
+        args.extend(keys(event.gets))
+    for key in keys(event.silent):
+        if key in args:
+            args.remove(key)
+    args = set(args)        
+    result = sorted(find("email", event.gets), key=lambda x: extract_date(todate(getattr(x[1], "Date", ""))))
     if event.index:
         o = result[event.index][1]
         tme = getattr(o, "Date", "")
-        event.reply(f'{event.index} {format(o, ["From", "Subject"] + event.args)} {elapsed(time.time() - fntime(tme))}')
+        event.reply(f'{event.index} {fmt(o, args, plain=True)} {elapsed(time.time() - extract_date(todate(tme)))}')
     else:
         for fnm, o in result:
             nrs += 1
-            event.reply(f'{nrs} {format(o, ["From", "Subject"])} {elapsed(time.time() - fntime(fnm))}')
-    if nrs == -1:
+            tme = getattr(o, "Date", "")
+            event.reply(f'{nrs} {fmt(o, args, plain=True)} {elapsed(time.time() - extract_date(todate(tme)))}')
+    if not result:
         event.reply("no emails found.")
 
 
@@ -116,19 +106,16 @@ def mbx(event):
         pass
     for m in thing:
         o = Email()
-        update(o, dict(m._headers)) # pylint: disable=W0212
+        update(o, dict(m._headers))
         o.text = ""
         for payload in m.walk():
             if payload.get_content_type() == 'text/plain':
                 o.text += payload.get_payload()
         o.text = o.text.replace("\\n", "\n")
-        write(o)
+        write(o, store(ident(o)))
         nr += 1
     if nr:
         event.reply("ok %s" % nr)
-
-
-"data"
 
 
 MONTH = {
@@ -145,14 +132,3 @@ MONTH = {
     'Nov': 11,
     'Dec': 12
 }
-
-
-"itnerface"
-
-
-def __dir__():
-    return (
-        'cor',
-        'eml',
-        'mbx',
-    )

@@ -11,9 +11,9 @@ import threading
 import time
 
 
-from ..clients import Fleet
-from ..objects import Object
-from ..threads import launch
+from ..client import Fleet
+from ..object import Object
+from ..thread import launch
 
 
 DEBUG = True
@@ -76,9 +76,6 @@ class UDP(Object):
         launch(self.loop)
 
 
-"utilities"
-
-
 def toudp(host, port, txt):
     if DEBUG:
         return
@@ -86,12 +83,7 @@ def toudp(host, port, txt):
     sock.sendto(bytes(txt.strip(), "utf-8"), (host, port))
 
 
-"command"
-
-
 def udp(event):
-    if DEBUG:
-        return
     if event.rest:
         toudp(Cfg.host, Cfg.port, event.rest)
         return
@@ -125,9 +117,3 @@ def udp(event):
             toudp(Cfg.host, Cfg.port, txt)
         if stop:
             break
-
-
-def __dir__():
-    return (
-        'udp',
-    )

@@ -1,7 +1,7 @@
 # This file is placed in the Public Domain.
 
 
-"rest"
+"web"
 
 
 import os
@@ -12,67 +12,24 @@ import time
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
 
-from ..excepts import later
-from ..locater import last
-from ..objects import Default, Object, edit, fmt, keys
-from ..persist import write
-from ..threads import launch
-
-
-"defines"
-
-
-a = os.path.abspath
-d = os.path.dirname
-p = os.path.join
+from ..error  import later
+from ..object import Default, Object
+from ..thread import launch
 
 
 DEBUG = False
 
 
-"init"
-
-
 def init():
-    if DEBUG:
-        return
-    try:
-        rest = HTTP((Config.hostname, int(Config.port)), HTTPHandler)
-    except OSError as ex:
-        rest = None
-        later(ex)
-    if rest is not None:
-        rest.start()
-    return rest
+    server = HTTP((Cfg.hostname, int(Cfg.port)), HTTPHandler)
+    server.start()
+    return server
 
 
-def html2(txt):
-    return """<!doctype html>
-<html>
-   %s
-</html>
-""" % txt
+class Cfg(Default):
 
-
-"exceptions"
-
-
-class WebError(Exception):
-
-    pass
-
-
-"config"
-
-
-class Config(Default):
-
-    base     = p(d(d(__file__)), "html", "")
     hostname = "localhost"
     port     = 8000
-
-
-"rest"
 
 
 class HTTP(HTTPServer, Object):
@@ -122,10 +79,7 @@ class HTTPHandler(BaseHTTPRequestHandler):
 
     def write_header(self, htype='text/plain', size=None):
         self.send_response(200)
-        #self.send_header(
-        #                  'Content-type',
-        #                  '%s; charset=%s ' % (htype, "utf-8")
-        #                 )
+        #self.send_header('Content-type', '%s; charset=%s ' % (htype, "utf-8"))
         self.send_header('Content-type', '%s;')
         if size is not None:
             self.send_header('Content-length', size)
@@ -142,69 +96,38 @@ class HTTPHandler(BaseHTTPRequestHandler):
             return
         if self.path == "/":
             self.path = "/index.html"
-        path = a(Config.base + self.path)
-        if not os.path.exists(path):
+        self.path = "html" + os.sep + self.path
+        if not os.path.exists(self.path):
             self.write_header("text/html")
             self.send_response(404)
             self.end_headers()
             return
         if "_images" in self.path:
             try:
-                with open(path, "rb") as file:
+                with open(self.path, "rb") as file:
                     img = file.read()
                     file.close()
                 ext = self.path[-3]
                 self.write_header(f"image/{ext}", len(img))
                 self.raw(img)
-            except (
-                    TypeError,
-                    FileNotFoundError,
-                    IsADirectoryError
-                   ) as ex:
+            except (TypeError, FileNotFoundError, IsADirectoryError):
                 self.send_response(404)
-                later(ex)
                 self.end_headers()
             return
         try:
-            with open(
-                      path,
-                      "r",
-                      encoding="utf-8",
-                      errors="ignore"
-                     ) as file:
+            with open(self.path, "r", encoding="utf-8", errors="ignore") as file:
                 txt = file.read()
                 file.close()
             self.write_header("text/html")
             self.send(html2(txt))
-        except (TypeError, FileNotFoundError, IsADirectoryError) as ex:
+        except (TypeError, FileNotFoundError, IsADirectoryError):
             self.send_response(404)
-            later(ex)
             self.end_headers()
 
 
-def web(event):
-    config = Config()
-    fnm = last(config)
-    if not event.sets:
-        event.reply(
-                    fmt(
-                        config,
-                        keys(config)
-                       )
-                   )
-    else:
-        edit(config, event.sets)
-        write(config, fnm)
-        event.done()
-
-
-"interface"
-
-
-def __dir__():
-    return (
-        'DEBUG',
-        'Config',
-        'HTTP',
-        'web'
-    )
+def html2(txt):
+    return """<!doctype html>
+<html>
+   %s
+</html>
+""" % txt

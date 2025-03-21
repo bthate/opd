@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # This file is placed in the Public Domain.
 
 
@@ -18,14 +17,14 @@ import _thread
 sys.path.insert(0, os.getcwd())
 
 
-from opd.client  import Client
-from opd.error   import Errors
-from opd.event   import Event
-from opd.modules import Commands, Main, command, load, mods, modules, parse, scan
-from opd.object  import dumps
-from opd.thread  import launch
-from opd.utils   import nodebug, spl
-from opd.workdir import Workdir, pidname
+from .client  import Client
+from .error   import Errors
+from .event   import Event
+from .modules import Commands, Main, command, load, mods, modules, parse, scan
+from .object  import dumps
+from .thread  import launch
+from .utils   import nodebug, spl
+from .workdir import Workdir, pidname
 
 
 p = os.path.join
@@ -262,7 +261,7 @@ def srv(event):
 
 
 def tbl(event):
-    import opd.modules
+    import obx.modules
     for mod in mods():
         scan(mod)
     event.reply("# This file is placed in the Public Domain.")
